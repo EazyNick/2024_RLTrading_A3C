@@ -7,11 +7,11 @@ from utils import *
 # Secret 디렉토리를 sys.path에 추가하여 모듈을 찾을 수 있도록 설정
 try:
   current_dir = os.path.dirname(os.path.abspath(__file__))
-  secret_dir = os.path.join(current_dir, 'Secret')
+  secret_dir = os.path.join(current_dir, 'Auth')
   sys.path.append(secret_dir)
-  from Secret import *
+  from Auth import *
 except:
-  from Secret import *
+  from Auth import *
 
 key = KeyringManager()
 app_key = key.app_key

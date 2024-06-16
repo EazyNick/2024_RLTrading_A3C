@@ -1,6 +1,9 @@
 import json
 
-def save_access_token(access_token, file_path = 'access_token.json'):
+# access token 파일 저장 경로
+PATH = 'D:\ICT_Project\Server\Auth\\access_token'
+
+def save_access_token(access_token, file_path = f'{PATH}\\access_token.json'):
     """access_token을 JSON 파일에 저장하는 함수"""
     data = {
         "access_token": access_token
@@ -8,7 +11,7 @@ def save_access_token(access_token, file_path = 'access_token.json'):
     with open(file_path, 'w') as json_file:
         json.dump(data, json_file)
 
-def load_access_token(file_path = 'access_token.json'):
+def load_access_token(file_path = f'{PATH}\\access_token.json'):
     """JSON 파일에서 access_token을 불러오는 함수"""
     try:
         with open(file_path, 'r') as json_file:
