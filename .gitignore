@@ -11,11 +11,10 @@ env.bak/
 venv.bak/
 
 # 환경 변수 파일 무시
-.env
+*.env
 
 # 기타 무시 파일
 *.log
 *.sqlite3
 .DS_Store
 *.bak
-key.env
