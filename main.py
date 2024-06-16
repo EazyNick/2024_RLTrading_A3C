@@ -1,35 +1,64 @@
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QAxContainer import QAxWidget
-import sys
+import keyring
+import json
+import requests
+import pandas as pd
 
-class Kiwoom:
-    def __init__(self):
-        self.app = QApplication(sys.argv)
-        self.ocx = QAxWidget("KHOPENAPI.KHOpenAPICtrl.1")
-        self.ocx.dynamicCall("CommConnect()")
-        self.ocx.OnEventConnect[int].connect(self.on_event_connect)
-        self.ocx.OnReceiveTrData[str, str, str, str, str, str, str, str, str].connect(self.on_receive_tr_data)
+def hashkey(datas):
+  PATH = "uapi/hashkey"
+  URL = f"{url_base}/{path}"
+  headers = {
+    'content-Type' : 'application/json',
+    'appKey' : app_key,
+    'appSecret' : app_secret,
+    }
+  res = requests.post(URL, headers=headers, data=json.dumps(datas))
+  hashkey = res.json()["HASH"]
 
-    def login(self):
-        self.ocx.dynamicCall("CommConnect()")
-        self.app.exec_()
+  return hashkey
 
-    def on_event_connect(self, err_code):
-        if err_code == 0:
-            print("로그인 성공")
-            self.request_stock_price()
-        else:
-            print("로그인 실패")
+app_key = keyring.get_password('mock_app_key', 'Henry')
+app_secret = keyring.get_password('mock_app_secret', 'Henry')
 
-    def request_stock_price(self):
-        self.ocx.dynamicCall("SetInputValue(QString, QString)", "종목코드", "005930")
-        self.ocx.dynamicCall("CommRqData(QString, QString, int, QString)", "주식기본정보", "opt10001", "0", "0101")
+# 모의투자 url
+url_base = "https://openapivts.koreainvestment.com:29443"
 
-    def on_receive_tr_data(self, screen_no, rqname, trcode, recordname, prev_next, data_len, err_code, msg1, msg2):
-        if rqname == "주식기본정보":
-            price = self.ocx.dynamicCall("GetCommData(QString, QString, int, QString)", trcode, rqname, 0, "현재가")
-            print(f"현재가: {price.strip()}")
+headers = {"content-type": "application/json"}
+path = "oauth2/tokenP"
+body = {
+    "grant_type": "client_credentials",
+    "appkey": app_key,
+    "appsecret": app_secret
+}
 
-if __name__ == "__main__":
-    kiwoom = Kiwoom()
-    kiwoom.login()
+url = f"{url_base}/{path}"
+res = requests.post(url, headers=headers, data=json.dumps(body))
+access_token = res.json()['access_token']
+
+keyring.set_password('mock_access_token', 'Henry', access_token)
+
+access_token = keyring.get_password('mock_access_token', 'Henry')
+
+print(access_token)
+
+# API 호출을 위한 URL 및 헤더 설정
+url = "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-price"
+headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": f"Bearer {access_token}",
+    "appkey": app_key,
+    "appsecret": app_secret,
+    "tr_id": "FHKST01010100"
+}
+
+div_code="J"
+itm_no="005930" # 삼성전자
+
+params = {
+        "FID_COND_MRKT_DIV_CODE": div_code, # 시장 분류 코드  J : 주식/ETF/ETN, W: ELW
+        "FID_INPUT_ISCD": itm_no            #   종목번호 (6자리) ETN의 경우, Q로 시작 (EX. Q500001)
+    }
+
+res = requests.get(url, headers=headers, params=params)
+# current_data = pd.DataFrame(res.getBody().output, index=[0])
+print(res.json())
+# res.json()['output']['stck_prpr']
