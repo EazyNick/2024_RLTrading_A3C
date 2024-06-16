@@ -10,6 +10,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Ignore access_token.json
+access_token.json
+
 # 환경 변수 파일 무시
 *.env
 

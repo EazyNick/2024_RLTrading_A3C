@@ -1,23 +1,21 @@
-import keyring
 import json
 import requests
 import pandas as pd
+import sys, os
+from utils import *
 
-def hashkey(datas):
-  PATH = "uapi/hashkey"
-  URL = f"{url_base}/{path}"
-  headers = {
-    'content-Type' : 'application/json',
-    'appKey' : app_key,
-    'appSecret' : app_secret,
-    }
-  res = requests.post(URL, headers=headers, data=json.dumps(datas))
-  hashkey = res.json()["HASH"]
+# Secret 디렉토리를 sys.path에 추가하여 모듈을 찾을 수 있도록 설정
+try:
+  current_dir = os.path.dirname(os.path.abspath(__file__))
+  secret_dir = os.path.join(current_dir, 'Secret')
+  sys.path.append(secret_dir)
+  from Secret import *
+except:
+  from Secret import *
 
-  return hashkey
-
-app_key = keyring.get_password('mock_app_key', 'Henry')
-app_secret = keyring.get_password('mock_app_secret', 'Henry')
+key = KeyringManager()
+app_key = key.app_key
+app_secret = key.app_secret_key
 
 # 모의투자 url
 url_base = "https://openapivts.koreainvestment.com:29443"
@@ -32,13 +30,14 @@ body = {
 
 url = f"{url_base}/{path}"
 res = requests.post(url, headers=headers, data=json.dumps(body))
-access_token = res.json()['access_token']
+at_temp = res.json()['access_token']
 
-keyring.set_password('mock_access_token', 'Henry', access_token)
-
-access_token = keyring.get_password('mock_access_token', 'Henry')
-
-print(access_token)
+if at_temp:
+    save_access_token(at_temp)
+    access_token = load_access_token()
+    log_manager.logger.info("Loaded Access Token")
+else:
+    log_manager.logger.error("Failed to retrieve access token")
 
 # API 호출을 위한 URL 및 헤더 설정
 url = "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-price"
