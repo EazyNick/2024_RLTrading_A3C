@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-7!i3ja1c_(g_0^gw+zs=)n!%bt%qx7^d*4j-)6bh_nuuv2x#y&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '3.107.6.146']
 
 
 # Application definition
@@ -121,3 +122,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static') # collectstatic 명령어로 모든 정적 파일을 모을 디렉토리를 지정
+# BASE_DIR은 프로젝트의 기본 디렉토리 경로입니다.
+# STATIC_ROOT는 모든 앱의 정적 파일을 모아 배포 준비를 할 디렉토리를 지정합니다.
+# python manage.py collectstatic 명령어를 실행하면, 모든 정적 파일이 이 디렉토리에 복사됩니다.
+
+# 보안 설정 (HTTPS)
+# HTTP_X_FORWARDED_PROTO 헤더를 사용하여 클라이언트의 원래 프로토콜(http 또는 https)을 확인하고, Django가 이를 인식하여 HTTPS로 처리하도록 합니다.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# 이 설정이 True로 설정되면, Django는 모든 HTTP 요청을 HTTPS로 자동 리디렉션합니다. 이를 통해 모든 통신이 암호화된 HTTPS를 통해 이루어지도록 보장
+SECURE_SSL_REDIRECT = True
