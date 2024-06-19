@@ -17,7 +17,7 @@ services:
   web:
     build:
       context: ./django
-      dockerfile: django/Dockerfile
+      dockerfile: Dockerfile
     command: gunicorn django.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/app/static
