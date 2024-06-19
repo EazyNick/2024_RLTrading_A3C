@@ -134,3 +134,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # 이 설정이 True로 설정되면, Django는 모든 HTTP 요청을 HTTPS로 자동 리디렉션합니다. 이를 통해 모든 통신이 암호화된 HTTPS를 통해 이루어지도록 보장
 SECURE_SSL_REDIRECT = True
+
+STATIC_URL = '/static/'
+STATIC_ROOT = '/app/static'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/app/media'
