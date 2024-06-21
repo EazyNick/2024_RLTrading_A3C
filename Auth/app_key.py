@@ -8,7 +8,7 @@ try:
     from utils import *
 except Exception as e:
     print(f"Error importing utils: {e}", file=sys.stderr)
-    from utils import *
+    from utils import * 
     sys.exit(1)
 
 class KeyringManager:
