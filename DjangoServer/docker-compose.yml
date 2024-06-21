@@ -16,16 +16,16 @@ services:
 
   web:
     build:
-      context: ./django
+      context: ./DjangoServer
       dockerfile: Dockerfile
-    command: gunicorn django.wsgi:application --bind 0.0.0.0:8000
+    command: gunicorn DjangoServer.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
     expose:
       - "8000"
     env_file:
-      - ./django/.env
+      - ./DjangoServer/.env
     networks:
       - mynetwork
 
