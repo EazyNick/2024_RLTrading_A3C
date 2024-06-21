@@ -1,16 +1,15 @@
 import time
 import sys
 import os
+from pathlib import Path
 from utils import *
 from config.config import Config
 
-# Auth 모듈 및 services 모듈 임포트
 try:
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    secret_dir = os.path.join(current_dir, 'Auth')
-    services_dir = os.path.join(current_dir, 'services')
-    sys.path.append(secret_dir)
-    sys.path.append(services_dir)
+    # 현재 파일의 부모 디렉토리의 부모 디렉토리까지 경로 추가 및 auth_dir 추가
+    sys.path.append(str(Path(__file__).resolve().parents[0] / 'Auth'))
+    sys.path.append(str(Path(__file__).resolve().parents[0] / 'services'))
+
     from Auth import *
     from services import *
 except ImportError as e:

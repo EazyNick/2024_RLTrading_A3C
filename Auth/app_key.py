@@ -6,7 +6,8 @@ import keyring
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from utils import *
-except:    
+except Exception as e:
+    print(f"Error importing utils: {e}", file=sys.stderr)
     from utils import *
     sys.exit(1)
 
