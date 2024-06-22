@@ -26,18 +26,18 @@ def main():
             "forget to activate a virtual environment?"
         ) from exc
 
-    # 추가된 부분: main.py 실행
-    def run_my_function():
-        log_manager.logger.info("START MAINFUN")
-        while True:
+    # # 추가된 부분: main.py 실행
+    # def run_my_function():
+    #     log_manager.logger.info("START MAINFUN")
+    #     while True:
             
-            Run()
-            time.sleep(60)  # 60초마다 실행
+    #         Run()
+    #         time.sleep(60)  # 60초마다 실행
 
-    # 스레드를 사용하여 main.py의 함수를 실행
-    thread = threading.Thread(target=run_my_function)
-    thread.daemon = True
-    thread.start()
+    # # 스레드를 사용하여 main.py의 함수를 실행
+    # thread = threading.Thread(target=run_my_function)
+    # thread.daemon = True
+    # thread.start()
 
     execute_from_command_line(sys.argv)
 

@@ -13,7 +13,7 @@ def load_env_file(filepath):
 
 if __name__ == "__main__":
     # .env 파일 로드
-    load_env_file('key.env')
+    load_env_file('Appkey.env')
 
     # 환경 변수에서 값 불러오기
     app_key = os.getenv('APP_KEY')
