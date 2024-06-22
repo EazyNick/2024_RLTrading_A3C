@@ -22,6 +22,7 @@ services:
       context: ./DjangoServer
       dockerfile: Dockerfile
     command: uwsgi --ini uwsgi.ini
+    user: www-data  # 사용자 설정 추가
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media

@@ -19,9 +19,9 @@ except ImportError as e:
 
 import logging
 
-# 절대 경로를 사용하여 BASE_DIR와 LOG_DIR를 설정
+# BASE_DIR와 LOG_DIR를 명확히 설정
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(BASE_DIR, 'logs')
+LOG_DIR = os.path.join(BASE_DIR, 'utils/Log')
 
 # 로그 디렉토리가 존재하지 않으면 생성
 if not os.path.exists(LOG_DIR):
@@ -30,10 +30,13 @@ if not os.path.exists(LOG_DIR):
 LOG_FILE = os.path.join(LOG_DIR, 'mainrun.log')
 
 # 로그 설정
-logging.basicConfig(level=logging.INFO, 
-                    filename=LOG_FILE, 
+logging.basicConfig(level=logging.INFO,
+                    filename=LOG_FILE,
                     filemode='a',
                     format='[%(asctime)s] [%(levelname)s] %(message)s')
+
+logger = logging.getLogger(__name__)
+
 def get_access_token(manager):
     """
     액세스 토큰을 가져오는 함수
