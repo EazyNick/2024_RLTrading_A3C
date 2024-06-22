@@ -10,11 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+log_dir = os.path.join(BASE_DIR, 'utils', 'Log')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
 
 
 # Quick-start development settings - unsuitable for production
@@ -148,7 +152,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'utils', 'Log', 'django_debug.log'),
+            'filename': os.path.join(log_dir, 'django_debug.log'),
             'formatter': 'verbose',
         },
     },
