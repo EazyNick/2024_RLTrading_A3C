@@ -1,4 +1,14 @@
 import os
+import sys
+
+try:
+    sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+except Exception as e:
+    print(f"Error importing utils: {e}", file=sys.stderr)
+    from utils import * 
+    sys.exit(1)
+
+
 
 def load_env_file(filepath):
     with open(filepath) as f:

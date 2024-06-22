@@ -13,7 +13,7 @@ except Exception as e:
 
 class KeyringManager:
     def __init__(self):
-        load_env_file('Appkey.env')
+        load_env_file(r'D:\ICT_Project\Server\Appkey.env')
         self.__app_key = os.getenv('APP_KEY')
         self.__app_secret_key = os.getenv('APP_SECRET_KEY')
 
