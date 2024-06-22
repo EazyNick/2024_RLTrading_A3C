@@ -6,7 +6,7 @@ def home(request):
     return render(request, 'home.html', {'posts': posts})
 
 import logging
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 
 logger = logging.getLogger('django')
 
@@ -16,3 +16,7 @@ def my_view(request):
     logger.warning("This is a warning message")
     logger.error("This is an error message")
     return HttpResponse("Logging test")
+
+def custom_404_view(request, exception):
+    logger.error(f"404 error at {request.path}")
+    return HttpResponseNotFound("404 Not Found")
