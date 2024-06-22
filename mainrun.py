@@ -16,6 +16,15 @@ except ImportError as e:
     print(f"Import error: {e}")
     raise
 
+import logging
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+logging.basicConfig(level=logging.INFO, 
+                    filename=os.path.join(BASE_DIR, 'logs/mainrun.log'), 
+                    filemode='a',
+                    format='[%(asctime)s] [%(levelname)s] %(message)s')
+
 def get_access_token(manager):
     """
     액세스 토큰을 가져오는 함수
@@ -40,6 +49,7 @@ def get_access_token(manager):
 
 def Run():
     # log_manager.logger.info("Start MainRun")
+    logging.info("Run function is starting...")
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
@@ -50,6 +60,7 @@ def Run():
     stck_prpr = get_price(access_token, app_key, app_secret)
     if stck_prpr:
         log_manager.logger(f"현재가: {stck_prpr}")
+    logging.info("Run function has finished.")
 
 if __name__ == "__main__":
     for i in range(10):
