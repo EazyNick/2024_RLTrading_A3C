@@ -12,8 +12,6 @@ try:
     from utils import * 
 except Exception as e:
     print(f"Error importing utils: {e}", file=sys.stderr)
-    from mainrun import Run 
-    from utils import *
     sys.exit(1)
 
 def main():
