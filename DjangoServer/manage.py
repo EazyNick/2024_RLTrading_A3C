@@ -2,7 +2,19 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 import threading
+import time
+
+try:
+    sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    from mainrun import Run 
+    from utils import * 
+except Exception as e:
+    print(f"Error importing utils: {e}", file=sys.stderr)
+    from mainrun import Run 
+    from utils import *
+    sys.exit(1)
 
 def main():
     """Run administrative tasks."""
@@ -18,8 +30,11 @@ def main():
 
     # 추가된 부분: main.py 실행
     def run_my_function():
-        import main  # main.py를 임포트하고 실행
-        main.Run()
+        log_manager.logger.info("START MAINFUN")
+        while True:
+            
+            Run()
+            time.sleep(60)  # 60초마다 실행
 
     # 스레드를 사용하여 main.py의 함수를 실행
     thread = threading.Thread(target=run_my_function)

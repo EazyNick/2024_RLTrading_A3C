@@ -39,6 +39,7 @@ def get_access_token(manager):
     return access_token
 
 def Run():
+    # log_manager.logger.info("Start MainRun")
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
@@ -48,7 +49,7 @@ def Run():
 
     stck_prpr = get_price(access_token, app_key, app_secret)
     if stck_prpr:
-        print(f"현재가: {stck_prpr}")
+        log_manager.logger(f"현재가: {stck_prpr}")
 
 if __name__ == "__main__":
     for i in range(10):
