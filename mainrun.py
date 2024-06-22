@@ -60,8 +60,9 @@ def get_access_token(manager):
     return access_token
 
 def Run():
-    # log_manager.logger.info("Start MainRun")
+    log_manager.logger.info("Start MainRun")
     logging.info("Run function is starting...")
+    print("Running...")
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
