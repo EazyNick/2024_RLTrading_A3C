@@ -18,11 +18,16 @@ except ImportError as e:
 
 import logging
 
-# 절대 경로를 사용하여 로그 파일 경로를 설정합니다.
+# BASE_DIR와 LOG_DIR를 명확히 설정
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_FILE = os.path.join(BASE_DIR, 'logs/mainrun.log')
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
-# 로그 설정
+# 로그 디렉토리가 존재하지 않으면 생성
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOG_FILE = os.path.join(LOG_DIR, 'mainrun.log')
+
 logging.basicConfig(level=logging.INFO, 
                     filename=LOG_FILE, 
                     filemode='a',
