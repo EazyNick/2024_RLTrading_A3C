@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.9
 
 # 작업 디렉토리 설정
 WORKDIR /app
@@ -16,7 +16,6 @@ COPY DjangoServer/uwsgi.ini /app/DjangoServer/uwsgi.ini
 
 # Set environment variables
 ENV DJANGO_SETTINGS_MODULE=DjangoServer.settings
-ENV PYTHONUNBUFFERED 1
 
 # uWSGI 실행
 CMD ["uwsgi", "--ini", "/app/DjangoServer/uwsgi.ini"]
