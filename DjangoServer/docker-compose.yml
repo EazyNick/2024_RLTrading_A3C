@@ -21,7 +21,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: DjangoServer/Dockerfile
+      dockerfile: ./DjangoServer/Dockerfile
     command: uwsgi --ini /app/DjangoServer/uwsgi.ini
     volumes:
       - static_volume:/app/static
@@ -30,7 +30,7 @@ services:
     expose:
       - "8000"
     env_file:
-      - ./DjangoServer/.env
+      - /app/DjangoServer/.env
     networks:
       - mynetwork
 
