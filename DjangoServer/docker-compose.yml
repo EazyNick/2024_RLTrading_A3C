@@ -10,9 +10,9 @@ services:
       - web
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # 수정된 부분
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /var/www/fintechproject/Server/Html:/var/www/html/custom
-      - /etc/letsencrypt:/etc/letsencrypt  # Let's Encrypt SSL 설정 파일 공유
+      - /etc/letsencrypt:/etc/letsencrypt
       - static_volume:/var/www/html/static
       - media_volume:/var/www/html/media
     networks:
@@ -22,14 +22,14 @@ services:
     build:
       context: ./DjangoServer
       dockerfile: Dockerfile
-    command: uwsgi --ini uwsgi.ini
+    command: uwsgi --ini /app/DjangoServer/uwsgi.ini
     volumes:
-      - ./DjangoServer:/app 
+      - ./DjangoServer:/app  # Django 애플리케이션 디렉토리 마운트
       - static_volume:/app/static
       - media_volume:/app/media
       - ./logs:/app/logs
     expose:
-      - "8000"  
+      - "8000"
     env_file:
       - ./DjangoServer/.env
     networks:
