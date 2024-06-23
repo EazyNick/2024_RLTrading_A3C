@@ -10,6 +10,7 @@ services:
       - web
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/uwsgi_params:/etc/nginx/uwsgi_params  # uwsgi_params 파일 추가
       - /var/www/fintechproject/Server/Html:/var/www/html/custom
       - /etc/letsencrypt:/etc/letsencrypt  # Let's Encrypt SSL 설정 파일 공유
       - static_volume:/var/www/html/static
