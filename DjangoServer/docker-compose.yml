@@ -9,6 +9,7 @@ services:
     depends_on:
       - web
     volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf  # 수정된 부분
       - /var/www/fintechproject/Server/Html:/var/www/html/custom
       - /etc/letsencrypt:/etc/letsencrypt  # Let's Encrypt SSL 설정 파일 공유
