@@ -50,7 +50,7 @@ def Run():
 
     stck_prpr = get_price(access_token, app_key, app_secret)
     if stck_prpr:
-        log_manager.logger(f"현재가: {stck_prpr}")
+        log_manager.logger.info(f"현재가: {stck_prpr}")
 
 if __name__ == "__main__":
     for i in range(10):

@@ -12,8 +12,7 @@ except ImportError:
     from config import Config
     from utils import *
 
-# 파일 저장 경로 설정
-PATH = r'D:\ICT_Project\Server\Auth'
+PATH = os.path.dirname(os.path.abspath(__file__))
 
 class AccessTokenManager:
     _instance = None  # 클래스 변수로 인스턴스 저장
