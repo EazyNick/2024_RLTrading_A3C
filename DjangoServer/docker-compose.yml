@@ -24,6 +24,7 @@ services:
       dockerfile: Dockerfile
     command: uwsgi --ini uwsgi.ini
     volumes:
+      - ./DjangoServer:/app 
       - static_volume:/app/static
       - media_volume:/app/media
       - ./logs:/app/logs
