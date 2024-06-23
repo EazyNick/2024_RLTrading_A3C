@@ -13,8 +13,8 @@ except Exception as e:
     from utils import * 
     sys.exit(1)
 
-# keyrings.alt 백엔드 사용 설정 # amazon linux 전용
-keyring.set_keyring(keyrings.alt.file.PlaintextKeyring())
+# keyrings.alt 백엔드 사용 설정
+keyring.set_keyring(keyrings.alt.PlaintextKeyring())
 
 PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Appkey.env')
 
