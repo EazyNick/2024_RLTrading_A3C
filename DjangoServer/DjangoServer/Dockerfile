@@ -13,3 +13,5 @@ RUN mkdir -p /app/logs
 COPY uwsgi.ini /app/
 
 CMD ["uwsgi", "--ini", "uwsgi.ini"]
+
+EXPOSE 8000
