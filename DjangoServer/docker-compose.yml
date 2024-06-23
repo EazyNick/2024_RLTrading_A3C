@@ -20,18 +20,18 @@ services:
 
   web:
     build:
-      context: ./DjangoServer
+      context: ./Server/DjangoServer
       dockerfile: Dockerfile
     command: uwsgi --ini uwsgi.ini
     volumes:
-      - ./DjangoServer:/app 
+      - ./Server/DjangoServer:/app  # Django 애플리케이션 디렉토리 마운트
       - static_volume:/app/static
       - media_volume:/app/media
       - ./logs:/app/logs
     expose:
       - "8000"  
     env_file:
-      - ./DjangoServer/.env
+      - ./Server/DjangoServer/.env
     networks:
       - mynetwork
 
