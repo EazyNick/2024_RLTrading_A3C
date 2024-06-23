@@ -20,11 +20,10 @@ services:
 
   web:
     build:
-      context: ./DjangoServer
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: DjangoServer/Dockerfile
     command: uwsgi --ini /app/DjangoServer/uwsgi.ini
     volumes:
-      - ./DjangoServer:/app  # Django 애플리케이션 디렉토리 마운트
       - static_volume:/app/static
       - media_volume:/app/media
       - ./logs:/app/logs

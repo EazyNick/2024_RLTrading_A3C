@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 
 # uWSGI 설정 파일 복사
-COPY uwsgi.ini /app/DjangoServer/uwsgi.ini
+COPY DjangoServer/uwsgi.ini /app/DjangoServer/uwsgi.ini
 
 # uWSGI 실행
 CMD ["uwsgi", "--ini", "/app/DjangoServer/uwsgi.ini"]
