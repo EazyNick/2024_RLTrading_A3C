@@ -4,7 +4,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # 필요한 패키지 설치
-COPY requirements.txt /app/
+COPY DjangoServer/requirements.txt /app/
 RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir -r requirements.txt
 
