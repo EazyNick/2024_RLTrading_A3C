@@ -8,8 +8,6 @@ except Exception as e:
     from utils import * 
     sys.exit(1)
 
-
-
 def load_env_file(filepath):
     with open(filepath) as f:
         for line in f:

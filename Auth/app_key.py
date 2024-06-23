@@ -11,9 +11,11 @@ except Exception as e:
     from utils import * 
     sys.exit(1)
 
+PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Appkey.env')
+
 class KeyringManager:
     def __init__(self):
-        load_env_file(r'D:\ICT_Project\Server\Appkey.env')
+        load_env_file(PATH)
         self.__app_key = os.getenv('APP_KEY')
         self.__app_secret_key = os.getenv('APP_SECRET_KEY')
 
