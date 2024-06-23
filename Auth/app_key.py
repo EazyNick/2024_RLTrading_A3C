@@ -3,7 +3,7 @@ import sys
 from load_env import load_env_file
 import keyring
 # amazon linux 전용
-import keyrings.alt
+from keyrings.alt.file import PlaintextKeyring  # keyrings.alt.file에서 PlaintextKeyring 가져오기
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -13,8 +13,8 @@ except Exception as e:
     from utils import * 
     sys.exit(1)
 
-# keyrings.alt 백엔드 사용 설정
-keyring.set_keyring(keyrings.alt.PlaintextKeyring())
+# keyring의 기본 파일 기반 백엔드 사용 설정
+keyring.set_keyring(file.PlaintextKeyring())
 
 PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Appkey.env')
 
