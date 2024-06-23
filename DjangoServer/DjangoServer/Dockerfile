@@ -10,8 +10,8 @@ COPY . /app/
 # 로그 디렉토리 생성
 RUN mkdir -p /app/logs
 
-COPY uwsgi.ini /app/
+COPY uwsgi.ini /app/uwsgi.ini
 
-CMD ["uwsgi", "--ini", "uwsgi.ini"]
+CMD ["uwsgi", "--ini", "/app/uwsgi.ini"]
 
 EXPOSE 8000
