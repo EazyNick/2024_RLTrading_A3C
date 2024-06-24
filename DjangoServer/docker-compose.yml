@@ -11,10 +11,10 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - /var/www/fintechproject/Server/Html:/var/www/html/custom
+      - /var/www/fintechproject/Server/templates:/var/www/templates/custom
       - /etc/letsencrypt:/etc/letsencrypt
-      - static_volume:/var/www/html/static
-      - media_volume:/var/www/html/media
+      - static_volume:/var/www/templates/static
+      - media_volume:/var/www/templates/media
     networks:
       - mynetwork
 
