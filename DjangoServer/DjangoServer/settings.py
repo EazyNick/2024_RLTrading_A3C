@@ -159,7 +159,7 @@ LOGGING = {
         'error_file': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django_error.log'),
+            'filename': os.path.join(log_dir, 'django_error.log'),
             'formatter': 'verbose',
         },
     },
@@ -171,11 +171,11 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['file', 'error_file'],
             'level': 'DEBUG',
             'propagate': True,
         },
-        'django.request': {  # 추가
+        'django.request': {
             'handlers': ['error_file'],
             'level': 'ERROR',
             'propagate': False,

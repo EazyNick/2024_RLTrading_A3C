@@ -22,7 +22,11 @@ services:
     build:
       context: .
       dockerfile: ./DjangoServer/Dockerfile
-    command: gunicorn DjangoServer.wsgi:application --bind 0.0.0.0:8000
+    command: >
+      gunicorn DjangoServer.wsgi:application
+      --bind 0.0.0.0:8000
+      --access-logfile /app/logs/gunicorn_access.log
+      --error-logfile /app/logs/gunicorn_error.log
     volumes:
       - .:/app
       - static_volume:/app/static
