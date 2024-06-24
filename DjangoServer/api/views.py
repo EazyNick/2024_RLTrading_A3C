@@ -8,7 +8,8 @@ import logging
 
 logger = logging.getLogger('django')
 
-def home_view(request):
+def home(request):
     logger.debug('Home view has been accessed')
     return render(request, 'home.html')
+
     
