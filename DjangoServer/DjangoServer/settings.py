@@ -20,6 +20,12 @@ log_dir = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 
+# 슈퍼유저 자동 생성 설정
+if 'DJANGO_SUPERUSER_USERNAME' in os.environ:
+    # 슈퍼유저 설정
+    DJANGO_SUPERUSER_USERNAME = os.environ['DJANGO_SUPERUSER_USERNAME']
+    DJANGO_SUPERUSER_PASSWORD = os.environ['DJANGO_SUPERUSER_PASSWORD']
+    DJANGO_SUPERUSER_EMAIL = os.environ['DJANGO_SUPERUSER_EMAIL']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -43,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

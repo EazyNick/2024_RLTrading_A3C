@@ -1,12 +1,20 @@
 # api/views.py
 
 from django.shortcuts import render
-from django.conf import settings
-import os
+
+from rest_framework import viewsets
+from .models import MyModel
+from .serializers import MyModelSerializer
+
+class MyModelViewSet(viewsets.ModelViewSet):
+    queryset = MyModel.objects.all()
+    serializer_class = MyModelSerializer
 
 import logging
 
 logger = logging.getLogger('mylogger')
+
+
 
 def home(request):
     logger.debug('This is a debug message')
