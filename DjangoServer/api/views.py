@@ -14,8 +14,6 @@ import logging
 
 logger = logging.getLogger('mylogger')
 
-
-
 def home(request):
     logger.debug('This is a debug message')
     logger.info('This is an info message')
