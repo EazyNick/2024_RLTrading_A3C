@@ -1,7 +1,7 @@
-from django.http import JsonResponse
+from django.shortcuts import render
 
 def home(request):
-    message = {
-        'message': 'Hello, this is your response message!'
+    context = {
+        'name': 'Your Name'
     }
-    return JsonResponse(message)
+    return render(request, 'home.html', context)
