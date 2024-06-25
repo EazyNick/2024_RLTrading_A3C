@@ -51,6 +51,7 @@ services:
     command: celery -A DjangoServer worker --loglevel=info --logfile=/app/logs/celery_worker.log
     volumes:
       - .:/app
+      - ./logs:/app/logs  # 로그 파일 마운트
     depends_on:
       - redis
     env_file:
@@ -65,6 +66,7 @@ services:
     command: celery -A DjangoServer beat --loglevel=info --logfile=/app/logs/celery_beat.log
     volumes:
       - .:/app
+      - ./logs:/app/logs  # 로그 파일 마운트
     depends_on:
       - redis
     env_file:
