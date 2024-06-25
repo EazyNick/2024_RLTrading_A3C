@@ -62,7 +62,7 @@ def run_task():
             response = table.put_item(
                 Item={
                     'Stock': '삼성전자',  # 예시 Stock
-                    'Timestamp': 'timestamp',  # 예시 Timestamp
+                    'Timestamp': str(int(time.time())), 
                     '현재가': str(stck_prpr)  # 주식 현재가
                 }
             )
