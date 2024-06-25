@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
-    command: celery -A DjangoServer worker --loglevel=DEBUG --logfile=/app/logs/celery_worker.log
+    command: celery -A DjangoServer.core.celery worker --loglevel=DEBUG --logfile=/app/logs/celery_worker.log
     volumes:
       - .:/app
       - ./logs:/app/logs  # 로그 파일 마운트
@@ -63,7 +63,7 @@ services:
     build:
       context: .
       dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
-    command: celery -A DjangoServer beat --loglevel=DEBUG --logfile=/app/logs/celery_beat.log
+    command: celery -A DjangoServer.core.celery beat --loglevel=DEBUG --logfile=/app/logs/celery_beat.log
     volumes:
       - .:/app
       - ./logs:/app/logs  # 로그 파일 마운트
