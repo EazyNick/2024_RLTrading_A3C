@@ -10,9 +10,9 @@ RUN pip install -r requirements.txt
 # 프로젝트 파일 복사
 COPY . /app/
 
-# 스크립트 파일 복사
-COPY scripts/entrypoint.sh /scripts/entrypoint.sh
-RUN chmod +x /scripts/entrypoint.sh
+# # 스크립트 파일 복사
+# COPY scripts/entrypoint.sh /scripts/entrypoint.sh
+# RUN chmod +x /scripts/entrypoint.sh
 
 # 환경 변수 설정
 ENV DJANGO_SETTINGS_MODULE=DjangoServer.settings
