@@ -34,7 +34,7 @@ def get_access_token(manager):
     else:
         access_token = manager.load_access_token()
         if access_token:
-            log_manager.logger.info("Loaded Access Token")
+            log_manager.logger.info("Access Token Update")
         else:
             log_manager.logger.error("Failed to load access token from file")
             access_token = manager.get_access_token()
@@ -43,7 +43,6 @@ def get_access_token(manager):
 @shared_task
 def run_task():
     log_manager.logger.info("Start MainRun")
-    logger.info("Start MainRun")
     print("Running...")
     key = KeyringManager()
     app_key = key.app_key
@@ -53,9 +52,8 @@ def run_task():
     access_token = get_access_token(manager)
 
     stck_prpr = get_price(access_token, app_key, app_secret)
-    if stck_prpr:
-        log_manager.logger.info(f"현재가: {stck_prpr}")
-        logger.info(f"현재가: {stck_prpr}")
+    # if stck_prpr:
+        # log_manager.logger.info(f"현재가: {stck_prpr}")
         # DynamoDB에 데이터 저장 (IAM 권한으로 접근)
         # table.put_item(
         #     Item={
