@@ -6,7 +6,6 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent))
 
 from load_env import load_env_file
-import keyring
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -17,6 +16,7 @@ except Exception as e:
     sys.exit(1)
 
 PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Appkey.env')
+KEY_FILE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'key_store.txt')
 
 class KeyringManager:
     def __init__(self):
@@ -30,18 +30,33 @@ class KeyringManager:
         if not self.__app_secret_key:
             log_manager.logger.error(f"APP_SECRET_KEY environment variable is missing")
             raise ValueError("APP_SECRET_KEY environment variable is missing")
-        # log_manager.logger.debug(self.app_key)
-        # log_manager.logger.debug(self.app_secret_key)
+        
         self.__app_key_changes = 0
         self.__app_secret_key_changes = 0
         self.store_keys()
 
     def store_keys(self):
         try:
-            keyring.set_password('mock_app_key', 'EazyNick08', self.__app_key)
-            keyring.set_password('mock_app_secret', 'EazyNick08', self.__app_secret_key)
+            with open(KEY_FILE_PATH, 'w') as key_file:
+                key_file.write(f"mock_app_key:EazyNick08:{self.__app_key}\n")
+                key_file.write(f"mock_app_secret:EazyNick08:{self.__app_secret_key}\n")
         except Exception as e:
             log_manager.logger.error(f"Failed to store keys: {e}")
+            raise
+
+    def load_keys(self):
+        try:
+            with open(KEY_FILE_PATH, 'r') as key_file:
+                for line in key_file:
+                    if line.startswith("mock_app_key:EazyNick08:"):
+                        self.__app_key = line.strip().split(":")[2]
+                    elif line.startswith("mock_app_secret:EazyNick08:"):
+                        self.__app_secret_key = line.strip().split(":")[2]
+        except FileNotFoundError:
+            log_manager.logger.warning("Key file not found, storing new keys.")
+            self.store_keys()
+        except Exception as e:
+            log_manager.logger.error(f"Failed to load keys: {e}")
             raise
 
     @property
@@ -82,8 +97,9 @@ class KeyringManager:
 
 # 키 저장 실행 (한번만 실행)
 if __name__ == "__main__":
-    Keyring = KeyringManager()
-    app_key = Keyring.app_key
-    app_secret = Keyring.app_secret_key
+    keyring_manager = KeyringManager()
+    keyring_manager.load_keys()
+    app_key = keyring_manager.app_key
+    app_secret = keyring_manager.app_secret_key
 
     print(app_key, app_secret)
