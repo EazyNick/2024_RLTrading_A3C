@@ -1,5 +1,6 @@
 import time
 import sys
+import logging
 from pathlib import Path
 from celery import shared_task
 from modules.utils import *
@@ -7,6 +8,8 @@ from modules.config.config import Config
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
+
+logger = logging.getLogger('celery')
 
 try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
@@ -40,6 +43,7 @@ def get_access_token(manager):
 @shared_task
 def run_task():
     log_manager.logger.info("Start MainRun")
+    logger.info("Start MainRun")
     print("Running...")
     key = KeyringManager()
     app_key = key.app_key
@@ -51,6 +55,7 @@ def run_task():
     stck_prpr = get_price(access_token, app_key, app_secret)
     if stck_prpr:
         log_manager.logger.info(f"현재가: {stck_prpr}")
+        logger.info(f"현재가: {stck_prpr}")
         # DynamoDB에 데이터 저장 (IAM 권한으로 접근)
         # table.put_item(
         #     Item={
