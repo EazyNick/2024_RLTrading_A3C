@@ -48,7 +48,7 @@ services:
     build:
       context: .
       dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
-    command: celery -A DjangoServer worker --loglevel=info  # 프로젝트 이름 수정
+    command: celery -A DjangoServer worker --loglevel=info --logfile=/app/logs/celery_worker.log
     volumes:
       - .:/app
     depends_on:
@@ -62,7 +62,7 @@ services:
     build:
       context: .
       dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
-    command: celery -A DjangoServer beat --loglevel=info  # 프로젝트 이름 수정
+    command: celery -A DjangoServer beat --loglevel=info --logfile=/app/logs/celery_beat.log
     volumes:
       - .:/app
     depends_on:

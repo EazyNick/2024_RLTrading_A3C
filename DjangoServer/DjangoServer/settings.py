@@ -160,6 +160,10 @@ STATIC_ROOT = '/app/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '/app/media'
 
+# Celery 로깅 설정
+CELERYD_LOG_FILE = os.path.join(log_dir,"/app/logs/celery_worker.log")
+CELERYBEAT_LOG_FILE = os.path.join(log_dir,"/app/logs/celery_beat.log")
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
