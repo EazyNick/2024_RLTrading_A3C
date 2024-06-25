@@ -39,6 +39,31 @@ services:
     networks:
       - mynetwork
 
+  redis:
+    image: "redis:alpine"
+    networks:
+      - mynetwork
+
+  celery:
+    build: .
+    command: celery -A core worker --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+    networks:
+      - mynetwork
+
+  celery-beat:
+    build: .
+    command: celery -A core beat --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - redis
+    networks:
+      - mynetwork
+
 volumes:
   static_volume:
   media_volume:

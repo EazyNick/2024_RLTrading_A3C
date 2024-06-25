@@ -2,3 +2,7 @@ Django==4.2.13
 gunicorn
 uwsgi
 djangorestframework
+requests
+pandas
+celery
+redis

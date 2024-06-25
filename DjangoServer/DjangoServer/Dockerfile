@@ -16,9 +16,10 @@ RUN chmod +x /scripts/entrypoint.sh
 
 # 환경 변수 설정
 ENV DJANGO_SETTINGS_MODULE=DjangoServer.settings
+# modules 디렉토리를 Python 경로에 추가
+ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 # 포트 설정 (예: 8000)
 EXPOSE 8000
 
-# 엔트리포인트 설정
-ENTRYPOINT ["/scripts/entrypoint.sh"]
+CMD ["gunicorn", "DjangoServer.wsgi:application", "--bind", "0.0.0.0:8000"]
