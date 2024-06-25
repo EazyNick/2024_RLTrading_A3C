@@ -1,6 +1,8 @@
 import sys
+import time
 from pathlib import Path
 from celery import shared_task
+import boto3
 from modules.utils import *
 from modules.config.config import Config
 
@@ -13,6 +15,10 @@ try:
 except ImportError as e:
     print(f"Import error: {e}")
     raise
+
+# DynamoDB 클라이언트 초기화
+dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+table = dynamodb.Table('RESTAPI')
 
 def get_access_token(manager):
     """
@@ -48,14 +54,21 @@ def run_task():
     access_token = get_access_token(manager)
 
     stck_prpr = get_price(access_token, app_key, app_secret)
-    # if stck_prpr:
-        # log_manager.logger.info(f"현재가: {stck_prpr}")
-        # DynamoDB에 데이터 저장 (IAM 권한으로 접근)
-        # table.put_item(
-        #     Item={
-        #         'timestamp': int(time.time()),
-        #         'stock_price': stck_prpr
-        #     }
-        # )
 
+    if stck_prpr:
+        log_manager.logger.info(f"현재가: {stck_prpr}")
+        # DynamoDB에 데이터 저장
+        try:
+            response = table.put_item(
+                Item={
+                    'Stock': '삼성전자',  # 예시 Stock
+                    'Timestamp': 'timestamp',  # 예시 Timestamp
+                    '현재가': str(stck_prpr)  # 주식 현재가
+                }
+            )
+            log_manager.logger.info("Data saved to DynamoDB successfully")
+        except Exception as e:
+            log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
+            raise
+            
     return stck_prpr
