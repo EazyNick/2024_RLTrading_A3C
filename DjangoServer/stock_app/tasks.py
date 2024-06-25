@@ -9,8 +9,6 @@ from modules.config.config import Config
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
 
-logger = logging.getLogger('celery')
-
 try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트

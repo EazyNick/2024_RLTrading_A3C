@@ -6,7 +6,7 @@ from datetime import datetime
 import glob
 
 class LogManager:
-    def __init__(self, directory='D:\\ICT_Project\\Server\\utils\\Log', max_files=10):
+    def __init__(self, directory='/app/ICT_Project/Server/utils/Log', max_files=10):
         self.directory = directory
         self.max_files = max_files
         self._timestamp = self._init_timestamp()
