@@ -59,6 +59,18 @@ INSTALLED_APPS = [
     'stock_app',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.TemplateHTMLRenderer',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -74,7 +86,7 @@ ROOT_URLCONF = 'DjangoServer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,9 +95,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'debug': True,  # 디버그 모드 활성화
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'DjangoServer.wsgi.application'
 
@@ -161,8 +175,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = '/app/media'
 
 # Celery 로깅 설정
-CELERYD_LOG_FILE = os.path.join(log_dir,"celery_worker.log")
-CELERYBEAT_LOG_FILE = os.path.join(log_dir,"celery_beat.log")
+CELERY_WORKER_LOG_FILE = os.path.join(log_dir, "celery_worker.log")
+CELERY_BEAT_LOG_FILE = os.path.join(log_dir, "celery_beat.log")
 
 LOGGING = {
     'version': 1,
@@ -178,6 +192,18 @@ LOGGING = {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'filename': os.path.join(log_dir, 'django_error.log'),
+            'formatter': 'verbose',
+        },
+        'celery_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': CELERY_WORKER_LOG_FILE,
+            'formatter': 'verbose',
+        },
+        'celery_beat_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': CELERY_BEAT_LOG_FILE,
             'formatter': 'verbose',
         },
     },
@@ -200,6 +226,16 @@ LOGGING = {
         },
         'mylogger': {
             'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['celery_file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'celery.beat': {
+            'handlers': ['celery_beat_file'],
             'level': 'DEBUG',
             'propagate': True,
         },
