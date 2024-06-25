@@ -1,6 +1,4 @@
-import time
 import sys
-import logging
 from pathlib import Path
 from celery import shared_task
 from modules.utils import *

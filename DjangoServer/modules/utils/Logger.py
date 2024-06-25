@@ -21,6 +21,10 @@ class LogManager:
         """ 로거 초기화 """
         logger = logging.getLogger('TEST')
 
+        # 로거 핸들러가 이미 설정되어 있는지 확인
+        if logger.hasHandlers():
+            return logger
+
         formatter = logging.Formatter(
             '[%(asctime)s.%(msecs)03d][%(levelname).1s][%(filename)s(%(funcName)s):%(lineno)d] %(message)s',
             datefmt='%Y-%m-%d %H:%M:%S')
