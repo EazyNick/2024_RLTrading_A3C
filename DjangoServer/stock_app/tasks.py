@@ -70,5 +70,7 @@ def run_task():
         except Exception as e:
             log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
             raise
+    else:
+        log_manager.logger.warning("stck_prpr is None or False-like value")
             
     return stck_prpr
