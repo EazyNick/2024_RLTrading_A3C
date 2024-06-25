@@ -1,5 +1,10 @@
 import os
 import sys
+from pathlib import Path
+
+# 현재 파일의 부모 디렉토리 경로 추가
+sys.path.append(str(Path(__file__).resolve().parent))
+
 from load_env import load_env_file
 import keyring
 
