@@ -240,12 +240,12 @@ LOGGING = {
         'celery': {
             'handlers': ['celery_file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
         'celery.beat': {
             'handlers': ['celery_beat_file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     }
 }
