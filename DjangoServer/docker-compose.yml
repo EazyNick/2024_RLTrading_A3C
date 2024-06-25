@@ -45,22 +45,30 @@ services:
       - mynetwork
 
   celery:
-    build: .
-    command: celery -A core worker --loglevel=info
+    build:
+      context: .
+      dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
+    command: celery -A DjangoServer worker --loglevel=info  # 프로젝트 이름 수정
     volumes:
-      - .:/code
+      - .:/app
     depends_on:
       - redis
+    env_file:
+      - ./DjangoServer/.env
     networks:
       - mynetwork
 
   celery-beat:
-    build: .
-    command: celery -A core beat --loglevel=info
+    build:
+      context: .
+      dockerfile: ./DjangoServer/Dockerfile  # Dockerfile 경로 수정
+    command: celery -A DjangoServer beat --loglevel=info  # 프로젝트 이름 수정
     volumes:
-      - .:/code
+      - .:/app
     depends_on:
       - redis
+    env_file:
+      - ./DjangoServer/.env
     networks:
       - mynetwork
 
