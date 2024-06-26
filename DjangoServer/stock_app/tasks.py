@@ -55,6 +55,31 @@ def run_task():
 
     stck_prpr = get_price(access_token, app_key, app_secret)
 
+    # if stck_prpr:
+    #     log_manager.logger.info(f"현재가: {stck_prpr}")
+    # else:
+    #     log_manager.logger.error(f"현재가 불러오기 실패")
+
+    buy_data = buy_stock(access_token, app_key, app_secret, "70000")
+    if buy_data:
+        log_manager.logger.info(f"주식 매수: {buy_data}")
+    else:
+        log_manager.logger.error(f"매수 실패")
+
+    sell_data = sell_stock(access_token, app_key, app_secret, "90000")
+
+    if sell_data:
+        log_manager.logger.info(f"주식 매도: {sell_data}")
+    else:
+        log_manager.logger.error(f"매도 실패")
+        
+    account = get_account_balance(access_token, app_key, app_secret)
+
+    if account:
+        log_manager.logger.info(f"계좌 현황: {account}")
+    else:
+        log_manager.logger.error(f"계좌 조회 실패")
+
     if stck_prpr:
         log_manager.logger.info(f"현재가: {stck_prpr}")
         # DynamoDB에 데이터 저장
