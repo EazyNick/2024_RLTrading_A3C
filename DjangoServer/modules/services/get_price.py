@@ -6,9 +6,13 @@ try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 except ImportError:    
-    from config import Config
+    from config.config import Config
     from utils import *
+    from Auth import *
+    from services import *
 
 def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     """
@@ -24,21 +28,33 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     Returns:
         str: 현재가 (주식 가격) 또는 None
     """
+    
     url = Config.Stock.get_url()
     headers = Config.Stock.get_headers(access_token, app_key, app_secret)
     params = Config.Stock.get_params(div_code, itm_no)
 
     res = requests.get(url, headers=headers, params=params)
-    
-    if res.status_code == 200:
-        data = res.json()
-        # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
-        stck_prpr = data['output'].get('stck_prpr')
-        if stck_prpr:
-            log_manager.logger.info(f"현재가: {stck_prpr}")
-            return stck_prpr
+    try:
+        if res.status_code == 200:
+            data = res.json()
+            # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
+            stck_prpr = data['output'].get('stck_prpr')
+            if stck_prpr:
+                log_manager.logger.info(f"현재가: {stck_prpr}")
+                return stck_prpr
+            else:
+                log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
         else:
-            log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
-    else:
-        log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
-    return None
+            log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
+        return None
+    except:
+        log_manager.logger.error(f"{data}")
+
+if __name__ == "__main__":
+    manager = AccessTokenManager()
+    access_token = manager.load_access_token()
+    key = KeyringManager()
+    app_key = key.app_key
+    app_secret = key.app_secret_key
+    result = get_price(access_token, app_key, app_secret)
+    print(result)
