@@ -4,6 +4,7 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import glob
+import colorlog
 
 class LogManager:
     _instance = None
@@ -34,9 +35,22 @@ class LogManager:
         if logger.hasHandlers():
             return logger
 
-        formatter = logging.Formatter(
-            '[%(asctime)s.%(msecs)03d][%(levelname).1s][%(filename)s(%(funcName)s):%(lineno)d] %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S')
+        log_colors_config = {
+            'DEBUG': 'cyan',
+            'INFO': 'green',
+            'WARNING': 'yellow',
+            'ERROR': 'red', 
+            'CRITICAL': 'red,bg_white'
+        }
+
+        formatter = colorlog.ColoredFormatter(
+            '[%(log_color)s%(asctime)s.%(msecs)03d][%(levelname).1s][%(filename)s(%(funcName)s):%(lineno)d] %(message)s',
+            log_colors=log_colors_config,
+            datefmt='%Y-%m-%d %H:%M:%S',
+            reset=True,
+            secondary_log_colors={}
+        )
+
 
         stream_handler = logging.StreamHandler()
         stream_handler.setFormatter(formatter)
