@@ -78,24 +78,35 @@ def run_task():
     else:
         log_manager.logger.warning("stck_prpr is None or False-like value")
 
-    buy_data = buy_stock(access_token, app_key, app_secret, "70000")
-    if buy_data:
-        log_manager.logger.info(f"주식 매수: {buy_data}")
-    else:
-        log_manager.logger.error(f"매수 실패")
+    # 디버깅 로그 추가
+    log_manager.logger.debug("Before buy_stock")
+    try:
+        buy_data = buy_stock(access_token, app_key, app_secret, "70000")
+        if buy_data:
+            log_manager.logger.info(f"주식 매수: {buy_data}")
+        else:
+            log_manager.logger.error(f"매수 실패")
+    except Exception as e:
+        log_manager.logger.error(f"buy_stock 예외 발생: {e}")
 
-    sell_data = sell_stock(access_token, app_key, app_secret, "90000")
+    log_manager.logger.debug("Before sell_stock")
+    try:
+        sell_data = sell_stock(access_token, app_key, app_secret, "90000")
+        if sell_data:
+            log_manager.logger.info(f"주식 매도: {sell_data}")
+        else:
+            log_manager.logger.error(f"매도 실패")
+    except Exception as e:
+        log_manager.logger.error(f"sell_stock 예외 발생: {e}")
 
-    if sell_data:
-        log_manager.logger.info(f"주식 매도: {sell_data}")
-    else:
-        log_manager.logger.error(f"매도 실패")
-        
-    account = get_account_balance(access_token, app_key, app_secret)
-
-    if account:
-        log_manager.logger.info(f"계좌 현황: {account}")
-    else:
-        log_manager.logger.error(f"계좌 조회 실패")
+    log_manager.logger.debug("Before get_account_balance")
+    try:
+        account = get_account_balance(access_token, app_key, app_secret)
+        if account:
+            log_manager.logger.info(f"계좌 현황: {account}")
+        else:
+            log_manager.logger.error(f"계좌 조회 실패")
+    except Exception as e:
+        log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
 
     return stck_prpr
