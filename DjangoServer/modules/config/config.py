@@ -1,11 +1,13 @@
 # config/config.py
 
-class Config:
+class Config:   
     class Base:
         __flag = 0  # access token 1회 발급 flag
         _url_base = "https://openapivts.koreainvestment.com:29443"
         _headers = {"content-type": "application/json"}
         _path = "oauth2/tokenP"
+        _CANO = "50112202"
+        _ACNT_PRDT_CD = "01"
 
         @classmethod
         def get_url_base(cls):
@@ -32,6 +34,22 @@ class Config:
             cls._path = value
 
         @classmethod
+        def get_CANO(cls):
+            return cls._CANO
+
+        @classmethod
+        def set_CANO(cls, value):
+            cls._CANO = value
+
+        @classmethod
+        def get_ACNT_PRDT_CD(cls):
+            return cls._ACNT_PRDT_CD
+
+        @classmethod
+        def set_ACNT_PRDT_CD(cls, value):
+            cls._ACNT_PRDT_CD = value
+
+        @classmethod
         def get_flag(cls):
             return cls.__flag
 
@@ -42,11 +60,28 @@ class Config:
     class Buy:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/buy_endpoint"
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-cash"
 
         @classmethod
-        def get_headers(cls):
-            return Config.Base.get_headers()
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0802U"
+            }
+        
+        @classmethod
+        def get_headers_hash(cls, access_token, app_key, app_secret, hashkey):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0802U",
+                'hashkey': hashkey
+            }
 
         @classmethod
         def get_path(cls):
@@ -63,15 +98,51 @@ class Config:
     class Sell:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/sell_endpoint"
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/order-cash"
 
         @classmethod
-        def get_headers(cls):
-            return Config.Base.get_headers()
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC0801U"
+            }
 
         @classmethod
         def get_path(cls):
             return "sell/tokenP"
+
+    class get_account:
+        @classmethod
+        def get_url(cls):
+            return f"{Config.Base.get_url_base()}/uapi/domestic-stock/v1/trading/inquire-balance"
+
+        @classmethod
+        def get_headers(cls, access_token, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+                "Authorization": f"Bearer {access_token}",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "tr_id": "VTTC8434R"
+            }
+
+        @classmethod
+        def get_path(cls):
+            return "buy/tokenP"
+        
+    class OAuth:
+        @classmethod
+        def get_url(cls):
+            return f"{Config.Base.get_url_base()}/oauth2/Approval"
+
+        @classmethod
+        def get_headers(cls):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+            }
         
         @staticmethod
         def body(app_key, app_secret):
@@ -80,20 +151,35 @@ class Config:
                 "appkey": app_key,
                 "appsecret": app_secret
             }
-
-    class OAuth:
+        
+    class OAuth_Revoke:
         @classmethod
         def get_url(cls):
-            return f"{Config.Base.get_url_base()}/{Config.Base.get_path()}"
+            return f"{Config.Base.get_url_base()}/oauth2/revokeP"
 
         @classmethod
         def get_headers(cls):
-            return Config.Base.get_headers()
+            return {
+                "Content-Type": "application/json; charset=utf-8",
+            }
         
         @staticmethod
-        def body(app_key, app_secret):
+        def body(app_key, app_secret, access_token):
             return {
-                "grant_type": "client_credentials",
+                "appkey": app_key,
+                "appsecret": app_secret,
+                "token": access_token
+            }
+        
+    class Hash:
+        @classmethod
+        def get_url(cls):
+            return f"https://openapi.koreainvestment.com:9443/uapi/hashkey"
+
+        @classmethod
+        def get_headers(cls, app_key, app_secret):
+            return {
+                "Content-Type": "application/json; charset=utf-8",
                 "appkey": app_key,
                 "appsecret": app_secret
             }
