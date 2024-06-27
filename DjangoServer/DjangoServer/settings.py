@@ -41,9 +41,11 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.k
 CELERY_BEAT_SCHEDULE = {
     'run-task-every-2-seconds': {
         'task': 'stock_app.tasks.run_task',
-        'schedule': 10.0,  # 10초마다 실행
+        'schedule': 20.0,  # 20초마다 실행
     },
 }
+
+CELERY_TASK_TIME_LIMIT = 300  # 5 minutes
 
 # Celery 설정
 CELERY_BROKER_URL = 'redis://redis:6379/0'
