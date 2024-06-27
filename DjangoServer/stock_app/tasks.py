@@ -60,6 +60,24 @@ def run_task():
     # else:
     #     log_manager.logger.error(f"현재가 불러오기 실패")
 
+    if stck_prpr:
+        log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
+    # DynamoDB에 데이터 저장
+        try:
+            response = table.put_item(
+                Item={
+                    'Stock': '삼성전자',  # 예시 Stock
+                    'Timestamp': str(int(time.time())), 
+                    '현재가': str(stck_prpr)  # 주식 현재가
+                }
+            )
+            log_manager.logger.info(f"Data saved to DynamoDB successfully: {response}")
+        except Exception as e:
+            log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
+            raise
+    else:
+        log_manager.logger.warning("stck_prpr is None or False-like value")
+
     buy_data = buy_stock(access_token, app_key, app_secret, "70000")
     if buy_data:
         log_manager.logger.info(f"주식 매수: {buy_data}")
@@ -80,22 +98,4 @@ def run_task():
     else:
         log_manager.logger.error(f"계좌 조회 실패")
 
-    if stck_prpr:
-        log_manager.logger.info(f"현재가: {stck_prpr}")
-        # DynamoDB에 데이터 저장
-        try:
-            response = table.put_item(
-                Item={
-                    'Stock': '삼성전자',  # 예시 Stock
-                    'Timestamp': str(int(time.time())), 
-                    '현재가': str(stck_prpr)  # 주식 현재가
-                }
-            )
-            log_manager.logger.info("Data saved to DynamoDB successfully")
-        except Exception as e:
-            log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
-            raise
-    else:
-        log_manager.logger.warning("stck_prpr is None or False-like value")
-            
     return stck_prpr
