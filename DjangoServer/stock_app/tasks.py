@@ -60,44 +60,46 @@ def run_task():
     # else:
     #     log_manager.logger.error(f"현재가 불러오기 실패")
 
-    if stck_prpr:
-        log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
-    # DynamoDB에 데이터 저장
-        try:
-            response = table.put_item(
-                Item={
-                    'Stock': '삼성전자',  # 예시 Stock
-                    'Timestamp': str(int(time.time())), 
-                    '현재가': str(stck_prpr)  # 주식 현재가
-                }
-            )
-            log_manager.logger.info(f"Data saved to DynamoDB successfully: {response}")
-        except Exception as e:
-            log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
-            raise
-    else:
-        log_manager.logger.warning("stck_prpr is None or False-like value")
+    # if stck_prpr:
+    #     log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
+    # # DynamoDB에 데이터 저장
+    #     try:
+    #         response = table.put_item(
+    #             Item={
+    #                 'Stock': '삼성전자',  # 예시 Stock
+    #                 'Timestamp': str(int(time.time())), 
+    #                 '현재가': str(stck_prpr)  # 주식 현재가
+    #             }
+    #         )
+    #         log_manager.logger.info(f"Data saved to DynamoDB successfully: {response}")
+    #     except Exception as e:
+    #         log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
+    #         raise
+    # else:
+    #     log_manager.logger.warning("stck_prpr is None or False-like value")
 
-    # 디버깅 로그 추가
-    log_manager.logger.debug("Before buy_stock")
-    try:
-        buy_data = buy_stock(access_token, app_key, app_secret, "70000")
-        if buy_data:
-            log_manager.logger.info(f"주식 매수: {buy_data}")
-        else:
-            log_manager.logger.error(f"매수 실패")
-    except Exception as e:
-        log_manager.logger.error(f"buy_stock 예외 발생: {e}")
+    # # 디버깅 로그 추가
+    # log_manager.logger.debug("Before buy_stock")
 
-    log_manager.logger.debug("Before sell_stock")
-    try:
-        sell_data = sell_stock(access_token, app_key, app_secret, "90000")
-        if sell_data:
-            log_manager.logger.info(f"주식 매도: {sell_data}")
-        else:
-            log_manager.logger.error(f"매도 실패")
-    except Exception as e:
-        log_manager.logger.error(f"sell_stock 예외 발생: {e}")
+    # try:
+    #     buy_data = buy_stock(access_token, app_key, app_secret, "70000")
+    #     if buy_data:
+    #         log_manager.logger.info(f"주식 매수: {buy_data}")
+    #     else:
+    #         log_manager.logger.error(f"매수 실패")
+    # except Exception as e:
+    #     log_manager.logger.error(f"buy_stock 예외 발생: {e}")
+
+    # log_manager.logger.debug("Before sell_stock")
+    # try:
+    #     sell_data = sell_stock(access_token, app_key, app_secret, "90000")
+    #     if sell_data:
+    #         log_manager.logger.info(f"주식 매도: {sell_data}")
+    #     else:
+    #         log_manager.logger.error(f"매도 실패")
+    # except Exception as e:
+    #     log_manager.logger.error(f"sell_stock 예외 발생: {e}")
+
 
     log_manager.logger.debug("Before get_account_balance")
     try:
@@ -108,5 +110,5 @@ def run_task():
             log_manager.logger.error(f"계좌 조회 실패")
     except Exception as e:
         log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
-
+    
     return stck_prpr
