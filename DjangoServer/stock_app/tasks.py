@@ -101,14 +101,14 @@ def run_task():
     #     log_manager.logger.error(f"sell_stock 예외 발생: {e}")
 
 
-    log_manager.logger.debug("Before get_account_balance")
-    try:
-        account = get_account_balance(access_token, app_key, app_secret)
-        if account:
-            log_manager.logger.info(f"계좌 현황: {account}")
-        else:
-            log_manager.logger.error(f"계좌 조회 실패")
-    except Exception as e:
-        log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
+    # log_manager.logger.debug("Before get_account_balance")
+    # try:
+    #     account = get_account_balance(access_token, app_key, app_secret)
+    #     if account:
+    #         log_manager.logger.info(f"계좌 현황: {account}")
+    #     else:
+    #         log_manager.logger.error(f"계좌 조회 실패")
+    # except Exception as e:
+    #     log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
     
-    return stck_prpr
+    # return stck_prpr
