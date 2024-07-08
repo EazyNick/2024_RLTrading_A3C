@@ -8,3 +8,4 @@ celery
 redis
 boto3
 colorlog
+django-cors-headers
