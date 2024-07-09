@@ -101,6 +101,11 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'authorization',
+]
+
 ROOT_URLCONF = 'DjangoServer.urls'
 
 TEMPLATES = [
