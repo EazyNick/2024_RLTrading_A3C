@@ -10,3 +10,4 @@ boto3
 colorlog
 django-cors-headers
 djangorestframework-simplejwt
+django_extensions
