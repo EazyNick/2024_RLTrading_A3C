@@ -1,19 +1,15 @@
 # accounts/serializers.py
-
 from rest_framework import serializers
-from .models import CustomUser
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['username', 'email', 'password']
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
