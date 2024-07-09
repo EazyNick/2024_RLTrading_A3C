@@ -33,8 +33,6 @@ if 'DJANGO_SUPERUSER_USERNAME' in os.environ:
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-7!i3ja1c_(g_0^gw+zs=)n!%bt%qx7^d*4j-)6bh_nuuv2x#y&'
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
