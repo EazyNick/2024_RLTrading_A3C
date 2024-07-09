@@ -1,11 +1,9 @@
-from django.views.generic import TemplateView
-import logging
+from django.shortcuts import render
+from rest_framework import viewsets
+from .serializers import ItemSerializer
+from .models import Item
 
-logger = logging.getLogger(__name__)
-
-class AccountHomeView(TemplateView):
-    template_name = 'accounts/home.html'
-
-    def get(self, request, *args, **kwargs):
-        logger.info("AccountHomeView GET request received")
-        return super().get(request, *args, **kwargs)
+# Create your views here.
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
