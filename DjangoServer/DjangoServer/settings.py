@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-##주석을 추가했습니다용 2024.07.05##
 
 import os
 from pathlib import Path
@@ -119,7 +118,10 @@ ROOT_URLCONF = 'DjangoServer.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'api/templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'api/templates'),
+            os.path.join(BASE_DIR, 'accounts/templates'),  # Add this line
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
