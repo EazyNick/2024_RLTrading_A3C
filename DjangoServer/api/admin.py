@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import MyModel
+from .models import Item  # Item 모델을 가져옵니다.
 
-admin.site.register(MyModel)
+admin.site.register(Item)  # Item 모델을 admin 사이트에 등록합니다.
