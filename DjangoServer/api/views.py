@@ -6,7 +6,7 @@ from rest_framework import status
 
 class SaveItemView(APIView):
     def get(self, request):
-        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED, content_type="application/json")
 
     def post(self, request):
         username = request.data.get('username')
