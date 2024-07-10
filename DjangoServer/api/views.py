@@ -1,27 +1,8 @@
-# api/views.py
-
-from django.shortcuts import render
-
 from rest_framework import viewsets
-from .models import MyModel
-from .serializers import MyModelSerializer
-from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+from api.models import Item
+from api.serializers import ItemSerializer
 
-class MyModelViewSet(viewsets.ModelViewSet):
-    queryset = MyModel.objects.all()
-    serializer_class = MyModelSerializer
-    renderer_classes = [JSONRenderer]
-
-import logging
-
-logger = logging.getLogger('mylogger')
-
-def home(request):
-    logger.debug('This is a debug message')
-    logger.info('This is an info message')
-    logger.warning('This is a warning message')
-    logger.error('This is an error message')
-    logger.critical('This is a critical message')
-    return render(request, 'api/home.html')
-
-    
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer

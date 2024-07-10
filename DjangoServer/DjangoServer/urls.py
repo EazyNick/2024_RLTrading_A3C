@@ -1,8 +1,13 @@
+# myproject/myproject/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from api import views
+
+router = routers.DefaultRouter()
+router.register(r'items', views.ItemViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
-    path('', include('accounts.urls')),
+    path('api/', include(router.urls)),
 ]
