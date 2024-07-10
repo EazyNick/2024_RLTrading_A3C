@@ -3,10 +3,13 @@ import boto3
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
 
 class SaveItemView(APIView):
+    renderer_classes = [JSONRenderer]
+
     def get(self, request):
-        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED, content_type="application/json")
+        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request):
         username = request.data.get('username')
