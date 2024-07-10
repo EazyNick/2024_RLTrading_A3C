@@ -5,11 +5,15 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class SaveItemView(APIView):
-    def post(self, request):
-        stock_name = request.data.get('Stock')
-        stck_prpr = request.data.get('현재가')
+    def get(self, request):
+        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-        if not stock_name or not stck_prpr:
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not username or not email or not password:
             return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
 
         # DynamoDB 클라이언트 초기화
@@ -19,9 +23,10 @@ class SaveItemView(APIView):
         try:
             response = table.put_item(
                 Item={
-                    'Stock': stock_name,
+                    'username': username,
+                    'email': email,
+                    'password': password,
                     'Timestamp': str(int(time.time())),
-                    '현재가': str(stck_prpr)
                 }
             )
             return Response({"message": "Data saved to DynamoDB successfully"}, status=status.HTTP_201_CREATED)
