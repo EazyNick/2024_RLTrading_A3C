@@ -1,7 +1,8 @@
+# api/views.py
 from rest_framework import viewsets
 from rest_framework.response import Response
-from api.models import Item
-from api.serializers import ItemSerializer
+from .models import Item
+from .serializers import ItemSerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()

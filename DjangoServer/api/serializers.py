@@ -1,6 +1,6 @@
-# myproject/myapp/serializers.py
+# api/serializers.py
 from rest_framework import serializers
-from api.models import Item
+from .models import Item
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
