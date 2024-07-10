@@ -1,5 +1,3 @@
-# api/views.py
-
 import time
 import boto3
 from rest_framework.views import APIView
