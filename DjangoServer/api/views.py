@@ -21,7 +21,7 @@ class SaveItemView(APIView):
 
         # DynamoDB 클라이언트 초기화
         dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
-        table = dynamodb.Table('RESTAPI')
+        table = dynamodb.Table('Accounts')
 
         try:
             response = table.put_item(
