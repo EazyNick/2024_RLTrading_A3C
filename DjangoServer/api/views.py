@@ -54,7 +54,6 @@ class LoginView(APIView):
 
         try:
             response = table.query(
-                IndexName='email-index',  # 이메일을 기준으로 인덱스를 사용하여 조회
                 KeyConditionExpression=Key('email').eq(email)
             )
             items = response.get('Items', [])
