@@ -75,7 +75,7 @@ class AccountStatusView(View):
     def get(self, request):
         try:
             # 현재 파일의 디렉토리 경로를 기준으로 get_prices.py 파일의 절대 경로를 생성합니다.
-            script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../modules/services/get_price.py'))
+            script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../modules/services/get_account_balance.py'))
 
             # 경로 확인을 위한 출력
             print(script_path)
