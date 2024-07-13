@@ -48,9 +48,9 @@ def get_account_balance(access_token, app_key, app_secret):
 
     res = requests.get(url, headers=headers, params=params)
     
-    log_manager.logger.debug(f"Status Code: {res.status_code}")
-    log_manager.logger.debug(f"Response Headers: {res.headers}")
-    log_manager.logger.debug(f"Response Text: {res.text}")
+    log_manager.logger.info(f"Status Code: {res.status_code}")
+    log_manager.logger.info(f"Response Headers: {res.headers}")
+    log_manager.logger.info(f"Response Text: {res.text}")
 
     if res.status_code == 200:
         data = res.json()
