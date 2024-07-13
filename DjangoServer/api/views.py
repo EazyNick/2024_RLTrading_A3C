@@ -84,11 +84,12 @@ class AccountStatusView(View):
             stdout = result.stdout
             stderr = result.stderr
 
-            # stdout을 처리하여 JSON 형식의 데이터를 추출합니다.
+            # stdout에서 JSON 부분을 추출
+            json_part = None
             try:
-                # Response Text 부분을 JSON으로 변환
                 start_index = stdout.find('Response Text: ') + len('Response Text: ')
-                json_part = stdout[start_index:].strip()
+                end_index = stdout.find('}', start_index) + 1
+                json_part = stdout[start_index:end_index].strip()
                 parsed_output = json.loads(json_part)
             except (json.JSONDecodeError, ValueError) as e:
                 parsed_output = {"raw_output": stdout}
