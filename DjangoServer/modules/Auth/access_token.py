@@ -3,12 +3,13 @@ import os
 import requests
 import sys
 from app_key import KeyringManager
+import atexit
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
     from config.config import Config
     from utils import *
-except ImportError:    
+except ImportError:
     from config import Config
     from utils import *
 
@@ -30,10 +31,17 @@ class AccessTokenManager:
             self.file_path = os.path.join(PATH, 'access_token.json')
         else:
             self.file_path = file_path
-        self.clear_access_token_file()
+
+        self.access_token = self.load_access_token()
         self.__initialized = True
 
+        # 서버 종료 시 JSON 파일을 클리어하는 함수 등록
+        atexit.register(self.clear_access_token_file)
+
     def get_access_token(self):
+        if self.access_token:
+            return self.access_token
+
         key = KeyringManager()
         app_key = key.app_key
         app_secret = key.app_secret_key
@@ -51,6 +59,7 @@ class AccessTokenManager:
             at_temp = res.json().get('access_token')
             if at_temp:
                 self.save_access_token(at_temp)
+                self.access_token = at_temp
                 return at_temp
             else:
                 log_manager.logger.error("Failed to retrieve access token: No access token in response.")
@@ -58,11 +67,11 @@ class AccessTokenManager:
             log_manager.logger.error(f"Failed to retrieve access token: {res.status_code}, {res.text}")
         raise Exception("Failed to retrieve access token")
 
-
     def clear_access_token_file(self):
         """JSON 파일의 내용을 비우는 함수"""
         with open(self.file_path, 'w') as json_file:
             json.dump({}, json_file)
+        self.access_token = None
 
     def save_access_token(self, access_token):
         """access_token을 JSON 파일에 저장하는 함수"""
@@ -71,6 +80,7 @@ class AccessTokenManager:
         }
         with open(self.file_path, 'w') as json_file:
             json.dump(data, json_file)
+        self.access_token = access_token
 
     def load_access_token(self):
         """JSON 파일에서 access_token을 불러오는 함수"""
@@ -78,7 +88,7 @@ class AccessTokenManager:
             with open(self.file_path, 'r') as json_file:
                 data = json.load(json_file)
                 return data.get("access_token")
-        except (FileNotFoundError, json.JSONDecodeError):
+        except FileNotFoundError:
             return None
 
 # 테스트 코드
