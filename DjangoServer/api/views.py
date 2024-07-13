@@ -28,7 +28,7 @@ class SaveItemView(APIView):
         try:
             response = table.put_item(
                 Item={
-                    'email': email,
+                    'Email': email,
                     'password': password,
                     'username': username,
                     'Timestamp': str(int(time.time())),
@@ -42,7 +42,7 @@ class LoginView(APIView):
     renderer_classes = [JSONRenderer]
 
     def post(self, request):
-        email = request.data.get('email')
+        email = request.data.get('Email')
         password = request.data.get('password')
 
         if not email or not password:
@@ -54,7 +54,7 @@ class LoginView(APIView):
 
         try:
             response = table.query(
-                KeyConditionExpression=Key('email').eq(email)
+                KeyConditionExpression=Key('Email').eq(email)
             )
             items = response.get('Items', [])
             if not items:
