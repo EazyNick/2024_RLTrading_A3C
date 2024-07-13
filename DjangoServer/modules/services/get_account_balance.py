@@ -64,23 +64,15 @@ def get_account_balance(access_token, app_key, app_secret):
         log_manager.logger.error(f"Failed to sell stock: {res.status_code}")
     return None
 
-manager = AccessTokenManager()
-access_token = manager.load_access_token()
-if access_token is None:
-    access_token = manager.get_access_token()
-# log_manager.logger.debug(access_token)
-key = KeyringManager()
-app_key = key.app_key
-app_secret = key.app_secret_key
-result = get_account_balance(access_token, app_key, app_secret)
-log_manager.logger.info(result)
-# print(result)
-
-# if __name__ == "__main__":
-#     manager = AccessTokenManager()
-#     access_token = manager.load_access_token()
-#     key = KeyringManager()
-#     app_key = key.app_key
-#     app_secret = key.app_secret_key
-#     result = get_account_balance(access_token, app_key, app_secret)
-#     print(result)
+if __name__ == "__main__":
+    manager = AccessTokenManager()
+    access_token = manager.load_access_token()
+    if access_token is None:
+        access_token = manager.get_access_token()
+    # log_manager.logger.debug(access_token)
+    key = KeyringManager()
+    app_key = key.app_key
+    app_secret = key.app_secret_key
+    result = get_account_balance(access_token, app_key, app_secret)
+    log_manager.logger.info(result)
+    # print(result)
