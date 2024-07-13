@@ -73,6 +73,7 @@ key = KeyringManager()
 app_key = key.app_key
 app_secret = key.app_secret_key
 result = get_account_balance(access_token, app_key, app_secret)
+log_manager.logger.info(result)
 # print(result)
 
 # if __name__ == "__main__":
