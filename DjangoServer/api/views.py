@@ -14,8 +14,8 @@ class SaveItemView(APIView):
         return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        email = request.data.get('Email')
+        password = request.data.get('Password')
         username = request.data.get('username')
 
         if not username or not email or not password:
@@ -29,7 +29,7 @@ class SaveItemView(APIView):
             response = table.put_item(
                 Item={
                     'Email': email,
-                    'password': password,
+                    'Password': password,
                     'username': username,
                     'Timestamp': str(int(time.time())),
                 }
@@ -43,7 +43,7 @@ class LoginView(APIView):
 
     def post(self, request):
         email = request.data.get('Email')
-        password = request.data.get('password')
+        password = request.data.get('Password')
 
         if not email or not password:
             return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
@@ -60,8 +60,8 @@ class LoginView(APIView):
             if not items:
                 return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
             user = items[0]
-            if user['password'] != password:
-                return Response({"error": "Incorrect password"}, status=status.HTTP_401_UNAUTHORIZED)
+            if user['Password'] != password:
+                return Response({"error": "Incorrect Password"}, status=status.HTTP_401_UNAUTHORIZED)
             return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
