@@ -68,7 +68,7 @@ manager = AccessTokenManager()
 access_token = manager.load_access_token()
 if access_token is None:
     access_token = manager.get_access_token()
-log_manager.logger.debug(access_token)
+# log_manager.logger.debug(access_token)
 key = KeyringManager()
 app_key = key.app_key
 app_secret = key.app_secret_key

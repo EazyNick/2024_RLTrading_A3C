@@ -3,7 +3,7 @@ import os
 import requests
 import sys
 from app_key import KeyringManager
-import atexit
+# import atexit
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -36,7 +36,7 @@ class AccessTokenManager:
         self.__initialized = True
 
         # 서버 종료 시 JSON 파일을 클리어하는 함수 등록
-        atexit.register(self.clear_access_token_file)
+        # atexit.register(self.clear_access_token_file)
 
     def get_access_token(self):
         if self.access_token:
@@ -91,23 +91,23 @@ class AccessTokenManager:
         except FileNotFoundError:
             return None
 
-# 테스트 코드
-if __name__ == "__main__":
-    manager = AccessTokenManager()
+# 테스트 코드, 서버에서 서브 프로세스로 실행하기 때문에, 사용 금지!
+# if __name__ == "__main__":
+#     manager = AccessTokenManager()
 
-    # 테스트: access_token 파일 비우기
-    manager.clear_access_token_file()
-    assert manager.load_access_token() is None, "파일이 비워지지 않았습니다."
+#     # 테스트: access_token 파일 비우기
+#     manager.clear_access_token_file()
+#     assert manager.load_access_token() is None, "파일이 비워지지 않았습니다."
 
-    # 테스트: access_token 저장 및 불러오기
-    test_token = "test_access_token"
-    manager.save_access_token(test_token)
-    assert manager.load_access_token() == test_token, "access_token이 올바르게 저장되지 않았습니다."
+#     # 테스트: access_token 저장 및 불러오기
+#     test_token = "test_access_token"
+#     manager.save_access_token(test_token)
+#     assert manager.load_access_token() == test_token, "access_token이 올바르게 저장되지 않았습니다."
 
-    # 테스트: get_access_token 메서드
-    try:
-        access_token = manager.get_access_token()
-        assert access_token is not None, "access_token을 가져오지 못했습니다."
-        print(f"Access token successfully retrieved: {access_token}")
-    except Exception as e:
-        print(f"Failed to retrieve access token: {e}")
+#     # 테스트: get_access_token 메서드
+#     try:
+#         access_token = manager.get_access_token()
+#         assert access_token is not None, "access_token을 가져오지 못했습니다."
+#         print(f"Access token successfully retrieved: {access_token}")
+#     except Exception as e:
+#         print(f"Failed to retrieve access token: {e}")

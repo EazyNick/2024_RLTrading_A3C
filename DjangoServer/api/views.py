@@ -79,27 +79,22 @@ class AccountStatusView(View):
             script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../modules/services/get_account_balance.py'))
 
             # 경로 확인을 위한 출력
-            # print(script_path)
+            print(script_path)
 
-             # subprocess를 사용하여 스크립트를 실행하고 출력을 캡처합니다.
+            # subprocess를 사용하여 스크립트를 실행하고 출력을 캡처합니다.
             result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
 
-            # 스크립트 실행 결과에서 표준 출력(stdout)과 표준 에러(stderr)를 분리하여 처리
-            output = result.stdout.strip()
-            error = result.stderr.strip()
+            output = result.stdout
+            error = result.stderr
 
-            # 출력 결과가 JSON 형식인지 확인하고 파싱
             try:
-                json_output = json.loads(output)
+                parsed_output = json.loads(output)
             except json.JSONDecodeError:
-                json_output = None
+                parsed_output = {"raw_output": output}
 
-            # 응답을 구성하여 반환
-            response_data = {
-                'output': json_output if json_output else output,
+            return JsonResponse({
+                'output': parsed_output,
                 'error': error
-            }
-
-            return JsonResponse(response_data)
+            })
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
