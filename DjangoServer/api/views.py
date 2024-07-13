@@ -5,6 +5,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
+from django.http import JsonResponse
+from django.views import View
+import subprocess
+import sys
+import os
 
 
 class SaveItemView(APIView):
@@ -65,3 +70,20 @@ class LoginView(APIView):
             return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+class AccountStatusView(View):
+    def get(self, request):
+        try:
+            # get_prices.py 파일의 절대 경로를 지정합니다.
+            script_path = os.path.join(os.path.dirname(__file__), 'modules/services/get_prices.py')
+
+            # subprocess를 사용하여 스크립트를 실행하고 출력을 캡처합니다.
+            result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
+
+            # 스크립트 실행 결과를 JSON 형식으로 반환합니다.
+            return JsonResponse({
+                'output': result.stdout,
+                'error': result.stderr
+            })
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)

@@ -50,6 +50,14 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     except:
         log_manager.logger.error(f"{data}")
 
+manager = AccessTokenManager()
+access_token = manager.load_access_token()
+key = KeyringManager()
+app_key = key.app_key
+app_secret = key.app_secret_key
+result = get_price(access_token, app_key, app_secret)
+print(result)
+
 if __name__ == "__main__":
     manager = AccessTokenManager()
     access_token = manager.load_access_token()
