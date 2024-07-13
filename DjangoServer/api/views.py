@@ -14,9 +14,9 @@ class SaveItemView(APIView):
         return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request):
-        username = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
+        username = request.data.get('username')
 
         if not username or not email or not password:
             return Response({"error": "Invalid data"}, status=status.HTTP_400_BAD_REQUEST)
@@ -28,9 +28,9 @@ class SaveItemView(APIView):
         try:
             response = table.put_item(
                 Item={
-                    'username': username,
                     'email': email,
                     'password': password,
+                    'username': username,
                     'Timestamp': str(int(time.time())),
                 }
             )
