@@ -78,7 +78,7 @@ class AccessTokenManager:
             with open(self.file_path, 'r') as json_file:
                 data = json.load(json_file)
                 return data.get("access_token")
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             return None
 
 # 테스트 코드
