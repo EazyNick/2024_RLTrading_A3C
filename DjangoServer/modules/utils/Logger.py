@@ -29,7 +29,7 @@ class LogManager:
 
     def _init_logger(self):
         """ 로거 초기화 """
-        logger = logging.getLogger('TEST')
+        logger = logging.getLogger('DjangoICTServer')
 
         # 로거 핸들러가 이미 설정되어 있는지 확인
         if logger.hasHandlers():
