@@ -1,12 +1,17 @@
+"""
+개별 실행 파일, 학습 후 테스트하는데 사용한 데이터를 가져와서, 모델의 입력에 같이 넣어주기 위해 사용
+ex) 365일 데이터를 위해서는 현재 이전의 364일의 데이터가 필요하므로 불러올 필요가 있음
+"""
+
 import boto3
 import csv
 
 # DynamoDB에 연결
-dynamodb = boto3.resource('dynamodb', region_name='your-region')  # 예: 'us-west-2'
+dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
 table = dynamodb.Table('StockPrices')
 
 # CSV 파일 경로
-csv_file_path = 'path/to/your/file.csv'
+csv_file_path = r'DjangoServer\RLmodels\data\data_csv\kia_stock_data.csv'
 
 # CSV 파일 읽기 및 데이터 삽입
 with open(csv_file_path, newline='') as csvfile:
