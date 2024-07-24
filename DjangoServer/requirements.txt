@@ -11,3 +11,7 @@ colorlog
 django-cors-headers
 djangorestframework-simplejwt
 django_extensions
+torch
+gym
+numpy
+pandas
