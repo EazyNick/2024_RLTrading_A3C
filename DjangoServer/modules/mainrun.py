@@ -28,6 +28,7 @@ def get_access_token(manager):
     """
     if Config.Base.get_flag() == 0:
         access_token = manager.get_access_token()  # get_access_token 메서드 호출하여 access_token 가져오기
+        access_token = manager.load_access_token()
         Config.Base.increment_flag()
     else:
         access_token = manager.load_access_token()
@@ -40,7 +41,7 @@ def get_access_token(manager):
 
 def Run():
     log_manager.logger.info("Start MainRun")
-    print("Running...")
+    log_manager.logger.info("Running...")
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key

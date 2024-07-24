@@ -1,6 +1,7 @@
 import requests
 import sys
 import os
+from datetime import datetime
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -16,7 +17,7 @@ except ImportError:
 
 def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     """
-    주식 API를 호출하여 현재가를 가져오는 함수
+    주식 API를 호출하여 현재가, 거래량을 가져오는 함수
 
     Args:
         access_token (str): 액세스 토큰
@@ -26,7 +27,7 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
         itm_no (str): 종목번호 (기본값: "005930")
 
     Returns:
-        str: 현재가 (주식 가격) 또는 None
+        dict: 현재가 및 현재 거래량을 포함하는 딕셔너리
     """
     
     url = Config.Stock.get_url()
@@ -37,20 +38,33 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     try:
         if res.status_code == 200:
             data = res.json()
-            # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
-            stck_prpr = data['output'].get('stck_prpr')
-            if stck_prpr:
-                log_manager.logger.info(f"현재가: {stck_prpr}")
-                return stck_prpr
-            else:
-                log_manager.logger.error("Failed to retrieve 현재가: 'stck_prpr' not found in response.")
+            log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
+            
+            # 필요한 데이터 추출
+            stck_prpr = float(data['output'].get('stck_prpr', 0))
+            acml_vol = float(data['output'].get('acml_vol', 0))
+            
+            # 현재 날짜
+            date_str = datetime.now().strftime('%Y-%m-%d')
+
+            result = {
+                'Date': date_str,
+                'Close': stck_prpr,
+                'Volume': acml_vol
+            }
+            
+            log_manager.logger.info(f"현재가 및 거래량: {result}")
+            return result
         else:
             log_manager.logger.error(f"Failed to retrieve stock data: {res.status_code}")
-            log_manager.logger.error(f"Response headers: {res.headers}")
-            log_manager.logger.error(f"Response content: {res.content}")
+            manager = AccessTokenManager()
+            manager.clear_access_token_file()
+            access_token = manager.get_access_token(manager)
+            stck_prpr = get_price(access_token, app_key, app_secret)
+            return None
+    except Exception as e:
+        log_manager.logger.error(f"Exception occurred: {e}")
         return None
-    except:
-        log_manager.logger.error(f"{data}")
 
 # manager = AccessTokenManager()
 # access_token = manager.load_access_token()
