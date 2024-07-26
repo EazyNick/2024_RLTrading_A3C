@@ -1,5 +1,6 @@
 import boto3
 import pandas as pd
+import os
 
 def convert_dynamodb_to_csv():
     # DynamoDB에 연결
@@ -50,7 +51,7 @@ def convert_dynamodb_to_csv():
             
         if vma_key not in exclude_keys:
             df[vma_key] = df[vma_key].astype(float)
-            
+
     df['365D_High'] = df['365D_High'].astype(float)
     df['365D_Low'] = df['365D_Low'].astype(float)
     df['180D_High'] = df['180D_High'].astype(float)
@@ -62,8 +63,11 @@ def convert_dynamodb_to_csv():
     df['AllTime_High'] = df['AllTime_High'].astype(float)
     df['AllTime_Low'] = df['AllTime_Low'].astype(float)
 
-    # CSV 파일로 저장
-    csv_file_path = r'DjangoServer\RLmodels\data\DynamoDB'
+    # 현재 작업 디렉토리 가져오기
+    current_dir = os.getcwd()
+
+    # CSV 파일 경로 설정 (현재 디렉토리에 저장)
+    csv_file_path = os.path.join(current_dir, 'DynamoDB.csv')
     df.to_csv(csv_file_path, index=False)
 
     print(f"Data exported to {csv_file_path}")
