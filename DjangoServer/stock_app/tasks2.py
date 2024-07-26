@@ -149,6 +149,9 @@ def run_task2():
             sma_keys = [f'SMA_{i}' for i in range(5, 705, 5) if f'SMA_{i}' not in exclude_keys]
             vma_keys = [f'VMA_{i}' for i in range(5, 705, 5) if f'VMA_{i}' not in exclude_keys]
 
+            log_manager.logger.debug(f"sma_keys: {sma_keys}")
+            log_manager.logger.debug(f"vma_keys: {vma_keys}")
+
             if 'Item' in existing_data:
                 log_manager.logger.info(f"기존 데이터가 존재합니다. 업데이트: {existing_data}")
                 item = existing_data['Item']    
