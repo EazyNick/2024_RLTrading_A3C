@@ -42,8 +42,15 @@ def convert_dynamodb_to_csv():
     df['Close'] = df['Close'].astype(float)
     df['Volume'] = df['Volume'].astype(int)
     for i in range(5, 705, 5):
-        df[f'SMA_{i}'] = df[f'SMA_{i}'].astype(float)
-        df[f'VMA_{i}'] = df[f'VMA_{i}'].astype(float)
+        sma_key = f'SMA_{i}'
+        vma_key = f'VMA_{i}'
+    
+        if sma_key not in exclude_keys:
+            df[sma_key] = df[sma_key].astype(float)
+            
+        if vma_key not in exclude_keys:
+            df[vma_key] = df[vma_key].astype(float)
+            
     df['365D_High'] = df['365D_High'].astype(float)
     df['365D_Low'] = df['365D_Low'].astype(float)
     df['180D_High'] = df['180D_High'].astype(float)
