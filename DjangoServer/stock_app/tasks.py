@@ -9,10 +9,12 @@ from stock_app.tasks2 import run_task2
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
+sys.path.append(str(Path(__file__).resolve().parents[2] / 'RLmodels'))
 
 try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
+    from RLmodels.main import main_run
 except ImportError as e:
     print(f"Import error: {e}")
     raise
@@ -46,11 +48,11 @@ def get_access_token(manager):
 @shared_task
 def run_task():
     log_manager.logger.info("Start MainRun")
-    print("Running...")
+    log_manager.logger.info("Running...")
 
     # Task 2 실행
-    result = run_task2.delay().get()
-    print("Task 2 결과:", result)
+    # result = run_task2.delay().get()
+    # log_manager.logger.info("Task 2 결과:", result)
     
     key = KeyringManager()
     app_key = key.app_key
@@ -61,11 +63,17 @@ def run_task():
 
     stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
-    # if stock_data:
-    #     log_manager.logger.info(f"현재가, 거래량: {stock_data}")
-    # else:
-    #     log_manager.logger.error(f"현재가 불러오기 실패")
+    if stock_data:
+        log_manager.logger.info(f"현재가, 거래량: {stock_data}")
+    else:
+        log_manager.logger.error(f"현재가 불러오기 실패")
 
+    try:
+        main_run()
+    except:
+        log_manager.logger.error(f"모델 실행 실패")
+
+    # DB 삽입 코드
     # if stck_prpr:
     #     log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
     # # DynamoDB에 데이터 저장

@@ -194,7 +194,7 @@ def run_task2():
                     log_manager.logger.info("dynamodb > csv 변환 완료")
                 except Exception as e:
                     log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
-                    
+
             else:
                 log_manager.logger.info("기존 데이터가 없습니다. 새 데이터로 추가합니다.")
                 
