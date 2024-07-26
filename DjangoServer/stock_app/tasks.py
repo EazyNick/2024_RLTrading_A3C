@@ -47,6 +47,10 @@ def get_access_token(manager):
 def run_task():
     log_manager.logger.info("Start MainRun")
     print("Running...")
+
+    # Task 2 실행
+    result = run_task2.delay().get()
+    print("Task 2 결과:", result)
     
     key = KeyringManager()
     app_key = key.app_key
