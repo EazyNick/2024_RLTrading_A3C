@@ -5,13 +5,17 @@ ex) 365일 데이터를 위해서는 현재 이전의 364일의 데이터가 필
 
 import boto3
 import csv
+import os
 
 # DynamoDB에 연결
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
 table = dynamodb.Table('StockPrices')
 
-# CSV 파일 경로
-csv_file_path = r'DjangoServer\RLmodels\data\data_csv\kia_stock_data.csv'
+# 현재 파일의 디렉토리 경로를 가져옵니다.
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# CSV 파일의 상대 경로를 절대 경로로 변환합니다.
+csv_file_path = os.path.join(current_dir, '..', '..', 'data_csv', 'kia_stock_data.csv')
 
 # CSV 파일 읽기 및 데이터 삽입
 with open(csv_file_path, newline='') as csvfile:
