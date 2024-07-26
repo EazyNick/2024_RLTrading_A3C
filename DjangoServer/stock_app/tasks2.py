@@ -253,7 +253,7 @@ def run_task2():
                     'SMA_540': calculate_sma(item.get('SMA_540', stock_data['Close']), stock_data['Close']),
                     'VMA_540': calculate_vma(item.get('VMA_540', stock_data['Volume']), stock_data['Volume']),
                     'SMA_550': calculate_sma(item.get('SMA_550', stock_data['Close']), stock_data['Close']),
-                    'VMA_550': calculate vma(item.get('VMA_550', stock_data['Volume']), stock_data['Volume']),
+                    'VMA_550': calculate_vma(item.get('VMA_550', stock_data['Volume']), stock_data['Volume']),
                     'SMA_560': calculate_sma(item.get('SMA_560', stock_data['Close']), stock_data['Close']),
                     'VMA_560': calculate_vma(item.get('VMA_560', stock_data['Volume']), stock_data['Volume']),
                     'SMA_570': calculate_sma(item.get('SMA_570', stock_data['Close']), stock_data['Close']),
