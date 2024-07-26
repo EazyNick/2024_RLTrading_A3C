@@ -165,8 +165,12 @@ def run_task2():
                 for sma_key, vma_key in zip(sma_keys, vma_keys):
                     previous_sma = Decimal(item.get(sma_key, stock_data['Close']))
                     previous_vma = Decimal(item.get(vma_key, stock_data['Volume']))
-                    new_item[sma_key] = calculate_sma(previous_sma, Decimal(stock_data['Close']))
-                    new_item[vma_key] = calculate_vma(previous_vma, Decimal(stock_data['Volume']))
+                    try:
+                        new_item[sma_key] = calculate_sma(previous_sma, Decimal(stock_data['Close']))
+                        new_item[vma_key] = calculate_vma(previous_vma, Decimal(stock_data['Volume']))
+                    except KeyError:
+                        log_manager.logger.warning(f"Key not found: {sma_key} or {vma_key}")
+                        continue
 
                 new_item.update({
                     '365D_High': max(Decimal(item.get('365D_High', Decimal('0.0'))), stock_data['Close']),
@@ -180,6 +184,8 @@ def run_task2():
                     'AllTime_High': max(Decimal(item.get('AllTime_High', Decimal('0.0'))), stock_data['Close']),
                     'AllTime_Low': min(Decimal(item.get('AllTime_Low', Decimal('inf'))), stock_data['Close'])
                 })
+
+                log_manager.logger.debug(f"new_item: {new_item}")
 
                 response = table.put_item(Item=new_item)
                 # log_manager.logger.debug(f"DynamoDB response: {response}")
