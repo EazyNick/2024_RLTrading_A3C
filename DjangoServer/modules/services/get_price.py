@@ -38,7 +38,7 @@ def get_price(access_token, app_key, app_secret, div_code="J", itm_no="005930"):
     try:
         if res.status_code == 200:
             data = res.json()
-            log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
+            # log_manager.logger.debug(data)  # 전체 JSON 응답 출력 
             
             # 필요한 데이터 추출
             stck_prpr = float(data['output'].get('stck_prpr', 0))
