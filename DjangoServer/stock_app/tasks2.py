@@ -485,7 +485,7 @@ def run_task2():
                 log_manager.logger.debug("csv로 저장 함수 실행")
 
         except Exception as e:
-            log_manager.logger.error("현재가 불러오기 실패")
+            log_manager.logger.error(f"{e}")
     else:
         log_manager.logger.error("현재가 불러오기 실패")
 
