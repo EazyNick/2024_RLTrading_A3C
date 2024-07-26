@@ -7,6 +7,15 @@ from decimal import Decimal
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
 table = dynamodb.Table('StockPrices')
 
+# 테이블 스캔 및 항목 삭제
+def delete_all_items(table):
+    scan = table.scan()
+    with table.batch_writer() as batch:
+        for each in scan['Items']:
+            batch.delete_item(Key={'Date': each['Date']})
+
+delete_all_items(table)
+
 # 현재 파일의 디렉토리 경로를 가져옵니다.
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
