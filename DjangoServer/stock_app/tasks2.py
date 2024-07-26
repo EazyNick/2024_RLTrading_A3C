@@ -26,7 +26,7 @@ try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
     # dynamodb_to_csv 모듈 임포트
-    import dynamodb_to_csv
+    from dynamodb_to_csv import convert_dynamodb_to_csv
 except ImportError as e:
     print(f"Import error: {e}")
     raise
@@ -301,9 +301,9 @@ def run_task2():
 
                 # DynamoDB에 데이터를 업데이트합니다.
                 response = table.put_item(Item=new_item)
-                logger.debug(f"DynamoDB response: {response}")
+                # log_manager.logger.debug(f"DynamoDB response: {response}")
                 # dynamodb_to_csv.py 파일의 함수 사용 예시
-                dynamodb_to_csv.convert_dynamodb_to_csv()  # 파일 내 함수 이름에 맞게 수정
+                convert_dynamodb_to_csv()  # 파일 내 함수 이름에 맞게 수정
             else:
                 log_manager.logger.info("기존 데이터가 없습니다. 새 데이터로 추가합니다.")
                 # 초기 값을 설정하여 새로운 데이터로 추가합니다.
@@ -478,17 +478,21 @@ def run_task2():
 
                 # DynamoDB에 데이터를 업데이트합니다.
                 response = table.put_item(Item=new_item)
-                logger.debug(f"DynamoDB response: {response}")
+                # logger.logger.debug(f"DynamoDB response: {response}")
+
                 # dynamodb_to_csv.py 파일의 함수 사용 예시
                 dynamodb_to_csv.convert_dynamodb_to_csv()  # 파일 내 함수 이름에 맞게 수정
+                log_manager.logger.debug("csv로 저장 함수 실행")
+
         except Exception as e:
-            logger.error(f"Error inserting data into DynamoDB: {e}")
+            log_manager.logger.error("현재가 불러오기 실패")
     else:
         log_manager.logger.error("현재가 불러오기 실패")
 
 
     # if stck_prpr:
     #     log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
+        
     # # DynamoDB에 데이터 저장
     #     try:
     #         response = table.put_item(
