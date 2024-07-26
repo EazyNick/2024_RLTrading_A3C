@@ -64,12 +64,13 @@ def run_task():
     stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
     if stock_data:
-        log_manager.logger.info(f"현재가, 거래량: {stock_data}")
+        log_manager.logger.info(f"주식 데이터 불러오기 성공")
     else:
-        log_manager.logger.error(f"현재가 불러오기 실패")
+        log_manager.logger.error(f"주식 데이터 불러오기 실패")
 
     try:
         main_run()
+        log_manager.logger.error(f"모델 실행 완료")
     except ImportError as e:
         log_manager.logger.error(f"모델 실행 실패: {e}")
 
