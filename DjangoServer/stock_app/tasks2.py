@@ -137,11 +137,17 @@ def run_task2():
                 sma_keys = [f'SMA_{i}' for i in range(5, 701, 10)]
                 vma_keys = [f'VMA_{i}' for i in range(5, 701, 10)]
 
-                new_item = {'Date': stock_data['Date'], 'Close': stock_data['Close'], 'Volume': stock_data['Volume']}
+                new_item = {
+                    'Date': stock_data['Date'],
+                    'Close': Decimal(stock_data['Close']),
+                    'Volume': Decimal(stock_data['Volume'])
+                }
 
                 for sma_key, vma_key in zip(sma_keys, vma_keys):
-                    new_item[sma_key] = calculate_sma(Decimal(item.get(sma_key, stock_data['Close'])), stock_data['Close'])
-                    new_item[vma_key] = calculate_vma(Decimal(item.get(vma_key, stock_data['Volume'])), stock_data['Volume'])
+                    previous_sma = Decimal(item.get(sma_key, stock_data['Close']))
+                    previous_vma = Decimal(item.get(vma_key, stock_data['Volume']))
+                    new_item[sma_key] = calculate_sma(previous_sma, Decimal(stock_data['Close']))
+                    new_item[vma_key] = calculate_vma(previous_vma, Decimal(stock_data['Volume']))
 
                 new_item.update({
                     '365D_High': max(Decimal(item.get('365D_High', Decimal('0.0'))), stock_data['Close']),
@@ -162,23 +168,29 @@ def run_task2():
             else:
                 log_manager.logger.info("기존 데이터가 없습니다. 새 데이터로 추가합니다.")
                 
-                new_item = {'Date': stock_data['Date'], 'Close': stock_data['Close'], 'Volume': stock_data['Volume']}
+                new_item = {
+                    'Date': stock_data['Date'],
+                    'Close': Decimal(stock_data['Close']),
+                    'Volume': Decimal(stock_data['Volume']),
+                    'SMA_5': Decimal(stock_data['Close']),  # 초기값 설정
+                    'VMA_5': Decimal(stock_data['Volume']),
+                }
                 
-                for sma_key, vma_key in zip(sma_keys, vma_keys):
-                    new_item[sma_key] = stock_data['Close']
-                    new_item[vma_key] = stock_data['Volume']
+                for sma_key, vma_key in zip(sma_keys[1:], vma_keys[1:]):
+                    new_item[sma_key] = Decimal(stock_data['Close'])
+                    new_item[vma_key] = Decimal(stock_data['Volume'])
 
                 new_item.update({
-                    '365D_High': stock_data['Close'],
-                    '365D_Low': stock_data['Close'],
-                    '180D_High': stock_data['Close'],
-                    '180D_Low': stock_data['Close'],
-                    '90D_High': stock_data['Close'],
-                    '90D_Low': stock_data['Close'],
-                    '30D_High': stock_data['Close'],
-                    '30D_Low': stock_data['Close'],
-                    'AllTime_High': stock_data['Close'],
-                    'AllTime_Low': stock_data['Close']
+                    '365D_High': Decimal(stock_data['Close']),
+                    '365D_Low': Decimal(stock_data['Close']),
+                    '180D_High': Decimal(stock_data['Close']),
+                    '180D_Low': Decimal(stock_data['Close']),
+                    '90D_High': Decimal(stock_data['Close']),
+                    '90D_Low': Decimal(stock_data['Close']),
+                    '30D_High': Decimal(stock_data['Close']),
+                    '30D_Low': Decimal(stock_data['Close']),
+                    'AllTime_High': Decimal(stock_data['Close']),
+                    'AllTime_Low': Decimal(stock_data['Close'])
                 })
 
                 response = table.put_item(Item=new_item)
