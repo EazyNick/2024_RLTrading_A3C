@@ -82,7 +82,7 @@ class LogManager:
 
     def clean_up_logs(self):
         # 디렉토리 내의 특정 패턴의 파일 목록을 가져옵니다.
-        files = glob.glob(os.path.join(self.directory, '*App_Logs.log'))
+        files = glob.glob(os.path.join(self.directory, '*.log'))
         
         # 파일을 생성 시간에 따라 정렬합니다.
         files.sort(key=os.path.getmtime)

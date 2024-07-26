@@ -47,11 +47,18 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'stock_app.tasks.run_task',
         'schedule': 60.0,  # 60초마다 실행
     },
-    # 'run-task2-every-30-seconds': {
-    #     'task': 'stock_app.tasks2.run_task2',
-    #     'schedule': 30.0,  # 30초마다 실행
-    # },
 }
+
+# CELERY_BEAT_SCHEDULE = {
+#     'run-task-every-60-seconds': {
+#         'task': 'stock_app.tasks.run_task',
+#         'schedule': 60.0,  # 60초마다 실행
+#     },
+#     # 'run-task2-every-30-seconds': {
+#     #     'task': 'stock_app.tasks2.run_task2',
+#     #     'schedule': 30.0,  # 30초마다 실행
+#     # },
+# }
 
 CELERY_TASK_TIME_LIMIT = 300  # 5 minutes
 
