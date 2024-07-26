@@ -15,6 +15,7 @@ def delete_all_items(table):
             batch.delete_item(Key={'Date': each['Date']})
 
 delete_all_items(table)
+print('All items in table StockPrices have been deleted.')
 
 # 현재 파일의 디렉토리 경로를 가져옵니다.
 current_dir = os.path.dirname(os.path.abspath(__file__))
