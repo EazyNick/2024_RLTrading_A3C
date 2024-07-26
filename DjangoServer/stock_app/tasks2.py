@@ -481,7 +481,7 @@ def run_task2():
                 # logger.logger.debug(f"DynamoDB response: {response}")
 
                 # dynamodb_to_csv.py 파일의 함수 사용 예시
-                dynamodb_to_csv.convert_dynamodb_to_csv()  # 파일 내 함수 이름에 맞게 수정
+                convert_dynamodb_to_csv()  # 파일 내 함수 이름에 맞게 수정
                 log_manager.logger.debug("csv로 저장 함수 실행")
 
         except Exception as e:
