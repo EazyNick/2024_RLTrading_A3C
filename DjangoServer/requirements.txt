@@ -15,3 +15,5 @@ torch
 gym
 numpy
 pandas
+matplotlib
+scikit-learn
