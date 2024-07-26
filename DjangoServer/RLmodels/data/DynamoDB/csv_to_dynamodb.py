@@ -11,11 +11,19 @@ import os
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
 table = dynamodb.Table('StockPrices')
 
-# 현재 파일의 디렉토리 경로를 가져옵니다.
+# 현재 파일의 디렉토리 경로를 가져옵니다.   
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # CSV 파일의 상대 경로를 절대 경로로 변환합니다.
 csv_file_path = os.path.join(current_dir, '..', '..', 'data_csv', 'kia_stock_data.csv')
+
+# 경로 확인
+print(f"Current directory: {current_dir}")
+print(f"CSV file path: {csv_file_path}")
+
+# CSV 파일이 존재하는지 확인
+if not os.path.exists(csv_file_path):
+    raise FileNotFoundError(f"The file at path {csv_file_path} does not exist.")
 
 # CSV 파일 읽기 및 데이터 삽입
 with open(csv_file_path, newline='') as csvfile:
