@@ -59,7 +59,7 @@ def run_task():
     manager = AccessTokenManager()
     access_token = get_access_token(manager)
 
-    stock_data = get_price(access_token, app_key, app_secret)
+    stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
     # if stock_data:
     #     log_manager.logger.info(f"현재가, 거래량: {stock_data}")

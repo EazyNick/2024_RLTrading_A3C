@@ -89,7 +89,7 @@ def run_task2():
 
     # 키 관리자를 통해 키를 가져옵니다.
     key = KeyringManager()
-    app_key = key.app_key
+    app_key = key.app_key   
     app_secret = key.app_secret_key
 
     # 액세스 토큰 관리자를 통해 토큰을 가져옵니다.
@@ -97,7 +97,7 @@ def run_task2():
     access_token = get_access_token(manager)
 
     # 주식 데이터(현재가와 거래량)를 가져옵니다.
-    stock_data = get_price(access_token, app_key, app_secret)
+    stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
     if stock_data:
         log_manager.logger.info(f"현재가, 거래량: {stock_data}")
@@ -109,6 +109,7 @@ def run_task2():
         # 기존 데이터를 읽어옵니다.
         existing_data = table.get_item(Key={'Date': stock_data['Date']})
         if 'Item' in existing_data:
+            log_manager.logger.info(f"기존 데이터가 존재합니다. 업데이트: {existing_data}")
             item = existing_data['Item']
             # log_manager.logger.debug(f"기존 데이터: {item}")
 
