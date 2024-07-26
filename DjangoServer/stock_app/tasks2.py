@@ -118,6 +118,10 @@ def run_task2():
     if stock_data:
         log_manager.logger.info(f"현재가, 거래량: {stock_data}")
 
+        # Decimal로 변환
+        stock_data['Close'] = Decimal(str(stock_data['Close']))
+        stock_data['Volume'] = Decimal(str(stock_data['Volume']))
+
         # DynamoDB에 연결합니다.
         dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
         table = dynamodb.Table('StockPrices')
