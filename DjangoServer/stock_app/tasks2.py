@@ -83,7 +83,7 @@ def calculate_vma(previous_vma, new_volume, period=5):
     return ((previous_vma * (period - 1)) + new_volume) / period
 
 @shared_task
-def run_task():
+def run_task2():
     log_manager.logger.info("Start MainRun")
     print("Running...")
 

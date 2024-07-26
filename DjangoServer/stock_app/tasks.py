@@ -5,6 +5,7 @@ from celery import shared_task
 import boto3
 from modules.utils import *
 from modules.config.config import Config
+from stock_app.tasks2 import run_task2
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
@@ -46,6 +47,11 @@ def get_access_token(manager):
 def run_task():
     log_manager.logger.info("Start MainRun")
     print("Running...")
+
+    # Task 2 실행
+    result = run_task2.delay().get()
+    print("Task 2 결과:", result)
+    
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
