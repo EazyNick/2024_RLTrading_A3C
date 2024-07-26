@@ -1,9 +1,19 @@
 import pandas as pd
-from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
-from env.env import StockTradingEnv
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
-from utils import *
+import sys
+import os
+
+# 프로젝트 루트 경로를 추가
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+
+try:
+    from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
+    from env.env import StockTradingEnv
+    from utils import *
+except:
+    log_manager.logger.error("import error")
 
 # 저장된 모델을 로드하고 새 데이터를 기반으로 매수, 매도를 수행하는 함수
 def run_trading(agent, env, new_data):
