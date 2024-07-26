@@ -11,11 +11,11 @@ import os
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
 table = dynamodb.Table('StockPrices')
 
-# 현재 파일의 디렉토리 경로를 가져옵니다.   
+# 현재 파일의 디렉토리 경로를 가져옵니다.
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # CSV 파일의 상대 경로를 절대 경로로 변환합니다.
-csv_file_path = os.path.join(current_dir, '..', '..', 'data_csv', 'kia_stock_data.csv')
+csv_file_path = os.path.abspath(os.path.join(current_dir, '..', '..', 'data_csv', 'kia_stock_data.csv'))
 
 # 경로 확인
 print(f"Current directory: {current_dir}")
