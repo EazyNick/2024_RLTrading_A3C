@@ -129,8 +129,25 @@ def run_task2():
         # 기존 데이터를 읽어옵니다.
         existing_data = table.get_item(Key={'Date': stock_data['Date']})
         try:  
-            sma_keys = [f'SMA_{i}' for i in range(5, 701, 10)]
-            vma_keys = [f'VMA_{i}' for i in range(5, 701, 10)]
+            exclude_keys = [
+                'SMA_55', 'SMA_65', 'SMA_75', 'SMA_85', 'SMA_95', 'SMA_105', 'SMA_115', 'SMA_125', 'SMA_135', 
+                'SMA_145', 'SMA_155', 'SMA_165', 'SMA_175', 'SMA_185', 'SMA_195', 'SMA_205', 'SMA_215', 'SMA_225', 
+                'SMA_235', 'SMA_245', 'SMA_255', 'SMA_265', 'SMA_275', 'SMA_285', 'SMA_295', 'SMA_305', 'SMA_315', 
+                'SMA_325', 'SMA_335', 'SMA_345', 'SMA_355', 'SMA_365', 'SMA_375', 'SMA_385', 'SMA_395', 'SMA_405', 
+                'SMA_415', 'SMA_425', 'SMA_435', 'SMA_445', 'SMA_455', 'SMA_465', 'SMA_475', 'SMA_485', 'SMA_495', 
+                'SMA_505', 'SMA_515', 'SMA_525', 'SMA_535', 'SMA_545', 'SMA_555', 'SMA_565', 'SMA_575', 'SMA_585', 
+                'SMA_595', 'SMA_605', 'SMA_615', 'SMA_625', 'SMA_635', 'SMA_645', 'SMA_655', 'SMA_665', 'SMA_675', 
+                'SMA_685', 'SMA_695', 'VMA_55', 'VMA_65', 'VMA_75', 'VMA_85', 'VMA_95', 'VMA_105', 'VMA_115', 
+                'VMA_125', 'VMA_135', 'VMA_145', 'VMA_155', 'VMA_165', 'VMA_175', 'VMA_185', 'VMA_195', 'VMA_205', 
+                'VMA_215', 'VMA_225', 'VMA_235', 'VMA_245', 'VMA_255', 'VMA_265', 'VMA_275', 'VMA_285', 'VMA_295', 
+                'VMA_305', 'VMA_315', 'VMA_325', 'VMA_335', 'VMA_345', 'VMA_355', 'VMA_365', 'VMA_375', 'VMA_385', 
+                'VMA_395', 'VMA_405', 'VMA_415', 'VMA_425', 'VMA_435', 'VMA_445', 'VMA_455', 'VMA_465', 'VMA_475', 
+                'VMA_485', 'VMA_495', 'VMA_505', 'VMA_515', 'VMA_525', 'VMA_535', 'VMA_545', 'VMA_555', 'VMA_565', 
+                'VMA_575', 'VMA_585', 'VMA_595', 'VMA_605', 'VMA_615', 'VMA_625', 'VMA_635', 'VMA_645', 'VMA_655', 
+                'VMA_665', 'VMA_675', 'VMA_685', 'VMA_695'
+            ]
+            sma_keys = [f'SMA_{i}' for i in range(5, 705, 5) if f'SMA_{i}' not in exclude_keys]
+            vma_keys = [f'VMA_{i}' for i in range(5, 705, 5) if f'VMA_{i}' not in exclude_keys]
 
             if 'Item' in existing_data:
                 log_manager.logger.info(f"기존 데이터가 존재합니다. 업데이트: {existing_data}")
