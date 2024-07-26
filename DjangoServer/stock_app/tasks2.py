@@ -129,13 +129,12 @@ def run_task2():
         # 기존 데이터를 읽어옵니다.
         existing_data = table.get_item(Key={'Date': stock_data['Date']})
         try:  
+            sma_keys = [f'SMA_{i}' for i in range(5, 701, 10)]
+            vma_keys = [f'VMA_{i}' for i in range(5, 701, 10)]
+
             if 'Item' in existing_data:
                 log_manager.logger.info(f"기존 데이터가 존재합니다. 업데이트: {existing_data}")
-                item = existing_data['Item']
-
-                # 모든 필요한 키가 있는지 확인하고, 없는 경우 기본 값을 사용
-                sma_keys = [f'SMA_{i}' for i in range(5, 701, 10)]
-                vma_keys = [f'VMA_{i}' for i in range(5, 701, 10)]
+                item = existing_data['Item']    
 
                 new_item = {
                     'Date': stock_data['Date'],
@@ -151,15 +150,15 @@ def run_task2():
 
                 new_item.update({
                     '365D_High': max(Decimal(item.get('365D_High', Decimal('0.0'))), stock_data['Close']),
-                    '365D_Low': min(Decimal(item.get('365D_Low', Decimal('Infinity'))), stock_data['Close']),
+                    '365D_Low': min(Decimal(item.get('365D_Low', Decimal('inf'))), stock_data['Close']),
                     '180D_High': max(Decimal(item.get('180D_High', Decimal('0.0'))), stock_data['Close']),
-                    '180D_Low': min(Decimal(item.get('180D_Low', Decimal('Infinity'))), stock_data['Close']),
+                    '180D_Low': min(Decimal(item.get('180D_Low', Decimal('inf'))), stock_data['Close']),
                     '90D_High': max(Decimal(item.get('90D_High', Decimal('0.0'))), stock_data['Close']),
-                    '90D_Low': min(Decimal(item.get('90D_Low', Decimal('Infinity'))), stock_data['Close']),
+                    '90D_Low': min(Decimal(item.get('90D_Low', Decimal('inf'))), stock_data['Close']),
                     '30D_High': max(Decimal(item.get('30D_High', Decimal('0.0'))), stock_data['Close']),
-                    '30D_Low': min(Decimal(item.get('30D_Low', Decimal('Infinity'))), stock_data['Close']),
+                    '30D_Low': min(Decimal(item.get('30D_Low', Decimal('inf'))), stock_data['Close']),
                     'AllTime_High': max(Decimal(item.get('AllTime_High', Decimal('0.0'))), stock_data['Close']),
-                    'AllTime_Low': min(Decimal(item.get('AllTime_Low', Decimal('Infinity'))), stock_data['Close'])
+                    'AllTime_Low': min(Decimal(item.get('AllTime_Low', Decimal('inf'))), stock_data['Close'])
                 })
 
                 response = table.put_item(Item=new_item)
