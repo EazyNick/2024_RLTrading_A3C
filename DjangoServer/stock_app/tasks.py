@@ -70,8 +70,8 @@ def run_task():
 
     try:
         main_run()
-    except:
-        log_manager.logger.error(f"모델 실행 실패")
+    except ImportError as e:
+        log_manager.logger.error(f"모델 실행 실패: {e}")
 
     # DB 삽입 코드
     # if stck_prpr:
