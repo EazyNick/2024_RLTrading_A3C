@@ -76,6 +76,20 @@ def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save
     log_manager.logger.info(f"Trading results saved as {save_path}")
 
 def main_run():
+    
+    # 프로젝트 루트 경로를 추가
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(project_root)
+
+    sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
+
+    try:
+        from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
+        from env.env import StockTradingEnv
+        from modules.utils import log_manager
+    except Exception as e:
+        print(f"import error {e}")
+
     # log_manager.logger.info("Starting trading process")
     print("Starting trading process")
 
