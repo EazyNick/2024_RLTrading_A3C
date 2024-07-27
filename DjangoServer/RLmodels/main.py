@@ -70,34 +70,6 @@ def plot_trading_results(dates, account_values, stock_prices, buy_sell_log):
 
     plt.show()
 
-def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save_path='output/trading_results.png'):
-    plt.figure(figsize=(14, 7))
-
-    # 주식 가격 플롯
-    plt.subplot(2, 1, 1)
-    plt.plot(dates, stock_prices, label='Stock Price')
-    plt.title('Stock Price over Time')
-    plt.xlabel('Date')
-    plt.ylabel('Price')
-    plt.legend()
-
-    # 계좌 가치 플롯
-    plt.subplot(2, 1, 2)
-    plt.plot(dates, account_values, label='Account Value')
-    plt.scatter(dates, buy_sell_log['buy'], marker='^', color='g', label='Buy Signal', alpha=1)
-    plt.scatter(dates, buy_sell_log['sell'], marker='v', color='r', label='Sell Signal', alpha=1)
-    plt.title('Account Value over Time')
-    plt.xlabel('Date')
-    plt.ylabel('Account Value')
-    plt.legend()
-
-    plt.tight_layout()
-    
-    # 이미지 파일로 저장
-    plt.savefig(save_path)
-    plt.close()
-    print(f"Trading results saved as {save_path}")
-
 def main_run():
     # log_manager.logger.info("Starting trading process")
     print("Starting trading process")

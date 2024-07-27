@@ -1,6 +1,7 @@
 import boto3
 import pandas as pd
 import os
+import time
 
 def convert_dynamodb_to_csv():
     try:
