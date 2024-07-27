@@ -20,6 +20,18 @@ except Exception as e:
 
 # 저장된 모델을 로드하고 새 데이터를 기반으로 매수, 매도를 수행하는 함수
 def run_trading(agent, env, new_data):
+
+    # 프로젝트 루트 경로를 추가
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(project_root)
+
+    sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
+
+    try:
+        from modules.utils import log_manager
+    except Exception as e:
+        print(f"import error {e}")
+
     state = env.reset(new_df=new_data)  # 새로운 데이터를 사용하여 환경 초기화
     done = False
     account_values = []  # 계좌 잔고 기록
@@ -105,9 +117,12 @@ def main_run():
     # new_data = pd.read_csv(Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
     new_data = pd.read_csv(Path(__file__).resolve().parent / 'data/DynamoDB/DynamoDB.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
     account_values, stock_prices, dates, buy_sell_log = run_trading(agent, env, new_data)
+    log_manager.logger.info("Starting trading End")
 
     # 거래 결과 플롯 및 저장
+    log_manager.logger.info("시각화 시작")
     plot_trading_results(dates, account_values, stock_prices, buy_sell_log)
+    log_manager.logger.info("시각화 종료")
 
     return buy_sell_log
 
