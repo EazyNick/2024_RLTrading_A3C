@@ -119,24 +119,5 @@ def main_run():
 
 
 if __name__ == '__main__':
-    import pandas as pd
-    import matplotlib.pyplot as plt
-    from sklearn.preprocessing import MinMaxScaler
-    import sys
-    import os
-    from pathlib import Path
 
-    # 프로젝트 루트 경로를 추가
-    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.append(project_root)
-
-    sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
-
-    try:
-        from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
-        from env.env import StockTradingEnv
-        from modules.utils import *
-    except Exception as e:
-        print(f"import error {e}")
-        
     main_run()

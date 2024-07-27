@@ -2,6 +2,7 @@ import boto3
 import csv
 import os
 from decimal import Decimal
+import time
 
 # DynamoDB에 연결
 dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')  # 예: 'us-west-2'
@@ -205,5 +206,6 @@ with open(csv_file_path, newline='') as csvfile:
             }
         )
         print(f"Inserted {row['Date']}")
+        time.sleep(2)
 
 print("Data insertion complete.")
