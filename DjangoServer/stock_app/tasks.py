@@ -8,13 +8,16 @@ from modules.config.config import Config
 from stock_app.tasks2 import run_task2
 
 # 추가 경로 설정
-sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
-sys.path.append(str(Path(__file__).resolve().parents[2] / 'RLmodels'))
+sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
+sys.path.append(str(Path(__file__).resolve().parent / 'RLmodels'))
 
 try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
     from RLmodels.main import main_run
+    from RLmodels.Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
+    from RLmodels.env.env import StockTradingEnv
+    from modules.utils import *
 except ImportError as e:
     print(f"Import error: {e}")
     raise
