@@ -87,7 +87,7 @@ def main_run():
     account_values, stock_prices, dates, buy_sell_log = run_trading(agent, env, new_data)
 
     # 거래 결과 플롯 및 저장
-    plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save_path='output/trading_results.png')
+    plot_trading_results(dates, account_values, stock_prices, buy_sell_log)
 
 
 if __name__ == '__main__':
