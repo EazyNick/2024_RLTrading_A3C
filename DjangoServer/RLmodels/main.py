@@ -7,7 +7,7 @@ from pathlib import Path
 
 # 프로젝트 루트 경로를 추가
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(project_root)
+sys.path.append(str(project_root))
 sys.path.append(str(project_root / 'modules'))
 
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
