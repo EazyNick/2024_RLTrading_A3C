@@ -43,9 +43,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.kro.kr']
 
 CELERY_BEAT_SCHEDULE = {
-    'run-task-every-60-seconds': {
+    'run-task-every-90000-seconds': {
         'task': 'stock_app.tasks.run_task',
-        'schedule': 60.0,  # 60초마다 실행
+        'schedule': 90000.0,  # 60초마다 실행
     },
 }
 
