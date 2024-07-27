@@ -99,7 +99,7 @@ def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save
     print(f"Trading results saved as {save_path}")
 
 def main_run():
-    log_manager.logger.info("Starting trading process")
+    print("Starting trading process")
     
     # 모델 로드
     model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model.pth'
