@@ -55,7 +55,7 @@ def run_trading(agent, env, new_data):
     
     return account_values, stock_prices, dates, env.buy_sell_log
 
-def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save_path='output/trading_results.png'):
+def plot_trading_results(dates, account_values, stock_prices, buy_sell_log):
     fig, ax1 = plt.subplots(figsize=(12, 6))
 
     ax1.plot(dates, account_values, label='Account Value', color='b')
@@ -80,7 +80,13 @@ def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save
     lines2, labels2 = ax2.get_legend_handles_labels()
     ax1.legend(lines + lines2, labels + labels2, loc='upper left')
 
-    plt.show()
+    # plt.show()
+
+    # 현재 파일의 디렉토리 가져오기
+    current_dir = Path(__file__).resolve().parent
+
+    # output 디렉토리와 파일명 설정
+    save_path = current_dir / 'output' / 'trading_results.png'
 
     # 이미지 파일로 저장
     plt.savefig(save_path)
@@ -128,7 +134,6 @@ def main_run():
 
 
 if __name__ == '__main__':
-
     try:
         from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
         from env.env import StockTradingEnv
