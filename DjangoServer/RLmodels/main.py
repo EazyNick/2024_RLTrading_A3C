@@ -56,6 +56,18 @@ def run_trading(agent, env, new_data):
     return account_values, stock_prices, dates, env.buy_sell_log
 
 def plot_trading_results(dates, account_values, stock_prices, buy_sell_log):
+
+    # 프로젝트 루트 경로를 추가
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.append(project_root)
+
+    sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
+
+    try:
+        from modules.utils import log_manager
+    except Exception as e:
+        print(f"import error {e}")
+
     fig, ax1 = plt.subplots(figsize=(12, 6))
 
     ax1.plot(dates, account_values, label='Account Value', color='b')
