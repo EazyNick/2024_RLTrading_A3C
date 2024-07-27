@@ -15,7 +15,7 @@ except ImportError:
     from Auth import *
     from services import *
 
-def sell_stock(access_token, app_key, app_secret, ORD_UNPR, itm_no="005930", qty='1'):
+def sell_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="005930", qty='1'):
     """
     주식 API를 호출하여 매도하는 함수
 

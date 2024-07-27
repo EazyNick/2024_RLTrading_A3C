@@ -52,11 +52,11 @@ def get_access_token(manager):
 def run_task():
     log_manager.logger.info("Start MainRun")
     log_manager.logger.info("Running...")
-
-    # Task 2 실행
-    # result = run_task2.delay().get()
-    # log_manager.logger.info("Task 2 결과:", result)
     
+    # Task 2 실행
+    result = run_task2.delay().get()
+    log_manager.logger.info("Task 2 결과:", result)
+
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
@@ -77,10 +77,32 @@ def run_task():
         print(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"모델 실행 완료")
+
+
+            # 매수, 매도 시점의 로그 남기기
+        for log in buy_sell_log:
+            date, action, num_stocks, price = log
+            if action == 'buy':
+                buy_data = buy_stock(access_token, app_key, app_secret)
+                if buy_data:
+                    log_manager.logger.info(f"주식 매수: {buy_data}")
+                else:
+                    log_manager.logger.error(f"매수 실패")
+                log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
+            elif action == 'sell':
+                sell_data = sell_stock(access_token, app_key, app_secret)
+                if sell_data:
+                    log_manager.logger.info(f"주식 매도: {sell_data}")
+                else:
+                    log_manager.logger.error(f"매도 실패")
+                log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
+
     except ImportError as e:
         log_manager.logger.error(f"모델 실행 실패: {e}")
     except Exception as e:
         log_manager.logger.error(f"예상치 못한 에러 발생: {e}")
+
+    
 
     # DB 삽입 코드
     # if stck_prpr:
