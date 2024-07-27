@@ -93,9 +93,9 @@ class LogManager:
         while len(files) > self.max_files:
             os.remove(files.pop(0))  # 가장 오래된 파일을 삭제하고 목록에서 제거합니다.
 
-if __name__ == "__main__":
-    log_manager = LogManager()
-    log_manager.logger.info("This is an info message for testing purposes.")
-    log_manager.logger.debug("This is a debug message for testing purposes.")
-    log_manager.logger.error("This is an error message for testing purposes.")
-    print(f"Timestamp: {log_manager.get_timestamp()}")
+# if __name__ == "__main__":
+#     log_manager = LogManager()
+#     log_manager.logger.info("This is an info message for testing purposes.")
+#     log_manager.logger.debug("This is a debug message for testing purposes.")
+#     log_manager.logger.error("This is an error message for testing purposes.")
+#     print(f"Timestamp: {log_manager.get_timestamp()}")

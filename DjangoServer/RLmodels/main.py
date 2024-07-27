@@ -4,17 +4,17 @@ from sklearn.preprocessing import MinMaxScaler
 import sys
 import os
 from pathlib import Path
-from modules.utils import *
 
 # 프로젝트 루트 경로를 추가
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
-sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
+sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
 
 try:
     from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
     from env.env import StockTradingEnv
+    from modules.utils import *
 except Exception as e:
     print(f"import error {e}")
 
@@ -102,14 +102,15 @@ def main_run():
     log_manager.logger.info("Starting trading process")
     
     # 모델 로드
-    model_path = 'output/a3c_stock_trading_model.pth'
-    df = pd.read_csv('data/data_csv/kia_stock_data.csv', index_col='Date', parse_dates=True)  # 주식 데이터 로드
+    model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model.pth'
+    file_path = Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv'
+    df = pd.read_csv(file_path, index_col='Date', parse_dates=True)  # 주식 데이터 로드
     env = StockTradingEnv(df)  # 환경 생성
     agent = A3CAgent(env)  # 에이전트 생성
     agent.load_model(model_path)  # 학습된 모델 로드
 
     # 새 데이터를 기반으로 거래 수행
-    new_data = pd.read_csv('data/DynamoDB/DynamoDB.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
+    new_data = pd.read_csv(Path(__file__).resolve().parent / 'data/DynamoDB/DynamoDB.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
     account_values, stock_prices, dates, buy_sell_log = run_trading(agent, env, new_data)
 
     # 거래 결과 플롯 및 저장
