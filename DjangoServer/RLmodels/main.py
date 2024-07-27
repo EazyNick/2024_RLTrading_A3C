@@ -43,16 +43,16 @@ def run_trading(agent, env, new_data):
     
     return account_values, stock_prices, dates, env.buy_sell_log
 
-def plot_trading_results(dates, account_values, stock_prices, buy_sell_log):
+def plot_trading_results(dates, account_values, stock_prices, buy_sell_log, save_path='output/trading_results.png'):
     fig, ax1 = plt.subplots(figsize=(12, 6))
 
     ax1.plot(dates, account_values, label='Account Value', color='b')
     ax1.set_xlabel('Date')
-    ax1.set_ylabel('Account Value (원)', color='b')
+    ax1.set_ylabel('Account Value', color='b')
 
     ax2 = ax1.twinx()
     ax2.plot(dates, stock_prices, label='Stock Price', color='orange', linestyle='--')
-    ax2.set_ylabel('Stock Price (원)', color='orange')
+    ax2.set_ylabel('Stock Price', color='orange')
 
     for log in buy_sell_log:
         date, action, num_stocks, price = log
@@ -69,6 +69,11 @@ def plot_trading_results(dates, account_values, stock_prices, buy_sell_log):
     ax1.legend(lines + lines2, labels + labels2, loc='upper left')
 
     plt.show()
+
+    # 이미지 파일로 저장
+    plt.savefig(save_path)
+    plt.close()
+    log_manager.logger.info(f"Trading results saved as {save_path}")
 
 def main_run():
     # log_manager.logger.info("Starting trading process")
