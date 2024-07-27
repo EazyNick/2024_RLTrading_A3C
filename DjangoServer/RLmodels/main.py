@@ -120,4 +120,11 @@ def main_run():
 
 if __name__ == '__main__':
 
+    try:
+        from Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
+        from env.env import StockTradingEnv
+        from modules.utils import *
+    except Exception as e:
+        print(f"import error {e}")
+
     main_run()
