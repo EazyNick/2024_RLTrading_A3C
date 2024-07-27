@@ -10,6 +10,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# 특정 디렉토리 무시 해제
+!DjangoServer/RLmodels/env/
+
 # Ignore access_token.json
 /Auth/access_token/access_token.json
 
