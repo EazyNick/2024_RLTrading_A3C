@@ -70,7 +70,9 @@ def run_task():
 
     try:
         log_manager.logger.error(f"모델 실행 시작")
-        main_run()
+        buy_sell_log = main_run()
+        print(f"Buy dates: {buy_sell_log}")
+        log_manager.logger.info(f"Buy dates: {buy_sell_log}")
         log_manager.logger.error(f"모델 실행 완료")
     except ImportError as e:
         log_manager.logger.error(f"모델 실행 실패: {e}")
