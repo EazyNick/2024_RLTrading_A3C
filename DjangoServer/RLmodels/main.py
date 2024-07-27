@@ -94,6 +94,8 @@ def main_run():
     # 거래 결과 플롯 및 저장
     plot_trading_results(dates, account_values, stock_prices, buy_sell_log)
 
+    return buy_sell_log
+
 
 if __name__ == '__main__':
 
@@ -104,4 +106,6 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"import error {e}")
 
-    main_run()
+    buy_sell_log = main_run()
+    print(f"Buy dates: {buy_sell_log}")
+    log_manager.logger.info(f"Buy dates: {buy_sell_log}")
