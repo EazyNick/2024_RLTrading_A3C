@@ -53,10 +53,10 @@ def run_task():
     log_manager.logger.info("Start MainRun")
     log_manager.logger.info("Running...")
     
-    # Task 2 실행
-    result = run_task2.delay()
-    task_result = result.get()
-    log_manager.logger.info("Task 2 결과:", task_result)
+    # # Task 2 실행
+    # result = run_task2.delay()
+    # task_result = result.get()
+    # log_manager.logger.info("Task 2 결과:", task_result)
 
     key = KeyringManager()
     app_key = key.app_key
