@@ -32,7 +32,7 @@ class AccessTokenManager:
         else:
             self.file_path = file_path
 
-        self.access_token = self.load_access_token()
+        # self.access_token = self.load_access_token()
         self.__initialized = True
 
         # 서버 종료 시 JSON 파일을 클리어하는 함수 등록
