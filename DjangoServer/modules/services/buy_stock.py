@@ -36,6 +36,11 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="005930", 
     cano = Config.Base.get_CANO()
     acnt_prdt_cd = Config.Base.get_ACNT_PRDT_CD()
 
+    log_manager.logger.debug(f"url data: {url}")
+    log_manager.logger.debug(f"headers data: {headers}")
+    log_manager.logger.debug(f"cano data: {cano}")
+    log_manager.logger.debug(f"acnt_prdt_cd data: {acnt_prdt_cd}")
+
     data = {
         "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
         "ACNT_PRDT_CD": acnt_prdt_cd,  # 계좌상품코드 (체계 8-2의 뒤 2자리)
@@ -48,6 +53,7 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="005930", 
     # hashkey = get_hashkey(app_key, app_secret, data)
     # log_manager.logger.debug(hashkey)
     # headers = Config.Buy.get_headers_hash(access_token, app_key, app_secret, hashkey)
+    log_manager.logger.debug(f"requests data: {data}")
 
     res = requests.post(url, headers=headers, data=json.dumps(data))
 
