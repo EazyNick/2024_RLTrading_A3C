@@ -45,9 +45,9 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR = '0', itm_no="005930"
         "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
         "ACNT_PRDT_CD": acnt_prdt_cd,  # 계좌상품코드 (체계 8-2의 뒤 2자리)
         "PDNO": itm_no,  # 종목코드 (6자리) 
-        "ORD_DVSN": "00",  # 주문구분 (지정가: 00)
+        "ORD_DVSN": "01",  # 주문구분 (지정가: 00)
         "ORD_QTY": qty,  # 주문수량
-        "ORD_UNPR": ORD_UNPR  # 매수 가격 (0일 경우 시장가 주문)
+        "ORD_UNPR": ORD_UNPR  # 매수 가격
     }
 
     # hashkey = get_hashkey(app_key, app_secret, data)
@@ -81,6 +81,6 @@ if __name__ == "__main__":
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    result = buy_stock(access_token, app_key, app_secret, '90000')
+    result = buy_stock(access_token, app_key, app_secret)
     print(result)
 
