@@ -54,8 +54,9 @@ def run_task():
     log_manager.logger.info("Running...")
     
     # Task 2 실행
-    result = run_task2.delay().get()
-    log_manager.logger.info("Task 2 결과:", result)
+    result = run_task2.delay()
+    task_result = result.get()
+    log_manager.logger.info("Task 2 결과:", task_result)
 
     key = KeyringManager()
     app_key = key.app_key
@@ -64,22 +65,20 @@ def run_task():
     manager = AccessTokenManager()
     access_token = get_access_token(manager)
 
-    stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
+    # stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
-    if stock_data:
-        log_manager.logger.info(f"주식 데이터 불러오기 성공")
-    else:
-        log_manager.logger.error(f"주식 데이터 불러오기 실패")
+    # if stock_data:
+    #     log_manager.logger.info(f"주식 데이터 불러오기 성공")
+    # else:
+    #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
 
     try:
         log_manager.logger.info(f"모델 실행 시작")
         buy_sell_log = main_run()
-        print(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"모델 실행 완료")
 
-
-            # 매수, 매도 시점의 로그 남기기
+        # 매수, 매도 시점의 로그
         for log in buy_sell_log:
             date, action, num_stocks, price = log
             if action == 'buy':
@@ -96,7 +95,6 @@ def run_task():
                 else:
                     log_manager.logger.error(f"매도 실패")
                 log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
-
     except ImportError as e:
         log_manager.logger.error(f"모델 실행 실패: {e}")
     except Exception as e:
