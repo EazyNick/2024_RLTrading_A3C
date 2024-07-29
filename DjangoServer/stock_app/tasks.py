@@ -6,6 +6,8 @@ import boto3
 from modules.utils import *
 from modules.config.config import Config
 from stock_app.tasks2 import run_task2
+import datetime
+from datetime import datetime
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
@@ -49,6 +51,16 @@ def get_access_token(manager):
             access_token = manager.get_access_token()
     return access_token
 
+def filter_logs_by_current_month(buy_sell_log):
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    filtered_log = [
+        log for log in buy_sell_log
+        if log[0].year == current_year and log[0].month == current_month
+    ]
+    return filtered_log
+
 @shared_task
 def run_task():
     log_manager.logger.info("Start MainRun")
@@ -74,7 +86,7 @@ def run_task():
     #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
 
     # log_manager.logger.debug("Before get_account_balance")
-    
+
     try:
         stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
     
@@ -91,6 +103,10 @@ def run_task():
         buy_sell_log = main_run()
         log_manager.logger.info(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"모델 실행 완료")
+
+        # 매수, 매도 시점의 로그
+        # filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
+        # log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
         # 매수, 매도 시점의 로그
         for log in buy_sell_log:
