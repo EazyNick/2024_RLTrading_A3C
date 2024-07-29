@@ -11,6 +11,7 @@ from django.views import View
 import subprocess
 import sys
 import os
+from pathlib import Path
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
