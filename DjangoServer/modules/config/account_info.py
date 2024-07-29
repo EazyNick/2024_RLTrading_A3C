@@ -16,18 +16,18 @@ class DataParser:
 
         def to_dict(self):
             return {
-                'stock_code': self.stock_code,
-                'stock_name': self.stock_name,
-                'trade_type': self.trade_type,
-                'holding_quantity': self.holding_quantity,
-                'orderable_quantity': self.orderable_quantity,
-                'purchase_avg_price': self.purchase_avg_price,
-                'purchase_amount': self.purchase_amount,
-                'current_price': self.current_price,
-                'evaluation_amount': self.evaluation_amount,
-                'evaluation_profit_loss_amount': self.evaluation_profit_loss_amount,
-                'evaluation_profit_loss_rate': self.evaluation_profit_loss_rate,
-                'fluctuation_rate': self.fluctuation_rate
+                'pdno': self.stock_code,
+                'prdt_name': self.stock_name,
+                'trad_dvsn_name': self.trade_type,
+                'hldg_qty': self.holding_quantity,
+                'ord_psbl_qty': self.orderable_quantity,
+                'pchs_avg_pric': self.purchase_avg_price,
+                'pchs_amt': self.purchase_amount,
+                'prpr': self.current_price,
+                'evlu_amt': self.evaluation_amount,
+                'evlu_pfls_amt': self.evaluation_profit_loss_amount,
+                'evlu_pfls_rt': self.evaluation_profit_loss_rate,
+                'fltt_rt': self.fluctuation_rate
             }
 
         def get_stock_code(self):
@@ -119,18 +119,18 @@ class DataParser:
 
         def to_dict(self):
             return {
-                'total_cash_balance': self.total_cash_balance,
-                'next_day_withdrawal_amount': self.next_day_withdrawal_amount,
-                'previous_day_withdrawal_amount': self.previous_day_withdrawal_amount,
-                'securities_evaluation_amount': self.securities_evaluation_amount,
-                'total_evaluation_amount': self.total_evaluation_amount,
-                'net_assets': self.net_assets,
-                'purchase_amount_sum': self.purchase_amount_sum,
-                'evaluation_amount_sum': self.evaluation_amount_sum,
-                'evaluation_profit_loss_sum': self.evaluation_profit_loss_sum,
-                'total_assets_evaluation_previous_day': self.total_assets_evaluation_previous_day,
-                'assets_fluctuation_amount': self.assets_fluctuation_amount,
-                'assets_fluctuation_rate': self.assets_fluctuation_rate
+                'dnca_tot_amt': self.total_cash_balance,
+                'nxdy_excc_amt': self.next_day_withdrawal_amount,
+                'prvs_rcdl_excc_amt': self.previous_day_withdrawal_amount,
+                'scts_evlu_amt': self.securities_evaluation_amount,
+                'tot_evlu_amt': self.total_evaluation_amount,
+                'nass_amt': self.net_assets,
+                'pchs_amt_smtl_amt': self.purchase_amount_sum,
+                'evlu_amt_smtl_amt': self.evaluation_amount_sum,
+                'evlu_pfls_smtl_amt': self.evaluation_profit_loss_sum,
+                'bfdy_tot_asst_evlu_amt': self.total_assets_evaluation_previous_day,
+                'asst_icdc_amt': self.assets_fluctuation_amount,
+                'asst_icdc_erng_rt': self.assets_fluctuation_rate
             }
 
         def get_total_cash_balance(self):
