@@ -50,7 +50,7 @@ def sell_stock(access_token, app_key, app_secret, ORD_UNPR = '0', itm_no="000270
         "ORD_UNPR": ORD_UNPR  # 매도 가격 (0일 경우 시장가 주문)
     }
 
-    log_manager.logger.debug(f"requests data: {data}")
+    # log_manager.logger.debug(f"requests data: {data}")
 
     res = requests.post(url, headers=headers, data=json.dumps(data))
     

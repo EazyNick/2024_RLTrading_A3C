@@ -111,6 +111,8 @@ def run_task():
         # 매수, 매도 시점의 로그
         for log in buy_sell_log:
             date, action, num_stocks, price = log
+            price = int(price)  # np.float64 값을 일반 정수로 변환
+            log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
             if action == 'buy':
                 buy_data = buy_stock(access_token, app_key, app_secret, price)
                 if buy_data:
