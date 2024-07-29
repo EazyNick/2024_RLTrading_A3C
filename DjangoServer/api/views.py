@@ -12,6 +12,21 @@ import subprocess
 import sys
 import os
 
+# 추가 경로 설정
+sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
+sys.path.append(str(Path(__file__).resolve().parent / 'RLmodels'))
+
+try:
+    from modules.Auth import *  # Auth 모듈의 파일들을 임포트
+    from modules.services import *  # services 모듈의 파일들을 임포트
+    from RLmodels.main import main_run
+    from RLmodels.Agent.A3CAgent import A3CAgent  # A3CAgent 클래스 불러오기
+    from RLmodels.env.env import StockTradingEnv
+    from modules.utils import *
+    from modules.config import *
+except ImportError as e:
+    print(f"Import error: {e}")
+    raise
 
 class SaveItemView(APIView):
     renderer_classes = [JSONRenderer]
@@ -74,29 +89,37 @@ class LoginView(APIView):
         
 class AccountStatusView(View):
     def get(self, request):
+        account_id = request.GET.get('account_id')
+
+        if not account_id:
+            return JsonResponse({'error': 'Account ID is required'}, status=400)
+
         try:
-            # 현재 파일의 디렉토리 경로를 기준으로 get_account_balance.py 파일의 절대 경로를 생성합니다.
-            script_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../modules/services/get_account_balance.py'))
+            # DynamoDB에서 데이터 불러오기
+            stock_info_list, account_info = DynamoDBManager.load_from_dynamodb(account_id)
 
-            # subprocess를 사용하여 스크립트를 실행하고 출력을 캡처합니다.
-            result = subprocess.run([sys.executable, script_path], capture_output=True, text=True)
+            if stock_info_list is None or account_info is None:
+                return JsonResponse({'error': 'No data found for the provided account ID'}, status=404)
 
-            stdout = result.stdout
-            stderr = result.stderr
+            # 데이터 포매팅
+            formatted_data = {
+                'total_cash_balance': account_info.get_total_cash_balance(),
+                'total_evaluation_amount': account_info.get_total_evaluation_amount(),
+                'evaluation_profit_loss_sum': account_info.get_evaluation_profit_loss_sum(),
+                'stocks': [
+                    {
+                        'stock_code': stock.get_stock_code(),
+                        'stock_name': stock.get_stock_name(),
+                        'holding_quantity': stock.get_holding_quantity(),
+                        'current_price': stock.get_current_price(),
+                        'evaluation_amount': stock.get_evaluation_amount(),
+                        'evaluation_profit_loss_amount': stock.get_evaluation_profit_loss_amount(),
+                        'evaluation_profit_loss_rate': stock.get_evaluation_profit_loss_rate()
+                    } for stock in stock_info_list
+                ]
+            }
 
-            # stdout에서 JSON 부분을 추출
-            json_part = None
-            try:
-                start_index = stdout.find('Response Text: ') + len('Response Text: ')
-                end_index = stdout.find('}', start_index) + 1
-                json_part = stdout[start_index:end_index].strip()
-                parsed_output = json.loads(json_part)
-            except (json.JSONDecodeError, ValueError) as e:
-                parsed_output = {"raw_output": stdout}
-
-            return JsonResponse({
-                'output': parsed_output,
-                'error': stderr
-            })
+            return JsonResponse(formatted_data, status=200, safe=False)
         except Exception as e:
+            log_manager.logger.error(f"An error occurred while retrieving account status: {e}")
             return JsonResponse({'error': str(e)}, status=500)
