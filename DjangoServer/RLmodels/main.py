@@ -123,7 +123,7 @@ def main_run():
     log_manager.logger.info("Starting trading process")
 
     # 모델 로드
-    model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model.pth'
+    model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model1024.pth'
     log_manager.logger.debug(f"모델 불러오는 경로: {model_path}")
     file_path = Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv'
     log_manager.logger.debug(f"학습 데이터 파일 경로: {model_path}")
