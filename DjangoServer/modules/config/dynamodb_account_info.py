@@ -1,6 +1,6 @@
 import boto3
 from botocore.exceptions import NoCredentialsError, PartialCredentialsError
-from account_info import DataParser
+from config.account_info import DataParser
 from Auth import AccessTokenManager, KeyringManager
 from services import get_account_balance
 from utils.Logger import log_manager
