@@ -30,11 +30,11 @@ class StockTradingEnv(gym.Env):
         super(StockTradingEnv, self).__init__()
         log_manager.logger.info(f"StockTradingEnv initialized")
 
-        account_info = DataParser.get_account_info()
-        stock_info_list = DataParser.get_stock_info_list()
+        # account_info = DataParser.get_account_info()
+        # stock_info_list = DataParser.get_stock_info_list()
 
-        log_manager.logger.debug(f"account_info: {account_info}")
-        log_manager.logger.debug(f"stock_info_list: {stock_info_list}")
+        # log_manager.logger.debug(f"account_info: {account_info}")
+        # log_manager.logger.debug(f"stock_info_list: {stock_info_list}")
 
         self.df = df
         self.current_step = 0
