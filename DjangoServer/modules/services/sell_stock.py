@@ -15,7 +15,7 @@ except ImportError:
     from Auth import *
     from services import *
 
-def sell_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="000270", qty='1'):
+def sell_stock(access_token, app_key, app_secret, ORD_UNPR = '0', itm_no="000270", qty='1'):
     """
     주식 API를 호출하여 매도하는 함수
 
@@ -36,10 +36,10 @@ def sell_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="000270",
     cano = Config.Base.get_CANO()
     acnt_prdt_cd = Config.Base.get_ACNT_PRDT_CD()
 
-    log_manager.logger.debug(f"url data: {url}")
-    log_manager.logger.debug(f"headers data: {headers}")
-    log_manager.logger.debug(f"cano data: {cano}")
-    log_manager.logger.debug(f"acnt_prdt_cd data: {acnt_prdt_cd}")
+    # log_manager.logger.debug(f"url data: {url}")
+    # log_manager.logger.debug(f"headers data: {headers}")
+    # log_manager.logger.debug(f"cano data: {cano}")
+    # log_manager.logger.debug(f"acnt_prdt_cd data: {acnt_prdt_cd}")
 
     data = {
         "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
@@ -75,5 +75,5 @@ if __name__ == "__main__":
     key = KeyringManager()
     app_key = key.app_key
     app_secret = key.app_secret_key
-    result = sell_stock(access_token, app_key, app_secret,'70000')
+    result = sell_stock(access_token, app_key, app_secret,'110000')
     print(result) # prvs_rcdl_excc_amt 가수도 정산 금액이, 매수하고 난 뒤 현재 내 현금(D+2의 금액임)

@@ -112,14 +112,14 @@ def run_task():
         for log in buy_sell_log:
             date, action, num_stocks, price = log
             if action == 'buy':
-                buy_data = buy_stock(access_token, app_key, app_secret)
+                buy_data = buy_stock(access_token, app_key, app_secret, price)
                 if buy_data:
                     log_manager.logger.info(f"주식 매수: {buy_data}")
                 else:
                     log_manager.logger.error(f"매수 실패")
                 log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
             elif action == 'sell':
-                sell_data = sell_stock(access_token, app_key, app_secret)
+                sell_data = sell_stock(access_token, app_key, app_secret, price)
                 if sell_data:
                     log_manager.logger.info(f"주식 매도: {sell_data}")
                 else:
