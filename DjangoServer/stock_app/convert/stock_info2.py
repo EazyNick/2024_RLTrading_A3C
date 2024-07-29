@@ -1,5 +1,3 @@
-
-
 class DataParser:
     class StockInfo:
         def __init__(self, data):

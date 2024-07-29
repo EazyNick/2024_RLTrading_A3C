@@ -15,12 +15,12 @@ try:
     sys.path.extend([modules_dir, rlmodels_dir])
 
     from utils import *
+    from config import *
 except ImportError as e:
     print(f"ImportError: {e}")
 
-
 class StockTradingEnv(gym.Env):
-    def __init__(self, df, max_stock=5555, trading_charge=0.00015, trading_tax=0.002):
+    def __init__(self, df, max_stock=85, trading_charge=0.00015, trading_tax=0.002):
         """
         주식 데이터프레임 df를 입력으로 받아 환경을 초기화
 
@@ -29,10 +29,18 @@ class StockTradingEnv(gym.Env):
         """
         super(StockTradingEnv, self).__init__()
         log_manager.logger.info(f"StockTradingEnv initialized")
+
+        account_info = DataParser.get_account_info()
+        stock_info_list = DataParser.get_stock_info_list()
+
         self.df = df
         self.current_step = 0
-        self.cash_in_hand = 50000000  # 초기 현금
-        self.stock_owned = 0  # 초기 주식 보유량 
+        self.cash_in_hand = account_info.get_total_cash_balance()  # 초기 현금
+        # 가장 많은 주식을 보유한 주식의 보유량을 찾습니다.
+        if stock_info_list:
+            self.stock_owned = max(stock_info_list, key=lambda x: x.get_holding_quantity()).get_holding_quantity()
+        else:
+            self.stock_owned = 0  # 주식이 없으면 0으로 설정
         self.max_stock = max_stock  # 한 번에 매수 또는 매도할 수 있는 최대 주식 수
         self.trading_charge = trading_charge  # 거래 수수료
         self.trading_tax = trading_tax  # 거래세
@@ -163,3 +171,78 @@ class StockTradingEnv(gym.Env):
             log_manager.logger.info(f'Step: {self.current_step}, Profit: {profit}')
         else:
             raise NotImplementedError(f"Render mode '{mode}' is not supported.")
+
+if __name__ == "__main__":
+    data = {
+        'ctx_area_fk100': ' ',
+        'ctx_area_nk100': ' ',
+        'output1': [
+            {
+                'pdno': '005930',
+                'prdt_name': '삼성전자',
+                'trad_dvsn_name': '현금',
+                'bfdy_buy_qty': '0',
+                'bfdy_sll_qty': '0',
+                'thdt_buyqty': '0',
+                'thdt_sll_qty': '0',
+                'hldg_qty': '2',
+                'ord_psbl_qty': '2',
+                'pchs_avg_pric': '80750.0000',
+                'pchs_amt': '161500',
+                'prpr': '87100',
+                'evlu_amt': '174200',
+                'evlu_pfls_amt': '12700',
+                'evlu_pfls_rt': '7.86',
+                'evlu_erng_rt': '7.86377709',
+                'loan_dt': '',
+                'loan_amt': '0',
+                'stln_slng_chgs': '0',
+                'expd_dt': '',
+                'fltt_rt': '2.96000000',
+                'bfdy_cprs_icdc': '2500',
+                'item_mgna_rt_name': '20%',
+                'grta_rt_name': '',
+                'sbst_pric': '0',
+                'stck_loan_unpr': '0.0000'
+            }
+        ],
+        'output2': [
+            {
+                'dnca_tot_amt': '9838480',
+                'nxdy_excc_amt': '9838480',
+                'prvs_rcdl_excc_amt': '9838480',
+                'cma_evlu_amt': '0',
+                'bfdy_buy_amt': '0',
+                'thdt_buy_amt': '0',
+                'nxdy_auto_rdpt_amt': '0',
+                'bfdy_sll_amt': '0',
+                'thdt_sll_amt': '0',
+                'd2_auto_rdpt_amt': '0',
+                'bfdy_tlex_amt': '0',
+                'thdt_tlex_amt': '0',
+                'tot_loan_amt': '0',
+                'scts_evlu_amt': '174200',
+                'tot_evlu_amt': '10012680',
+                'nass_amt': '10012680',
+                'fncg_gld_auto_rdpt_yn': '',
+                'pchs_amt_smtl_amt': '161500',
+                'evlu_amt_smtl_amt': '174200',
+                'evlu_pfls_smtl_amt': '12700',
+                'tot_stln_slng_chgs': '0',
+                'bfdy_tot_asst_evlu_amt': '10007680',
+                'asst_icdc_amt': '5000',
+                'asst_icdc_erng_rt': '0.04996163'
+            }
+        ],
+        'rt_cd': '0',
+        'msg_cd': '20310000',
+        'msg1': '모의투자 조회가 완료되었습니다.'
+    }
+
+    DataParser.parse_account_data(data)
+
+    stock_info_list = DataParser.get_stock_info_list()
+    account_info = DataParser.get_account_info()
+    
+    df = {0}
+    test = StockTradingEnv(df)
