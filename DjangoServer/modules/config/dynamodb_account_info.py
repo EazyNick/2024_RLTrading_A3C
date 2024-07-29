@@ -51,9 +51,9 @@ class DynamoDBManager:
             account_info_dict = account_info.to_dict()
 
             item = {
-            'account_id': account_id,
-            'stock_info_list': float_to_decimal(stock_info_dicts),
-            'account_info': float_to_decimal(account_info_dict)
+                'account_id': account_id,
+                'stock_info_list': float_to_decimal(stock_info_dicts),
+                'account_info': float_to_decimal(account_info_dict)
             }
 
             table.put_item(Item=item)
@@ -75,6 +75,7 @@ class DynamoDBManager:
             tuple: (주식 정보 객체 리스트, 계좌 정보 객체)
         """
         try:
+            log_manager.logger.info(f"Loading data for account_id {account_id} from DynamoDB")  
             dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
             table = dynamodb.Table('Accounts')
 
@@ -84,6 +85,10 @@ class DynamoDBManager:
             if item:
                 stock_info_data = item['stock_info_list']
                 account_info_data = item['account_info']
+
+                # 불러온 데이터를 로깅하여 구조 확인
+                log_manager.logger.debug(f"Stock Info Data: {stock_info_data}")
+                log_manager.logger.debug(f"Account Info Data: {account_info_data}")
 
                 stock_info_list = [DataParser.StockInfo(stock) for stock in stock_info_data]
                 account_info = DataParser.AccountInfo(account_info_data)

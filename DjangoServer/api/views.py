@@ -93,34 +93,16 @@ class AccountStatusView(View):
         account_id = request.GET.get('account_id')
 
         if not account_id:
-            return JsonResponse({'error': 'Account ID is required'}, status=400)
+            return JsonResponse({'error': 'No account ID provided'}, status=400)
 
         try:
-            # DynamoDB에서 데이터 불러오기
             stock_info_list, account_info = DynamoDBManager.load_from_dynamodb(account_id)
-
-            if stock_info_list is None or account_info is None:
+            if stock_info_list and account_info:
+                return JsonResponse({
+                    'stock_info_list': [stock.to_dict() for stock in stock_info_list],
+                    'account_info': account_info.to_dict()
+                })
+            else:
                 return JsonResponse({'error': 'No data found for the provided account ID'}, status=404)
-
-            # 데이터 포매팅
-            formatted_data = {
-                'total_cash_balance': account_info.get_total_cash_balance(),
-                'total_evaluation_amount': account_info.get_total_evaluation_amount(),
-                'evaluation_profit_loss_sum': account_info.get_evaluation_profit_loss_sum(),
-                'stocks': [
-                    {
-                        'stock_code': stock.get_stock_code(),
-                        'stock_name': stock.get_stock_name(),
-                        'holding_quantity': stock.get_holding_quantity(),
-                        'current_price': stock.get_current_price(),
-                        'evaluation_amount': stock.get_evaluation_amount(),
-                        'evaluation_profit_loss_amount': stock.get_evaluation_profit_loss_amount(),
-                        'evaluation_profit_loss_rate': stock.get_evaluation_profit_loss_rate()
-                    } for stock in stock_info_list
-                ]
-            }
-
-            return JsonResponse(formatted_data, status=200, safe=False)
         except Exception as e:
-            log_manager.logger.error(f"An error occurred while retrieving account status: {e}")
             return JsonResponse({'error': str(e)}, status=500)
