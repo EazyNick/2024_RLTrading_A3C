@@ -50,12 +50,14 @@ def buy_stock(access_token, app_key, app_secret, ORD_UNPR = '0', itm_no="000270"
         "ORD_UNPR": ORD_UNPR  # 매수 가격
     }
 
+    # log_manager.logger.debug(f"requests data: {data}")
+    
     # hash 디버깅 코드
     # hashkey = get_hashkey(app_key, app_secret, data)
     # log_manager.logger.debug(hashkey)
     # headers = Config.Buy.get_headers_hash(access_token, app_key, app_secret, hashkey)
 
-    # log_manager.logger.debug(f"requests data: {data}")
+    
 
     res = requests.post(url, headers=headers, data=json.dumps(data))
 
