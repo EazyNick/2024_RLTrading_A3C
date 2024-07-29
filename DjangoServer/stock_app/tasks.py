@@ -73,10 +73,8 @@ def run_task():
     # else:
     #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
 
-    log_manager.logger.debug("Before get_account_balance")
-    log_manager.logger.debug("Before get_account_balance")
-    log_manager.logger.debug("Before get_account_balance")
-    log_manager.logger.debug("Before get_account_balance")
+    # log_manager.logger.debug("Before get_account_balance")
+    
     try:
         stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
     

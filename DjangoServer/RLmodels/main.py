@@ -126,7 +126,7 @@ def main_run():
     model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model1024.pth'
     log_manager.logger.debug(f"모델 불러오는 경로: {model_path}")
     file_path = Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv'
-    log_manager.logger.debug(f"학습 데이터 파일 경로: {model_path}")
+    log_manager.logger.debug(f"학습 데이터 파일 경로: {file_path}")
     df = pd.read_csv(file_path, index_col='Date', parse_dates=True)  # 주식 데이터 로드
     env = StockTradingEnv(df)  # 환경 생성
     agent = A3CAgent(env)  # 에이전트 생성

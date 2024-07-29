@@ -33,14 +33,21 @@ class StockTradingEnv(gym.Env):
         account_info = DataParser.get_account_info()
         stock_info_list = DataParser.get_stock_info_list()
 
+        log_manager.logger.debug(f"account_info: {account_info}")
+        log_manager.logger.debug(f"stock_info_list: {stock_info_list}")
+
         self.df = df
         self.current_step = 0
-        self.cash_in_hand = account_info.get_total_cash_balance()  # 초기 현금
+        self.cash_in_hand = 50000000  # 초기 현금
+        # self.cash_in_hand = account_info.get_total_cash_balance()  # 초기 현금
+        log_manager.logger.debug(f"cash_in_hand: {self.cash_in_hand}")
         # 가장 많은 주식을 보유한 주식의 보유량을 찾습니다.
-        if stock_info_list:
-            self.stock_owned = max(stock_info_list, key=lambda x: x.get_holding_quantity()).get_holding_quantity()
-        else:
-            self.stock_owned = 0  # 주식이 없으면 0으로 설정
+        # if stock_info_list:
+        #     self.stock_owned = max(stock_info_list, key=lambda x: x.get_holding_quantity()).get_holding_quantity()
+        # else:
+        #     self.stock_owned = 0  # 주식이 없으면 0으로 설정
+        self.stock_owned = 0 
+        log_manager.logger.debug(f"stock_owned: {self.stock_owned}")
         self.max_stock = max_stock  # 한 번에 매수 또는 매도할 수 있는 최대 주식 수
         self.trading_charge = trading_charge  # 거래 수수료
         self.trading_tax = trading_tax  # 거래세
