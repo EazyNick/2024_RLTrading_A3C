@@ -1,7 +1,8 @@
 class DataParser:
     class StockInfo:
         def __init__(self, data):
-            self.stock_code = data['pdno']
+            self.stock_code = data['stock_code']  # 여기서 'pdno' 대신 'stock_code'를 사용
+            # self.stock_code = data['pdno']
             self.stock_name = data['prdt_name']
             self.trade_type = data['trad_dvsn_name']
             self.holding_quantity = int(data['hldg_qty'])
