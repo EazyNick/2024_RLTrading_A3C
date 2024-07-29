@@ -5,6 +5,7 @@ from Auth import AccessTokenManager, KeyringManager
 from services import get_account_balance
 import sys
 import os
+from decimal import Decimal
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
