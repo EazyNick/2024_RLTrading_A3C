@@ -124,15 +124,19 @@ def main_run():
 
     # 모델 로드
     model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model.pth'
+    log_manager.logger.debug(f"모델 불러오는 경로: {model_path}")
     file_path = Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv'
+    log_manager.logger.debug(f"학습 데이터 파일 경로: {model_path}")
     df = pd.read_csv(file_path, index_col='Date', parse_dates=True)  # 주식 데이터 로드
     env = StockTradingEnv(df)  # 환경 생성
     agent = A3CAgent(env)  # 에이전트 생성
     agent.load_model(model_path)  # 학습된 모델 로드
 
     # 새 데이터를 기반으로 거래 수행
+    new_data_path = Path(__file__).resolve().parent / 'data/DynamoDB/DynamoDB.csv'
+    log_manager.logger.debug(f"수행 데이터 파일 경로: {new_data_path}")
     # new_data = pd.read_csv(Path(__file__).resolve().parent / 'data/data_csv/kia_stock_testdata.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
-    new_data = pd.read_csv(Path(__file__).resolve().parent / 'data/DynamoDB/DynamoDB.csv', index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
+    new_data = pd.read_csv(new_data_path, index_col='Date', parse_dates=True)  # 새로운 주식 데이터 로드
     account_values, stock_prices, dates, buy_sell_log = run_trading(agent, env, new_data)
     log_manager.logger.info("Starting trading End")
 
