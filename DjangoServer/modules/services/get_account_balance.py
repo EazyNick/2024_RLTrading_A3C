@@ -60,8 +60,11 @@ def get_account_balance(access_token, app_key, app_secret):
         if data['rt_cd'] == '0':
             log_manager.logger.info("Account successful")
             DataParser.parse_account_data(data)
+            
             stock_info_list = DataParser.get_stock_info_list()
             account_info = DataParser.get_account_info()
+            log_manager.logger.info(f"stock_info_list: {stock_info_list}")
+            log_manager.logger.info(f"account_info: {account_info}")
             return stock_info_list, account_info
         else:
             log_manager.logger.error("Failed to load Account")
