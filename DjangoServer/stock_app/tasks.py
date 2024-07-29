@@ -104,12 +104,12 @@ def run_task():
         log_manager.logger.info(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"모델 실행 완료")
 
-        # 매수, 매도 시점의 로그
-        # filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
-        # log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
+        # 이번 달에 매수, 매도한 기록만 필터링
+        filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
+        log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
         # 매수, 매도 시점의 로그
-        for log in buy_sell_log:
+        for log in filtered_buy_sell_log:
             date, action, num_stocks, price = log
             price = str(int(price))  # np.float64 값을 일반 정수로 변환
             log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
