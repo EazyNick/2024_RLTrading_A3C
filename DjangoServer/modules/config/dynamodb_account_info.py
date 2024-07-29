@@ -18,6 +18,16 @@ except ImportError:
     from services import *
     from config import *
 
+def float_to_decimal(obj):
+    if isinstance(obj, list):
+        return [float_to_decimal(i) for i in obj]
+    elif isinstance(obj, dict):
+        return {k: float_to_decimal(v) for k, v in obj.items()}
+    elif isinstance(obj, float):
+        return Decimal(str(obj))
+    else:
+        return obj
+
 class DynamoDBManager:
     @staticmethod
     def save_to_dynamodb(account_id, stock_info_list, account_info):
@@ -40,9 +50,9 @@ class DynamoDBManager:
             account_info_dict = account_info.to_dict()
 
             item = {
-                'account_id': account_id,
-                'stock_info_list': stock_info_dicts,
-                'account_info': account_info_dict
+            'account_id': account_id,
+            'stock_info_list': float_to_decimal(stock_info_dicts),
+            'account_info': float_to_decimal(account_info_dict)
             }
 
             table.put_item(Item=item)
