@@ -3,7 +3,20 @@ from botocore.exceptions import NoCredentialsError, PartialCredentialsError
 from config.account_info import DataParser
 from Auth import AccessTokenManager, KeyringManager
 from services import get_account_balance
-from utils.Logger import log_manager
+import sys
+import os
+
+try:
+    sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+    from utils import *
+    from Auth import *
+    from services import *
+    from config import *
+except ImportError:    
+    from utils import *
+    from Auth import *
+    from services import *
+    from config import *
 
 class DynamoDBManager:
     @staticmethod
