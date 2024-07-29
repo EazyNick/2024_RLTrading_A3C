@@ -9,7 +9,6 @@ import sys
 import os
 from decimal import Decimal
 
-
 # 현재 파일의 디렉토리 경로
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -104,12 +103,12 @@ def run_task2():
     log_manager.logger.info("Start MainRun2")
     print("Running...")
 
-    # 키 관리자를 통해 키를 가져옵니다.
+    # api 키를 가져옵니다.
     key = KeyringManager()
     app_key = key.app_key   
     app_secret = key.app_secret_key
 
-    # 액세스 토큰 관리자를 통해 토큰을 가져옵니다.
+    # 액세스 토큰을 가져옵니다.
     manager = AccessTokenManager()
     access_token = get_access_token(manager)
 

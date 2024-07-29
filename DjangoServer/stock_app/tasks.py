@@ -93,6 +93,8 @@ def run_task():
         if stock_info_list is not None and account_info is not None:
             formatter = AccountFormatter()
             formatter.format(stock_info_list, account_info)
+            dynamodbmanager = DynamoDBManager()
+            dynamodbmanager.save_to_dynamodb('admin', stock_info_list, account_info)
         else:
             log_manager.logger.error("Failed to retrieve account information")
     except Exception as e:

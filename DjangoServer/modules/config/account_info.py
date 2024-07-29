@@ -14,6 +14,22 @@ class DataParser:
             self.evaluation_profit_loss_rate = float(data['evlu_pfls_rt'])
             self.fluctuation_rate = float(data['fltt_rt'])
 
+        def to_dict(self):
+            return {
+                'stock_code': self.stock_code,
+                'stock_name': self.stock_name,
+                'trade_type': self.trade_type,
+                'holding_quantity': self.holding_quantity,
+                'orderable_quantity': self.orderable_quantity,
+                'purchase_avg_price': self.purchase_avg_price,
+                'purchase_amount': self.purchase_amount,
+                'current_price': self.current_price,
+                'evaluation_amount': self.evaluation_amount,
+                'evaluation_profit_loss_amount': self.evaluation_profit_loss_amount,
+                'evaluation_profit_loss_rate': self.evaluation_profit_loss_rate,
+                'fluctuation_rate': self.fluctuation_rate
+            }
+
         def get_stock_code(self):
             return self.stock_code
 
@@ -101,6 +117,22 @@ class DataParser:
             self.assets_fluctuation_amount = int(data['asst_icdc_amt'])
             self.assets_fluctuation_rate = float(data['asst_icdc_erng_rt'])
 
+        def to_dict(self):
+            return {
+                'total_cash_balance': self.total_cash_balance,
+                'next_day_withdrawal_amount': self.next_day_withdrawal_amount,
+                'previous_day_withdrawal_amount': self.previous_day_withdrawal_amount,
+                'securities_evaluation_amount': self.securities_evaluation_amount,
+                'total_evaluation_amount': self.total_evaluation_amount,
+                'net_assets': self.net_assets,
+                'purchase_amount_sum': self.purchase_amount_sum,
+                'evaluation_amount_sum': self.evaluation_amount_sum,
+                'evaluation_profit_loss_sum': self.evaluation_profit_loss_sum,
+                'total_assets_evaluation_previous_day': self.total_assets_evaluation_previous_day,
+                'assets_fluctuation_amount': self.assets_fluctuation_amount,
+                'assets_fluctuation_rate': self.assets_fluctuation_rate
+            }
+
         def get_total_cash_balance(self):
             return self.total_cash_balance
 
@@ -185,3 +217,86 @@ class DataParser:
     @classmethod
     def get_account_info(cls):
         return cls.account_info
+
+if __name__ == "__main__":
+    # 데이터 예시
+    data = {
+        'ctx_area_fk100': ' ',
+        'ctx_area_nk100': ' ',
+        'output1': [
+            {
+                'pdno': '005930',
+                'prdt_name': '삼성전자',
+                'trad_dvsn_name': '현금',
+                'bfdy_buy_qty': '0',
+                'bfdy_sll_qty': '0',
+                'thdt_buyqty': '0',
+                'thdt_sll_qty': '0',
+                'hldg_qty': '2',
+                'ord_psbl_qty': '2',
+                'pchs_avg_pric': '80750.0000',
+                'pchs_amt': '161500',
+                'prpr': '87100',
+                'evlu_amt': '174200',
+                'evlu_pfls_amt': '12700',
+                'evlu_pfls_rt': '7.86',
+                'evlu_erng_rt': '7.86377709',
+                'loan_dt': '',
+                'loan_amt': '0',
+                'stln_slng_chgs': '0',
+                'expd_dt': '',
+                'fltt_rt': '2.96000000',
+                'bfdy_cprs_icdc': '2500',
+                'item_mgna_rt_name': '20%',
+                'grta_rt_name': '',
+                'sbst_pric': '0',
+                'stck_loan_unpr': '0.0000'
+            }
+        ],
+        'output2': [
+            {
+                'dnca_tot_amt': '9838480',
+                'nxdy_excc_amt': '9838480',
+                'prvs_rcdl_excc_amt': '9838480',
+                'cma_evlu_amt': '0',
+                'bfdy_buy_amt': '0',
+                'thdt_buy_amt': '0',
+                'nxdy_auto_rdpt_amt': '0',
+                'bfdy_sll_amt': '0',
+                'thdt_sll_amt': '0',
+                'd2_auto_rdpt_amt': '0',
+                'bfdy_tlex_amt': '0',
+                'thdt_tlex_amt': '0',
+                'tot_loan_amt': '0',
+                'scts_evlu_amt': '174200',
+                'tot_evlu_amt': '10012680',
+                'nass_amt': '10012680',
+                'fncg_gld_auto_rdpt_yn': '',
+                'pchs_amt_smtl_amt': '161500',
+                'evlu_amt_smtl_amt': '174200',
+                'evlu_pfls_smtl_amt': '12700',
+                'tot_stln_slng_chgs': '0',
+                'bfdy_tot_asst_evlu_amt': '10007680',
+                'asst_icdc_amt': '5000',
+                'asst_icdc_erng_rt': '0.04996163'
+            }
+        ],
+        'rt_cd': '0',
+        'msg_cd': '20310000',
+        'msg1': '모의투자 조회가 완료되었습니다.'
+    }
+
+    # DataParser를 사용하여 데이터 파싱
+    DataParser.parse_account_data(data)
+
+    # 파싱된 데이터 가져오기
+    stock_info_list = DataParser.get_stock_info_list()
+    account_info = DataParser.get_account_info()
+
+    # 결과 출력
+    print("Stock Information:")
+    for stock in stock_info_list:
+        print(stock.to_dict())
+
+    print("\nAccount Information:")
+    print(account_info.to_dict())
