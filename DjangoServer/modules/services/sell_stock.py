@@ -36,10 +36,10 @@ def sell_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="000270",
     cano = Config.Base.get_CANO()
     acnt_prdt_cd = Config.Base.get_ACNT_PRDT_CD()
 
-    # log_manager.logger.debug(f"url data: {url}")
-    # log_manager.logger.debug(f"headers data: {headers}")
-    # log_manager.logger.debug(f"cano data: {cano}")
-    # log_manager.logger.debug(f"acnt_prdt_cd data: {acnt_prdt_cd}")
+    log_manager.logger.debug(f"url data: {url}")
+    log_manager.logger.debug(f"headers data: {headers}")
+    log_manager.logger.debug(f"cano data: {cano}")
+    log_manager.logger.debug(f"acnt_prdt_cd data: {acnt_prdt_cd}")
 
     data = {
         "CANO": cano,  # 종합계좌번호 (체계 8-2의 앞 8자리)
@@ -50,7 +50,7 @@ def sell_stock(access_token, app_key, app_secret, ORD_UNPR = 0, itm_no="000270",
         "ORD_UNPR": ORD_UNPR  # 매도 가격 (0일 경우 시장가 주문)
     }
 
-    # log_manager.logger.debug(f"requests data: {data}")
+    log_manager.logger.debug(f"requests data: {data}")
 
     res = requests.post(url, headers=headers, data=json.dumps(data))
     
