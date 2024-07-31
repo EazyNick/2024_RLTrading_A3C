@@ -123,8 +123,9 @@ def run_task():
         filtered_buy_sell_log = filter_logs_by_current_week(buy_sell_log)
         log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
-        # -1000 ~ 1000사이의 점수 반환
-        score = API_main()
+        # -1000 ~ 1000사이의 점수 반환, GPT 스코어 반환함수로, 비용문제로 주석처리 해둠
+        # score = API_main()
+        score = 50
 
         # chat gpt의 매매 점수가 900이상(과매수)
         if score < 900:
