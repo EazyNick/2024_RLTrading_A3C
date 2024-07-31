@@ -84,7 +84,7 @@ def API_main():
     Args:
 
     Returns:
-        str: 예측 점수
+        int: 예측 점수
     """
     ticker = '000270.KS'
     combined_data = get_stock_data(ticker)
@@ -99,6 +99,8 @@ def API_main():
     prediction_score = predict_stock_performance(data_str)
     log_manager.logger.info(f"Chat GPT Prediction Score: {prediction_score}")
 
-    return prediction_score
+    # 반환값을 int로 변환
+    return int(prediction_score)
+
 if __name__ == "__main__":
-    main()
+    API_main()
