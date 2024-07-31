@@ -54,15 +54,15 @@ def get_access_token(manager):
     return access_token
 
 # 1달 기준
-# def filter_logs_by_current_month(buy_sell_log):
-#     current_year = datetime.now().year
-#     current_month = datetime.now().month
+def filter_logs_by_current_month(buy_sell_log):
+    current_year = datetime.now().year
+    current_month = datetime.now().month
 
-#     filtered_log = [
-#         log for log in buy_sell_log
-#         if log[0].year == current_year and log[0].month == current_month
-#     ]
-#     return filtered_log
+    filtered_log = [
+        log for log in buy_sell_log
+        if log[0].year == current_year and log[0].month == current_month
+    ]
+    return filtered_log
 
 # 1주 기준
 def filter_logs_by_current_week(buy_sell_log):
@@ -120,7 +120,7 @@ def run_task():
         log_manager.logger.info(f"모델 실행 완료")
 
         # 이번 달에 매수, 매도한 기록만 필터링
-        filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
+        filtered_buy_sell_log = filter_logs_by_current_week(buy_sell_log)
         log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
         # -1000 ~ 1000사이의 점수 반환
