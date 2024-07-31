@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import sys
 import os
-import openai
+from openai import OpenAI
 from dotenv import load_dotenv
 
 # 프로젝트 루트 경로를 추가
