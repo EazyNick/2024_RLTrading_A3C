@@ -132,7 +132,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, './templates'),  # Add this line
+            os.path.join(BASE_DIR, 'templates/static'),  # Add this line
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -216,10 +216,10 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/app/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'templates', 'static')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = '/app/media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'templates', 'media')
 
 # Celery 로깅 설정
 CELERY_WORKER_LOG_FILE = os.path.join(log_dir, "celery_worker.log")
