@@ -21,7 +21,7 @@
 - Django 4.2.13
 - Nginx
 - Gunicorn
-- Git
+- GIT
 - 한국투자증권 REST API 사용을 위한 API Key, API SECRET KEY
 - https 사용을 위한 도메인 및 ssl 인증서
 - CHAT GPT API 키
@@ -69,10 +69,10 @@
 2. Nginx 설정 파일 (`DjangoServer\nginx\nginx.conf`)을 수정하여 Django 애플리케이션과 연결합니다.
 
 ## 사용 방법
-1. docker-compose.yml 디렉토리에서, docker-compose up -d --build 명령어를 통해 빌드합니다.
+1. docker-compose.yml 파일이 있는 디렉토리에서, docker-compose up -d --build 명령어를 통해 빌드합니다.
 2. 백그라운드에서 강화학습 모델을 통해 자동매매가 실행됩니다.
 3. 웹 브라우저를 통해 서버에 접속합니다 (예: `http://your_server_domain_or_IP`).
-4. rest api를 통해 계좌 조회 기능을 사용할 수 있습니다.
+4. 웹 인터페이스를 통해 계좌 조회 기능을 사용할 수 있습니다.
 
 ## 기여 방법
 1. 이 프로젝트를 포크합니다.
