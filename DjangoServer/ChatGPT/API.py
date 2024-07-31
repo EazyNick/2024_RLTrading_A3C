@@ -78,11 +78,19 @@ def predict_stock_performance(data_str, model="gpt-3.5-turbo"):
     return prediction_score
 
 def API_main():
+    """
+    주어진 주식 데이터를 기반으로 GPT 모델을 통해 예측 점수를 반환합니다.
+    
+    Args:
+
+    Returns:
+        str: 예측 점수
+    """
     ticker = '000270.KS'
     combined_data = get_stock_data(ticker)
     
     # 데이터의 첫 몇 줄 출력
-    log_manager.logger.debug(combined_data.head())
+    # log_manager.logger.debug(combined_data.head())
     
     # 가져온 데이터를 문자열로 변환
     data_str = combined_data.to_string()
@@ -91,5 +99,6 @@ def API_main():
     prediction_score = predict_stock_performance(data_str)
     log_manager.logger.info(f"Chat GPT Prediction Score: {prediction_score}")
 
+    return prediction_score
 if __name__ == "__main__":
     main()

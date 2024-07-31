@@ -112,29 +112,33 @@ def run_task():
         filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
         log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
-        log_manager.logger.debug(f"Chat GPT API 실행 시작")
-        API_main()
-        log_manager.logger.debug(f"Chat GPT API 실행 종료")
+        # -1000 ~ 1000사이의 점수 반환
+        score = API_main()
 
-        # 매수, 매도 시점의 로그
-        for log in filtered_buy_sell_log:
-            date, action, num_stocks, price = log
-            price = str(int(price))  # np.float64 값을 일반 정수로 변환
-            log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
-            if action == 'buy':
-                buy_data = buy_stock(access_token, app_key, app_secret, price)
-                if buy_data:
-                    log_manager.logger.info(f"주식 매수: {buy_data}")
-                else:
-                    log_manager.logger.error(f"매수 실패")
-                log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
-            elif action == 'sell':
-                sell_data = sell_stock(access_token, app_key, app_secret, price)
-                if sell_data:
-                    log_manager.logger.info(f"주식 매도: {sell_data}")
-                else:
-                    log_manager.logger.error(f"매도 실패")
-                log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
+        # chat gpt의 매매 점수가 900이상(과매수)
+        if score < 900:
+            # 매수, 매도 시점의 로그
+            for log in filtered_buy_sell_log:
+                date, action, num_stocks, price = log
+                price = str(int(price))  # np.float64 값을 일반 정수로 변환
+                log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
+                if action == 'buy':
+                    buy_data = buy_stock(access_token, app_key, app_secret, price)
+                    if buy_data:
+                        log_manager.logger.info(f"주식 매수: {buy_data}")
+                    else:
+                        log_manager.logger.error(f"매수 실패")
+                    log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
+                elif action == 'sell':
+                    sell_data = sell_stock(access_token, app_key, app_secret, price)
+                    if sell_data:
+                        log_manager.logger.info(f"주식 매도: {sell_data}")
+                    else:
+                        log_manager.logger.error(f"매도 실패")
+                    log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
+        else:
+            log_manager.logger.info(f"과매수 구간입니다. Chat GPT 추천점수는 {score}점 입니다.")
+            pass
     except ImportError as e:
         log_manager.logger.error(f"모델 실행 실패: {e}")
     except Exception as e:
