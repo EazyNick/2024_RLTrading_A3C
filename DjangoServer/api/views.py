@@ -97,7 +97,7 @@ class AccountStatusView(View):
 
         try:
             stock_info_list, account_info = DynamoDBManager.load_from_dynamodb(account_id)
-            if stock_info_list and account_info:
+            if stock_info_list or account_info:
                 return JsonResponse({
                     'stock_info_list': [stock.to_dict() for stock in stock_info_list],
                     'account_info': account_info.to_dict()
