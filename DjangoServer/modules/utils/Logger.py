@@ -95,7 +95,7 @@ class LogManager:
                 os.remove(files.pop(0))  # 가장 오래된 파일을 삭제하고 목록에서 제거합니다.
                 
         except Exception as e:
-            self.logger.error(f'Error during cleaning up logs: {e}')
+            self.logger.warning(f'Error during cleaning up logs: {e}')
 
 # if __name__ == "__main__":
 #     log_manager = LogManager()

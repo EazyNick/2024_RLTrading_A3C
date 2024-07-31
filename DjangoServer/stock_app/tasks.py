@@ -12,6 +12,7 @@ from datetime import datetime
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
 sys.path.append(str(Path(__file__).resolve().parent / 'RLmodels'))
+sys.path.append(str(Path(__file__).resolve().parent / 'ChatGPT'))
 
 try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
@@ -21,6 +22,7 @@ try:
     from RLmodels.env.env import StockTradingEnv
     from modules.utils import *
     from modules.config import *
+    from ChatGPT.API import *
 except ImportError as e:
     print(f"Import error: {e}")
     raise
@@ -109,6 +111,10 @@ def run_task():
         # 이번 달에 매수, 매도한 기록만 필터링
         filtered_buy_sell_log = filter_logs_by_current_month(buy_sell_log)
         log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
+
+        log_manager.logger.debug(f"Chat GPT API 실행 시작")
+        API_main()
+        log_manager.logger.debug(f"Chat GPT API 실행 종료")
 
         # 매수, 매도 시점의 로그
         for log in filtered_buy_sell_log:

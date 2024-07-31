@@ -38,7 +38,7 @@ class StockTradingEnv(gym.Env):
 
         self.df = df
         self.current_step = 0
-        self.cash_in_hand = 1000000  # 초기 현금
+        self.cash_in_hand = 10000000  # 초기 현금
         # self.cash_in_hand = account_info.get_total_cash_balance()  # 초기 현금
         log_manager.logger.debug(f"cash_in_hand: {self.cash_in_hand}")
         # 가장 많은 주식을 보유한 주식의 보유량을 찾습니다.
@@ -77,7 +77,7 @@ class StockTradingEnv(gym.Env):
         """
         # log_manager.logger.info(f"Environment reset start")
         self.current_step = 0
-        self.cash_in_hand = 1000000  # 초기 현금
+        self.cash_in_hand = 10000000  # 초기 현금
         self.stock_owned = 0  # 초기 주식 보유량
         if new_df is not None:
             self.df = new_df
@@ -171,7 +171,7 @@ class StockTradingEnv(gym.Env):
             mode (str): 출력 모드. 'human'은 콘솔 출력.
             close (bool): 환경을 닫을지 여부. 기본값은 False.
         """
-        profit = self.stock_owned * self.df['Close'].values[self.current_step] + self.cash_in_hand - 50000000
+        profit = self.stock_owned * self.df['Close'].values[self.current_step] + self.cash_in_hand - 10000000
         # log_manager.logger.info(f"Profit: {profit}")
 
         if mode == 'human':
