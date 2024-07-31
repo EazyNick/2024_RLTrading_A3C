@@ -53,13 +53,24 @@ def get_access_token(manager):
             access_token = manager.get_access_token()
     return access_token
 
-def filter_logs_by_current_month(buy_sell_log):
-    current_year = datetime.now().year
-    current_month = datetime.now().month
+# 1달 기준
+# def filter_logs_by_current_month(buy_sell_log):
+#     current_year = datetime.now().year
+#     current_month = datetime.now().month
+
+#     filtered_log = [
+#         log for log in buy_sell_log
+#         if log[0].year == current_year and log[0].month == current_month
+#     ]
+#     return filtered_log
+
+# 1주 기준
+def filter_logs_by_current_week(buy_sell_log):
+    current_year, current_week, _ = datetime.now().isocalendar()
 
     filtered_log = [
         log for log in buy_sell_log
-        if log[0].year == current_year and log[0].month == current_month
+        if log[0].isocalendar()[0] == current_year and log[0].isocalendar()[1] == current_week
     ]
     return filtered_log
 
