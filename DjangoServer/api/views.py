@@ -72,7 +72,7 @@ class LoginView(APIView):
 
         # DynamoDB 클라이언트 초기화
         dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
-        table = dynamodb.Table('Accounts')
+        table = dynamodb.Table('User_Accounts')
 
         try:
             response = table.query(
