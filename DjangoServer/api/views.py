@@ -12,6 +12,8 @@ import subprocess
 import sys
 import os
 from pathlib import Path
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
