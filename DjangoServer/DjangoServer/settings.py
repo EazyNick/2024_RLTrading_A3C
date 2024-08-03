@@ -38,7 +38,7 @@ if 'DJANGO_SUPERUSER_USERNAME' in os.environ:
 SECRET_KEY = 'django-insecure-7!i3ja1c_(g_0^gw+zs=)n!%bt%qx7^d*4j-)6bh_nuuv2x#y&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.kro.kr']
 
