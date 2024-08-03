@@ -89,6 +89,7 @@ class LoginView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 class AccountStatusView(View):
+    @csrf_exempt
     def get(self, request):
         account_id = request.GET.get('account_id')
 
