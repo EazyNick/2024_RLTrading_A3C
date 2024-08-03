@@ -42,6 +42,12 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.kro.kr']
 
+# CSRF_TRUSTED_ORIGINS 설정
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:55563',
+    'http://127.0.0.1:8000',
+]
+
 # CELERY_BEAT_SCHEDULE = {
 #     'run-task-every-90000-seconds': {
 #         'task': 'stock_app.tasks.run_task',
