@@ -44,7 +44,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.k
 
 # CSRF_TRUSTED_ORIGINS 설정
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:55563',
+    'http://localhost:56163',
     'http://127.0.0.1:8000',
 ]
 
