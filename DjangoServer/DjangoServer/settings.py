@@ -42,11 +42,26 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1',  '13.210.203.153', 'fintech19190301.kro.kr']
 
+# Define the allowed methods
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
 # CSRF_TRUSTED_ORIGINS 설정
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:58194',
-    'http://127.0.0.1:8000',
+    'http://localhost',
+    'http://127.0.0.1',
+    'https://fintech19190301.kro.kr',
 ]
+
+# CSRF settings
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
 
 # CELERY_BEAT_SCHEDULE = {
 #     'run-task-every-90000-seconds': {

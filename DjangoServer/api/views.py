@@ -106,3 +106,13 @@ class AccountStatusView(View):
                 return JsonResponse({'error': 'No data found for the provided account ID'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
+        
+# CSRF 토큰 발급
+from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
+
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    csrf_token = get_token(request)
+    return JsonResponse({'csrfToken': csrf_token})
