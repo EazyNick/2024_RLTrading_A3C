@@ -17,11 +17,11 @@
 
 ### 사전 요구 사항
 - AWS EC2 인스턴스 (Amazon Linux 2), Instance type - t3.large and Volume size (GiB) - 64GB
-- Python 3.9
+- Python 3.9 이상 버전
 - Django 4.2.13
 - Nginx
 - Gunicorn
-- GIT
+- Git
 - 한국투자증권 REST API 사용을 위한 API Key, API SECRET KEY
 - https 사용을 위한 도메인 및 ssl 인증서
 - CHAT GPT API 키
