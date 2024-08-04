@@ -72,15 +72,8 @@ CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
 # CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
     'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
+    'authorization',
 ]
 
 # CELERY_BEAT_SCHEDULE = {
