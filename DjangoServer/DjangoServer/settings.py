@@ -57,10 +57,14 @@ CORS_ALLOW_METHODS = [
 # CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
     'https://fintech19190301.kro.kr',
 ]
 
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost',
+    'http://127.0.0.1',
     'https://fintech19190301.kro.kr',
 ]
 
