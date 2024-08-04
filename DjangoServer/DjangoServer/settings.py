@@ -53,15 +53,35 @@ CORS_ALLOW_METHODS = [
 ]
 
 # CSRF_TRUSTED_ORIGINS 설정
+# CORS_ALLOW_ALL_ORIGINS = True  # 개발 중에는 이렇게 설정하고, 프로덕션에서는 특정 도메인만 허용하도록 변경하세요.
+# CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost',
-    'http://127.0.0.1',
+    'https://fintech19190301.kro.kr',
+]
+
+CORS_ALLOWED_ORIGINS = [
     'https://fintech19190301.kro.kr',
 ]
 
 # CSRF settings
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_HEADER_NAME = "HTTP_X_CSRFTOKEN"
+
+#클라이언트에게 노출할 헤더
+# CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
 # CELERY_BEAT_SCHEDULE = {
 #     'run-task-every-90000-seconds': {
@@ -137,13 +157,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-]
-
-CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOW_HEADERS = [
-    'content-type',
-    'authorization',
 ]
 
 ROOT_URLCONF = 'DjangoServer.urls'
