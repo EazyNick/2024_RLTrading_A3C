@@ -15,9 +15,11 @@ sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
 
 try:
     from modules.utils import *
-    from modules.Auth import load_env_file
 except Exception as e:
     print(f"import error {e}")
+
+def load_env_file(env_path):
+    load_dotenv(env_path)
 
 def get_stock_data(ticker):
     """

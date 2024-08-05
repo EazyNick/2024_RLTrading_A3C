@@ -27,6 +27,7 @@ try:
     from RLmodels.env.env import StockTradingEnv
     from modules.utils import *
     from modules.config import *
+    from ChatGPT import *
 except ImportError as e:
     print(f"Import error: {e}")
     raise
@@ -64,6 +65,9 @@ class SaveItemView(APIView):
         
 class LoginView(APIView):
     renderer_classes = [JSONRenderer]
+
+    def get(self, request):
+        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request):
         email = request.data.get('Email')
@@ -120,3 +124,23 @@ from django.middleware.csrf import get_token
 def get_csrf_token(request):
     csrf_token = get_token(request)
     return JsonResponse({'csrfToken': csrf_token})
+
+class StockAutoTradingChatbotView(View):
+    def get(self, request):
+        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def post(self, request):
+        try:
+            # 엑셀 파일 읽기
+            excel_path = os.path.join(os.path.dirname(__file__), 'templates', 'excel', 'CS_Document.xlsx')
+            excel_content = read_excel(excel_path)
+            # 요청 본문에서 데이터 파싱
+            data = json.loads(request.body)
+            user_input = data.get('message', '')
+            chatbot_response = chatgpt(user_input, excel_content)
+            # JSON 응답 생성
+            return JsonResponse({'response': chatbot_response})
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'Invalid JSON provided'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
