@@ -135,16 +135,26 @@ class StockAutoTradingChatbotView(View):
 
     def post(self, request):
         try:
-            # 엑셀 파일 읽기
+            print("Received POST request")
             excel_path = os.path.join(os.path.dirname(__file__), 'templates', 'excel', 'CS_Document.xlsx')
+            if not os.path.exists(excel_path):
+                print("Excel file not found")
+                return JsonResponse({'error': 'Excel file not found'}, status=404)
+            
             excel_content = read_excel(excel_path)
-            # 요청 본문에서 데이터 파싱
+            print("Excel file read successfully")
             data = json.loads(request.body)
             user_input = data.get('message', '')
+            if not user_input:
+                print("No user input provided")
+                return JsonResponse({'error': 'No user input provided'}, status=400)
+            
             chatbot_response = chatgpt(user_input, excel_content)
-            # JSON 응답 생성
+            print("ChatGPT response generated successfully")
             return JsonResponse({'response': chatbot_response})
         except json.JSONDecodeError:
+            print("Invalid JSON provided")
             return JsonResponse({'error': 'Invalid JSON provided'}, status=400)
         except Exception as e:
+            print(f"An error occurred: {e}")
             return JsonResponse({'error': str(e)}, status=500)
