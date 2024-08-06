@@ -17,9 +17,6 @@ try:
 except Exception as e:
     print(f"import error {e}")
 
-# 환경 변수 파일 경로 설정
-PATH = 'apikey.env'
-
 def load_env_file(env_path):
     log_manager.logger.debug(f"Loading environment file: {env_path}")
     load_dotenv(env_path)
@@ -57,6 +54,11 @@ def chatgpt(user_input, document_content, model="gpt-3.5-turbo"):
     Returns:
         str: 답변 메시지
     """
+
+    # 환경 변수 파일 경로 설정
+    PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'apikey.env')
+    log_manager.logger.debug(f"Environment file path: {PATH}")
+
     log_manager.logger.debug("Starting chatgpt function")
     log_manager.logger.debug(f"User input: {user_input}")
 
