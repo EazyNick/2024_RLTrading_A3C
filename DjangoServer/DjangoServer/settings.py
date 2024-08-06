@@ -55,6 +55,7 @@ CORS_ALLOW_METHODS = [
 # CSRF_TRUSTED_ORIGINS 설정
 CORS_ALLOW_ALL_ORIGINS = True  # 개발 중에는 이렇게 설정하고, 프로덕션에서는 특정 도메인만 허용하도록 변경하세요.
 # CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_HTTPONLY = False  # 모바일 앱에서 CSRF 쿠키를 사용할 수 있도록 설정
 
 CSRF_TRUSTED_ORIGINS = [
     'https://fintech19190301.kro.kr',
