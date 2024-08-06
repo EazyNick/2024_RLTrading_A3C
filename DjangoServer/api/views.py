@@ -12,8 +12,8 @@ import subprocess
 import sys
 import os
 from pathlib import Path
-from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.middleware.csrf import get_token
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
@@ -90,12 +90,15 @@ class LoginView(APIView):
             user = items[0]
             if user['Password'] != password:
                 return Response({"error": "Incorrect Password"}, status=status.HTTP_401_UNAUTHORIZED)
-            return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            
+            csrf_token = get_token(request) 
+            response = JsonResponse({'message': 'Login successful'})
+            response.set_cookie('csrftoken', csrf_token)
+            return response
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 
-# @csrf_exempt
 class AccountStatusView(View):
     def get(self, request):
         account_id = request.GET.get('account_id')
@@ -114,11 +117,6 @@ class AccountStatusView(View):
                 return JsonResponse({'error': 'No data found for the provided account ID'}, status=404)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
-        
-# CSRF 토큰 발급
-from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.middleware.csrf import get_token
 
 @ensure_csrf_cookie
 def get_csrf_token(request):
@@ -126,7 +124,6 @@ def get_csrf_token(request):
     return JsonResponse({'csrfToken': csrf_token})
 
 class StockAutoTradingChatbotView(View):
-    @csrf_exempt
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
     
