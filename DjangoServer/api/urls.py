@@ -6,5 +6,5 @@ urlpatterns = [
     path('accounts/login/', LoginView.as_view(), name='account-login'),  # 로그인 경로 추가
     path('account/status/', AccountStatusView.as_view(), name='account-status'),
     path('csrf/', get_csrf_token, name='get_csrf_token'),
-    path('stock_auto_trading_chatbot/', StockAutoTradingChatbotView, name='stock_auto_trading_chatbot'),
+    path('stock_auto_trading_chatbot/', StockAutoTradingChatbotView.as_view(), name='stock_auto_trading_chatbot'),
 ]
