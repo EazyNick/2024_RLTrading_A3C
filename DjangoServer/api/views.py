@@ -127,7 +127,7 @@ def get_csrf_token(request):
 
 class StockAutoTradingChatbotView(View):
     def get(self, request):
-        return Response({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return JsonResponse({"message": "POST 요청으로 해야지 멍충아"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def post(self, request):
         try:
