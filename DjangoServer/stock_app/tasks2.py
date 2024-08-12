@@ -8,6 +8,7 @@ from modules.config.config import Config
 import sys
 import os
 from decimal import Decimal
+import pandas as pd
 
 # 현재 파일의 디렉토리 경로
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -235,6 +236,20 @@ def run_task2():
             log_manager.logger.error(f"Error inserting data into DynamoDB: {e}")
     else:
         log_manager.logger.error("현재가 불러오기 실패")
+
+    try:
+        # 데이터 가져오기
+        kospi_data = get_intraday_data('^KS11', interval='5m', period='1d')
+        kosdaq_data = get_intraday_data('^KQ11', interval='5m', period='1d')
+
+        # 데이터 합치기
+        merged_data = pd.concat([kospi_data, kosdaq_data])
+
+        # DynamoDB에 저장
+        save_to_dynamodb(merged_data)
+    except Exception as e:
+        log_manager.logger.error(f"Error inserting KOSPI, KOSDAKdata into DynamoDB: {e}")
+
 
 
     # if stck_prpr:
