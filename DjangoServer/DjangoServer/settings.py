@@ -84,17 +84,17 @@ CORS_ALLOW_HEADERS = [
 #     },
 # }
 
-# # Celery 설정
-# CELERY_BEAT_SCHEDULE = {
-#     'run-task-every-104-seconds': {
-#         'task': 'stock_app.tasks.run_task',
-#         'schedule': 104.0,  # 104초마다 실행
-#     },
-#     'run-task2-every-100-seconds': {
-#         'task': 'stock_app.tasks2.run_task2',
-#         'schedule': 100,  # 100초마다 실행
-#     },
-# }
+# Celery 설정
+CELERY_BEAT_SCHEDULE = {
+    'run-task-every-104-seconds': {
+        'task': 'stock_app.tasks.run_task',
+        'schedule': 104.0,  # 104초마다 실행
+    },
+    'run-task2-every-100-seconds': {
+        'task': 'stock_app.tasks2.run_task2',
+        'schedule': 100,  # 100초마다 실행
+    },
+}
 
 # CELERY_TASK_TIME_LIMIT = 300  # 5 minutes
 
