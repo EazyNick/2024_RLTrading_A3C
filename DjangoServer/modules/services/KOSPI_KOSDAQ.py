@@ -4,18 +4,15 @@ import pandas as pd
 import requests
 import sys
 import os
-import json
+import boto3
+from boto3.dynamodb.conditions import Key
 
 try:
     sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-    from config.config import Config
     from utils import *
-    from Auth import *
     from services import *
 except ImportError:    
-    from config.config import Config
     from utils import *
-    from Auth import *
     from services import *
 
 def get_intraday_data(symbol, interval='5m', period='1d'):
@@ -64,6 +61,25 @@ def save_to_dynamodb(data):
             )
         log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
 
+def get_stock_data():
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('kospi_kosdaq_data')
+    
+    # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
+    kospi_response = table.query(
+        IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
+        KeyConditionExpression=Key('Symbol').eq('^KS11')
+    )
+    kospi_items = kospi_response.get('Items', [])
+    
+    # 코스닥 데이터를 조회 (Symbol이 '^KQ11'인 항목만 조회)
+    kosdaq_response = table.query(
+        IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
+        KeyConditionExpression=Key('Symbol').eq('^KQ11')
+    )
+    kosdaq_items = kosdaq_response.get('Items', [])
+    
+    return kospi_items, kosdaq_items
 
 if __name__ == "__main__":
     # 코스피 지수와 코스닥 지수의 5분봉 데이터를 가져옵니다.

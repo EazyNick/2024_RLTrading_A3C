@@ -116,6 +116,7 @@ def run_task2():
     # 주식 데이터(현재가와 거래량)를 가져옵니다.
     stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
+    # 오늘자 주식 데이터 dynamodb에 저장
     if stock_data:
         log_manager.logger.info(f"현재가, 거래량: {stock_data}")
 
@@ -237,6 +238,7 @@ def run_task2():
     else:
         log_manager.logger.error("현재가 불러오기 실패")
 
+    # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
     try:
         # 데이터 가져오기
         kospi_data = get_intraday_data('^KS11', interval='5m', period='1d')

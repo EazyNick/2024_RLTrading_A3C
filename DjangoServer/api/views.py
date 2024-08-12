@@ -155,3 +155,11 @@ class StockAutoTradingChatbotView(View):
         except Exception as e:
             print(f"An error occurred: {e}")
             return JsonResponse({'error': str(e)}, status=500)
+        
+class StockDataView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            kospi_data, kosdaq_data = get_stock_data()
+            return JsonResponse({'status': 'success', 'kospi_data': kospi_data, 'kosdaq_data': kosdaq_data}, status=200)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
