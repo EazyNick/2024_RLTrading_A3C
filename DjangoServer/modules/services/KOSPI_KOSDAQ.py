@@ -68,14 +68,16 @@ def get_kospi_kosdaq_data():
     # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
     kospi_response = table.query(
         IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
-        KeyConditionExpression=Key('Symbol').eq('^KS11')
+        KeyConditionExpression=Key('Symbol').eq('^KS11'),
+        ProjectionExpression='Timestamp, Symbol, Close'  # 반환할 속성 지정
     )
     kospi_items = kospi_response.get('Items', [])
     
     # 코스닥 데이터를 조회 (Symbol이 '^KQ11'인 항목만 조회)
     kosdaq_response = table.query(
         IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
-        KeyConditionExpression=Key('Symbol').eq('^KQ11')
+        KeyConditionExpression=Key('Symbol').eq('^KQ11'),
+        ProjectionExpression='Timestamp, Symbol, Close'  # 반환할 속성 지정
     )
     kosdaq_items = kosdaq_response.get('Items', [])
     
