@@ -12,5 +12,5 @@ __all__ = ['get_price',
            'get_hashkey',
            'get_intraday_data',
            'save_to_dynamodb',
-           get_stock_data,
+           'get_stock_data',
            ]
