@@ -60,14 +60,14 @@ def save_to_dynamodb(data):
                 }
             )
         log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
-
+        
 def get_kospi_kosdaq_data():
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
     
     # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
     kospi_response = table.query(
-        IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
+        IndexName='Symbol-Timestamp-index',  # 새로운 인덱스 이름
         KeyConditionExpression=Key('Symbol').eq('^KS11'),
         ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
         ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
@@ -76,7 +76,7 @@ def get_kospi_kosdaq_data():
     
     # 코스닥 데이터를 조회 (Symbol이 '^KQ11'인 항목만 조회)
     kosdaq_response = table.query(
-        IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
+        IndexName='Symbol-Timestamp-index',  # 새로운 인덱스 이름
         KeyConditionExpression=Key('Symbol').eq('^KQ11'),
         ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
         ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
