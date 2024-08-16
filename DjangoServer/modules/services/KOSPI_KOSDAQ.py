@@ -36,7 +36,7 @@ def get_intraday_data(symbol, interval='5m', period='1d'):
 
 def save_to_dynamodb(data):
     # AWS DynamoDB 설정
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
 
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장중...")
@@ -62,7 +62,7 @@ def save_to_dynamodb(data):
         log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
 
 def get_stock_data():
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
     
     # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
