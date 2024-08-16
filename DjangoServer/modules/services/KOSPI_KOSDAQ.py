@@ -69,8 +69,8 @@ def get_kospi_kosdaq_data():
     kospi_response = table.query(
         IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
         KeyConditionExpression=Key('Symbol').eq('^KS11'),
-        ProjectionExpression='#ts, Symbol, Close',  # 반환할 속성 지정 (Timestamp는 예약어이므로 대체)
-        ExpressionAttributeNames={'#ts': 'Timestamp'}  # #ts는 실제로 Timestamp를 의미함
+        ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
+        ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
     )
     kospi_items = kospi_response.get('Items', [])
     
@@ -78,13 +78,12 @@ def get_kospi_kosdaq_data():
     kosdaq_response = table.query(
         IndexName='Symbol-index',  # 인덱스 이름 (Symbol을 인덱스로 설정한 경우)
         KeyConditionExpression=Key('Symbol').eq('^KQ11'),
-        ProjectionExpression='#ts, Symbol, Close',  # 반환할 속성 지정 (Timestamp는 예약어이므로 대체)
-        ExpressionAttributeNames={'#ts': 'Timestamp'}  # #ts는 실제로 Timestamp를 의미함
+        ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
+        ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
     )
     kosdaq_items = kosdaq_response.get('Items', [])
     
     return kospi_items, kosdaq_items
-
 
 if __name__ == "__main__":
     # 코스피 지수와 코스닥 지수의 5분봉 데이터를 가져옵니다.
