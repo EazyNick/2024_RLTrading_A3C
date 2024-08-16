@@ -61,7 +61,7 @@ def save_to_dynamodb(data):
             )
         log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
 
-def get_stock_data():
+def get_kospi_kosdaq_data():
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
     
