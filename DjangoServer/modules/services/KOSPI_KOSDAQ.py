@@ -58,10 +58,12 @@ def save_to_dynamodb(data):
                     '#ts': 'Timestamp',
                     '#sym': 'Symbol'
                 }
-                # 위 조건에 따라 동일한 Timestamp와 Symbol을 가진 항목이 없을 경우에만 삽입
             )
-        except Exception as e:
-            log_manager.logger.error(f"Error inserting item: {e}")
+        except boto3.exceptions.botocore.exceptions.ClientError as e:
+            if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
+                log_manager.logger.warning(f"Item already exists, skipping insertion: {e}")
+            else:
+                log_manager.logger.error(f"Error inserting item: {e}")
 
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
 
