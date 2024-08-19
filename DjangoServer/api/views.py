@@ -159,7 +159,13 @@ class StockAutoTradingChatbotView(View):
 class StockDataView(View):
     def get(self, request, *args, **kwargs):
         try:
-            kospi_data, kosdaq_data = get_kospi_kosdaq_data()
-            return JsonResponse({'status': 'success', 'kospi_data': kospi_data, 'kosdaq_data': kosdaq_data}, status=200)
+            kospi_today, kospi_latest, kosdaq_today, kosdaq_latest = get_kospi_kosdaq_data()
+            return JsonResponse({
+                'status': 'success', 
+                'kospi_today': kospi_today, 
+                'kospi_latest': kospi_latest,
+                'kosdaq_today': kosdaq_today,
+                'kosdaq_latest': kosdaq_latest
+            }, status=200)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

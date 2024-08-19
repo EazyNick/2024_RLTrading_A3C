@@ -40,15 +40,11 @@ def save_to_dynamodb(data):
     table = dynamodb.Table('kospi_kosdaq_data')
 
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장중...")
-    """
-    table.batch_writer(): DynamoDB 테이블 객체에서 batch_writer를 호출하여 배치 작성기(batch writer)를 생성 
-    배치 작성기는 여러 항목을 한 번에 테이블에 넣거나 업데이트하는 데 사용
-    as batch: batch_writer 객체를 batch라는 변수로 사용
-    """
-    with table.batch_writer() as batch:
-        # data.iterrows(): 데이터프레임의 행을 반복 가능한 형태로 반환, 각 반복에서 index는 행의 인덱스를, row는 행의 데이터를 포함
-        for index, row in data.iterrows():
-            batch.put_item(
+    
+    # batch_writer를 사용하지 않고 각 항목을 개별적으로 삽입
+    for index, row in data.iterrows():
+        try:
+            table.put_item(
                 Item={
                     'Timestamp': row['Datetime'].isoformat(),
                     'Symbol': row['Symbol'],
@@ -61,50 +57,49 @@ def save_to_dynamodb(data):
                 ConditionExpression="attribute_not_exists(Timestamp) AND attribute_not_exists(Symbol)"
                 # 위 조건에 따라 동일한 Timestamp와 Symbol을 가진 항목이 없을 경우에만 삽입
             )
-        log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
+        except Exception as e:
+            log_manager.logger.error(f"Error inserting item: {e}")
+
+    log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
+
 
 def get_kospi_kosdaq_data():
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
     
-    # 오늘 날짜와 어제 날짜 계산
     today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-
-    # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
-    kospi_response = table.query(
-        IndexName='Symbol-Timestamp-index',  # 새로운 인덱스 이름
-        KeyConditionExpression=Key('Symbol').eq('^KS11'),
-        ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
-        ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
-    )
-    kospi_items = kospi_response.get('Items', [])
     
-    # 코스닥 데이터를 조회 (Symbol이 '^KQ11'인 항목만 조회)
-    kosdaq_response = table.query(
-        IndexName='Symbol-Timestamp-index',  # 새로운 인덱스 이름
-        KeyConditionExpression=Key('Symbol').eq('^KQ11'),
-        ProjectionExpression='#ts, Symbol, #cl',  # 반환할 속성 지정 (Timestamp와 Close는 예약어이므로 대체)
-        ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
-    )
-    kosdaq_items = kosdaq_response.get('Items', [])
+    # 오늘 날짜 데이터 모두 조회
+    def get_today_data(symbol):
+        response = table.query(
+            IndexName='Symbol-Timestamp-index',
+            KeyConditionExpression=Key('Symbol').eq(symbol) & Key('Timestamp').begins_with(str(today)),
+            ProjectionExpression='#ts, Symbol, #cl',
+            ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}
+        )
+        return response.get('Items', [])
+    
+    # 오늘 제외한 최신 데이터 1개만 조회
+    def get_latest_data_exclude_today(symbol):
+        response = table.query(
+            IndexName='Symbol-Timestamp-index',
+            KeyConditionExpression=Key('Symbol').eq(symbol) & Key('Timestamp').lt(str(today)),
+            ScanIndexForward=False,  # 가장 최신의 데이터가 우선
+            Limit=1,  # 최신 데이터 1개만 가져오기
+            ProjectionExpression='#ts, Symbol, #cl',
+            ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}
+        )
+        return response.get('Items', [])
+    
+    # 코스피 데이터 조회
+    kospi_today = get_today_data('^KS11')
+    kospi_latest = get_latest_data_exclude_today('^KS11')
 
-    # 어제 종가와 오늘 데이터 필터링 함수
-    def filter_data_for_today(data, symbol):
-        yesterday_close = None
-        today_data = []
-        for item in data:
-            timestamp = datetime.fromisoformat(item['Timestamp'])
-            if timestamp.date() == yesterday:
-                yesterday_close = item['Close']  # 어제의 마지막 종가를 기억
-            elif timestamp.date() == today:
-                today_data.append(item)  # 오늘의 데이터만 추가
-        return {'yesterday_close': yesterday_close, 'today_data': today_data, 'symbol': symbol}
-
-    kospi_filtered = filter_data_for_today(kospi_items, '^KS11')
-    kosdaq_filtered = filter_data_for_today(kosdaq_items, '^KQ11')
-
-    return kospi_filtered, kosdaq_filtered
+    # 코스닥 데이터 조회
+    kosdaq_today = get_today_data('^KQ11')
+    kosdaq_latest = get_latest_data_exclude_today('^KQ11')
+    
+    return kospi_today, kospi_latest, kosdaq_today, kosdaq_latest
 
 if __name__ == "__main__":
     # 코스피 지수와 코스닥 지수의 5분봉 데이터를 가져옵니다.
