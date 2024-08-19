@@ -41,7 +41,6 @@ def save_to_dynamodb(data):
 
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장중...")
     
-    # batch_writer를 사용하지 않고 각 항목을 개별적으로 삽입
     for index, row in data.iterrows():
         try:
             table.put_item(
@@ -54,13 +53,18 @@ def save_to_dynamodb(data):
                     'Close': str(row['Close']),
                     'Volume': str(row['Volume'])
                 },
-                ConditionExpression="attribute_not_exists(Timestamp) AND attribute_not_exists(Symbol)"
+                ConditionExpression="attribute_not_exists(#ts) AND attribute_not_exists(#sym)",
+                ExpressionAttributeNames={
+                    '#ts': 'Timestamp',
+                    '#sym': 'Symbol'
+                }
                 # 위 조건에 따라 동일한 Timestamp와 Symbol을 가진 항목이 없을 경우에만 삽입
             )
         except Exception as e:
             log_manager.logger.error(f"Error inserting item: {e}")
 
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
+
 
 
 def get_kospi_kosdaq_data():
