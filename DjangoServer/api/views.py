@@ -160,6 +160,22 @@ class StockDataView(View):
     def get(self, request, *args, **kwargs):
         try:
             kospi_data, kosdaq_data = get_kospi_kosdaq_data()
-            return JsonResponse({'status': 'success', 'kospi_data': kospi_data, 'kosdaq_data': kosdaq_data}, status=200)
+
+            # JsonResponse에 맞는 형식으로 변환
+            response_data = {
+                'status': 'success',
+                'kospi_data': {
+                    'symbol': kospi_data['symbol'],
+                    'yesterday_close': kospi_data['yesterday_close'],
+                    'today_data': kospi_data['today_data']
+                },
+                'kosdaq_data': {
+                    'symbol': kosdaq_data['symbol'],
+                    'yesterday_close': kosdaq_data['yesterday_close'],
+                    'today_data': kosdaq_data['today_data']
+                }
+            }
+
+            return JsonResponse(response_data, status=200)
         except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)

@@ -101,7 +101,7 @@ def convert_to_decimal(data):
 
 @shared_task
 def run_task2():
-    log_manager.logger.info("Start MainRun2")
+    log_manager.logger.info("주식 데이터 DB에 저장 시작...")
     print("Running...")
 
     # api 키를 가져옵니다.
@@ -155,7 +155,8 @@ def run_task2():
             # log_manager.logger.debug(f"vma_keys: {vma_keys}")
 
             if 'Item' in existing_data:
-                log_manager.logger.info(f"기존 데이터가 존재합니다. 업데이트: {existing_data}")
+                log_manager.logger.info(f"기존 데이터가 존재합니다. Data Update...")
+                log_manager.logger.debug(f"Updated Data: {existing_data}")
                 item = existing_data['Item']    
 
                 new_item = {
@@ -198,7 +199,7 @@ def run_task2():
                     log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
 
             else:
-                log_manager.logger.info("기존 데이터가 없습니다. 새 데이터로 추가합니다.")
+                log_manager.logger.info("기존 데이터가 없습니다. 새 데이터를 추가합니다.")
                 
                 new_item = {
                     'Date': stock_data['Date'],

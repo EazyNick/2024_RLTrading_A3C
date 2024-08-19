@@ -90,7 +90,8 @@ def chatgpt(user_input, document_content, model="gpt-3.5-turbo"):
             temperature=0
         )
         review = response.choices[0].message.content
-        log_manager.logger.debug("ChatGPT response received successfully")
+        log_manager.logger.info(f"ChatGPT 답변: {review}")
+        log_manager.logger.info("ChatGPT response received successfully")
         return review
     except Exception as e:
         log_manager.logger.error(f"An error occurred: {e}")

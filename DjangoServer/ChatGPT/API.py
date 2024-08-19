@@ -99,7 +99,7 @@ def API_main():
 
     # 예측 수행
     prediction_score = predict_stock_performance(data_str)
-    log_manager.logger.info(f"Chat GPT Prediction Score: {prediction_score}")
+    log_manager.logger.info(f"Chat GPT Prediction Score(-1000~1000): {prediction_score}")
 
     # 반환값을 int로 변환
     return int(prediction_score)

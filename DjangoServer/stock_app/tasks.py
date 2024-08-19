@@ -76,7 +76,7 @@ def filter_logs_by_current_week(buy_sell_log):
 
 @shared_task
 def run_task():
-    log_manager.logger.info("Start MainRun")
+    log_manager.logger.info("자동매매 시작")
     log_manager.logger.info("Running...")
     
     # # Task 2 실행
@@ -116,7 +116,7 @@ def run_task():
     try:
         log_manager.logger.info(f"모델 실행 시작")
         buy_sell_log = main_run()
-        log_manager.logger.info(f"Buy dates: {buy_sell_log}")
+        log_manager.logger.debug(f"Buy dates: {buy_sell_log}")
         log_manager.logger.info(f"모델 실행 완료")
 
         # 이번 달에 매수, 매도한 기록만 필터링
@@ -124,8 +124,8 @@ def run_task():
         log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
 
         # -1000 ~ 1000사이의 점수 반환, GPT 스코어 반환함수로, 비용문제로 주석처리 해둠
-        # score = API_main()
-        score = 50
+        score = API_main()
+        # score = 50
 
         # chat gpt의 매매 점수가 900이상(과매수)
         if score < 900:

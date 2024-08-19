@@ -1,6 +1,6 @@
 import yfinance as yf
 import pandas as pd
-
+from datetime import datetime, timedelta
 import requests
 import sys
 import os
@@ -57,14 +57,20 @@ def save_to_dynamodb(data):
                     'Low': str(row['Low']),
                     'Close': str(row['Close']),
                     'Volume': str(row['Volume'])
-                }
+                },
+                ConditionExpression="attribute_not_exists(Timestamp) AND attribute_not_exists(Symbol)"
+                # 위 조건에 따라 동일한 Timestamp와 Symbol을 가진 항목이 없을 경우에만 삽입
             )
         log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장 완료")
-        
+
 def get_kospi_kosdaq_data():
     dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
     table = dynamodb.Table('kospi_kosdaq_data')
     
+    # 오늘 날짜와 어제 날짜 계산
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+
     # 코스피 데이터를 조회 (Symbol이 '^KS11'인 항목만 조회)
     kospi_response = table.query(
         IndexName='Symbol-Timestamp-index',  # 새로운 인덱스 이름
@@ -82,8 +88,23 @@ def get_kospi_kosdaq_data():
         ExpressionAttributeNames={'#ts': 'Timestamp', '#cl': 'Close'}  # #ts는 실제로 Timestamp를, #cl은 실제로 Close를 의미함
     )
     kosdaq_items = kosdaq_response.get('Items', [])
-    
-    return kospi_items, kosdaq_items
+
+    # 어제 종가와 오늘 데이터 필터링 함수
+    def filter_data_for_today(data, symbol):
+        yesterday_close = None
+        today_data = []
+        for item in data:
+            timestamp = datetime.fromisoformat(item['Timestamp'])
+            if timestamp.date() == yesterday:
+                yesterday_close = item['Close']  # 어제의 마지막 종가를 기억
+            elif timestamp.date() == today:
+                today_data.append(item)  # 오늘의 데이터만 추가
+        return {'yesterday_close': yesterday_close, 'today_data': today_data, 'symbol': symbol}
+
+    kospi_filtered = filter_data_for_today(kospi_items, '^KS11')
+    kosdaq_filtered = filter_data_for_today(kosdaq_items, '^KQ11')
+
+    return kospi_filtered, kosdaq_filtered
 
 if __name__ == "__main__":
     # 코스피 지수와 코스닥 지수의 5분봉 데이터를 가져옵니다.
