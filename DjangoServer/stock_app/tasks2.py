@@ -242,14 +242,15 @@ def run_task2():
     # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
     try:
         # 데이터 가져오기
-        kospi_data = get_intraday_data('^KS11', interval='5m', period='1d')
-        kosdaq_data = get_intraday_data('^KQ11', interval='5m', period='1d')
+        kospi_data = get_intraday_data('^KS11', interval='5m', period='2d')
+        kosdaq_data = get_intraday_data('^KQ11', interval='5m', period='2d')
 
         # 데이터 합치기
         merged_data = pd.concat([kospi_data, kosdaq_data])
 
         # DynamoDB에 저장
         save_to_dynamodb(merged_data)
+        
     except Exception as e:
         log_manager.logger.error(f"Error inserting KOSPI, KOSDAKdata into DynamoDB: {e}")
 
