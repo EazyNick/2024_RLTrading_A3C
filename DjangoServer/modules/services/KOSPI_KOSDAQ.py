@@ -61,23 +61,28 @@ def save_to_dynamodb(data):
     log_manager.logger.info(f"코스피, 코스닥 5분봉 데이터 저장중...")
     
     for index, row in data.iterrows():
+        item = {
+            'Timestamp': row['Datetime'].isoformat(),
+            'Symbol': row['Symbol'],
+            'Open': str(row['Open']),
+            'High': str(row['High']),
+            'Low': str(row['Low']),
+            'Close': str(row['Close']),
+            'Volume': str(row['Volume'])
+        }
+
+        log_manager.logger.debug(f"Saving item: {item}")
+
         try:
-            table.put_item(
-                Item={
-                    'Timestamp': row['Datetime'].isoformat(),
-                    'Symbol': row['Symbol'],
-                    'Open': str(row['Open']),
-                    'High': str(row['High']),
-                    'Low': str(row['Low']),
-                    'Close': str(row['Close']),
-                    'Volume': str(row['Volume'])
-                },
+            response = table.put_item(
+                Item=item,
                 ConditionExpression="attribute_not_exists(#ts) AND attribute_not_exists(#sym)",
                 ExpressionAttributeNames={
                     '#ts': 'Timestamp',
                     '#sym': 'Symbol'
                 }
             )
+            log_manager.logger.debug(f"Successfully saved item with Timestamp: {item['Timestamp']} and Symbol: {item['Symbol']}")
         except boto3.exceptions.botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
                 log_manager.logger.warning(f"Item already exists, skipping insertion: {e}")
