@@ -3,7 +3,7 @@ from .services.buy_stock import buy_stock
 from .services.sell_stock import sell_stock
 from .services.get_account_balance import get_account_balance
 from .services.get_hash import get_hashkey
-from .services.KOSPI_KOSDAQ import get_intraday_data, save_to_dynamodb, get_kospi_kosdaq_data
+from .services.KOSPI_KOSDAQ import get_intraday_data, save_to_dynamodb, get_kospi_kosdaq_data, get_previous_trading_day
 from .config.config import Config
 from .config.account_info import DataParser
 from .config.dynamodb_account_info import DynamoDBManager
@@ -33,4 +33,5 @@ __all__ = [
     'get_intraday_data',
     'save_to_dynamodb',
     'get_kospi_kosdaq_data',
+    'get_previous_trading_day'
 ]

@@ -33,6 +33,25 @@ def get_intraday_data(symbol, interval='5m', period='1d'):
     log_manager.logger.debug(f"{symbol} {period} {interval} data: {data}")
     return data
 
+def get_previous_trading_day(symbol, interval='5m'):
+    """
+    전날 데이터를 가져옵니다. 만약 전날이 휴일이거나 비거래일이면, 마지막 거래일 데이터를 가져옵니다.
+    """
+    prev_day = datetime.now() - timedelta(1)
+
+    while True:
+        # 이틀 전부터 오늘까지의 데이터를 가져옵니다.
+        data = get_intraday_data(symbol, interval=interval, period='2d')
+
+        if not data.empty:
+            prev_day_data = data.iloc[:-len(get_intraday_data(symbol, interval=interval, period='1d'))]
+            if not prev_day_data.empty:
+                return prev_day_data
+
+        prev_day -= timedelta(1)
+        if prev_day.weekday() >= 5:  # 주말은 건너뜁니다.
+            continue
+        log_manager.logger.debug(f"이전 거래일 확인 중: {prev_day.strftime('%Y-%m-%d')}")
 
 def save_to_dynamodb(data):
     # AWS DynamoDB 설정

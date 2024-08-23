@@ -3,7 +3,7 @@ from .buy_stock import buy_stock
 from .sell_stock import sell_stock
 from .get_account_balance import get_account_balance
 from .get_hash import get_hashkey
-from .KOSPI_KOSDAQ import get_intraday_data, save_to_dynamodb, get_kospi_kosdaq_data
+from .KOSPI_KOSDAQ import get_intraday_data, save_to_dynamodb, get_kospi_kosdaq_data, get_previous_trading_day
 
 __all__ = ['get_price', 
            'buy_stock', 
@@ -13,4 +13,5 @@ __all__ = ['get_price',
            'get_intraday_data',
            'save_to_dynamodb',
            'get_kospi_kosdaq_data',
+           'get_previous_trading_day'
            ]
