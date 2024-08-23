@@ -251,16 +251,16 @@ def run_task2():
         # DynamoDB에 저장
         save_to_dynamodb(merged_data_today)
 
-        # 전날 데이터 가져오기 (이전 거래일이 휴일이 아닌 경우)
-        kospi_data_prev_day = get_previous_trading_day('^KS11', interval='5m')
-        kosdaq_data_prev_day = get_previous_trading_day('^KQ11', interval='5m')
+        # # 전날 데이터 가져오기 (이전 거래일이 휴일이 아닌 경우)
+        # kospi_data_prev_day = get_previous_trading_day('^KS11', interval='5m')
+        # kosdaq_data_prev_day = get_previous_trading_day('^KQ11', interval='5m')
 
-        if not kospi_data_prev_day.empty and not kosdaq_data_prev_day.empty:
-            # 전날 데이터 병합 및 DynamoDB 저장
-            merged_data_prev_day = pd.concat([kospi_data_prev_day, kosdaq_data_prev_day])
-            save_to_dynamodb(merged_data_prev_day)
-        else:
-            log_manager.logger.warning("이전 거래일 데이터가 비어 있습니다. 저장을 건너뜁니다.")
+        # if not kospi_data_prev_day.empty and not kosdaq_data_prev_day.empty:
+        #     # 전날 데이터 병합 및 DynamoDB 저장
+        #     merged_data_prev_day = pd.concat([kospi_data_prev_day, kosdaq_data_prev_day])
+        #     save_to_dynamodb(merged_data_prev_day)
+        # else:
+        #     log_manager.logger.warning("이전 거래일 데이터가 비어 있습니다. 저장을 건너뜁니다.")
 
     except Exception as e:
         log_manager.logger.error(f"Error inserting KOSPI, KOSDAKdata into DynamoDB: {e}")
