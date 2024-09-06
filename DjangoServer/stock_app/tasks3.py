@@ -42,12 +42,14 @@ def run_task3():
     # end_time = datetime.strptime("15:30", "%H:%M").time()
 
     # if start_time <= current_time <= end_time:
-    log_manager.logger.info("지수 데이터 DB에 저장 시작...")
-    print("Running...")
+    # log_manager.logger.info("지수 데이터 DB에 저장 시작...")
+    # print("Running...")
 
         # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
     try:
         # 데이터 가져오기
+        log_manager.logger.info("지수 데이터 DB에 저장 시작...")
+        print("Running...")
         kospi_data_today = get_intraday_data('^KS11', interval='5m', period='1d')
         kosdaq_data_today = get_intraday_data('^KQ11', interval='5m', period='1d')
 
