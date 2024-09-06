@@ -96,7 +96,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'run-task3-every-100-seconds': {
         'task': 'stock_app.tasks3.run_task3',
-        'schedule': 300,  
+        'schedule': 10,  
     },
 }
 
