@@ -98,7 +98,7 @@ def convert_to_decimal(data):
             data[key] = convert_to_decimal(value)
     return data
 
-@shared_task
+# @shared_task
 def run_task2():
     log_manager.logger.info("주식 데이터 DB에 저장 시작...")
     print("Running...")
