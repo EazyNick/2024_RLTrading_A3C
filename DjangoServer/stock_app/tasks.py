@@ -1,5 +1,4 @@
 import sys
-import time
 from pathlib import Path
 from celery import shared_task
 import boto3
@@ -8,6 +7,8 @@ from modules.config.config import Config
 from stock_app.tasks2 import run_task2
 import datetime
 from datetime import datetime
+from datetime import datetime
+import pytz  # 한국 시간을 사용하기 위해 필요
 
 # 추가 경로 설정
 sys.path.append(str(Path(__file__).resolve().parent / 'modules'))
@@ -84,77 +85,89 @@ def run_task():
     # task_result = result.get()
     # log_manager.logger.info("Task 2 결과:", task_result)
 
-    key = KeyringManager()
-    app_key = key.app_key
-    app_secret = key.app_secret_key
+    # 한국 시간대 설정
+    tz = pytz.timezone('Asia/Seoul')
+    current_time = datetime.now(tz).time()
 
-    manager = AccessTokenManager()
-    access_token = get_access_token(manager)
+    # 오전 9시부터 오후 3시 20분 사이에만 실행
+    start_time = datetime.strptime("09:00", "%H:%M").time()
+    end_time = datetime.strptime("15:30", "%H:%M").time()
 
-    # stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
+    if start_time <= current_time <= end_time:
 
-    # if stock_data:
-    #     log_manager.logger.info(f"주식 데이터 불러오기 성공")
-    # else:
-    #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
+        key = KeyringManager()
+        app_key = key.app_key
+        app_secret = key.app_secret_key
 
-    # log_manager.logger.debug("Before get_account_balance")
+        manager = AccessTokenManager()
+        access_token = get_access_token(manager)
 
-    try:
-        stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
-    
-        if stock_info_list is not None and account_info is not None:
-            formatter = AccountFormatter()
-            formatter.format(stock_info_list, account_info)
-            dynamodbmanager = DynamoDBManager()
-            dynamodbmanager.save_to_dynamodb('admin', stock_info_list, account_info)
-        else:
-            log_manager.logger.error("Failed to retrieve account information")
-    except Exception as e:
-        log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
+        # stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
-    try:
-        log_manager.logger.info(f"모델 실행 시작")
-        buy_sell_log = main_run()
-        log_manager.logger.debug(f"Buy dates: {buy_sell_log}")
-        log_manager.logger.info(f"모델 실행 완료")
+        # if stock_data:
+        #     log_manager.logger.info(f"주식 데이터 불러오기 성공")
+        # else:
+        #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
 
-        # 이번 달에 매수, 매도한 기록만 필터링
-        filtered_buy_sell_log = filter_logs_by_current_week(buy_sell_log)
-        log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
+        # log_manager.logger.debug("Before get_account_balance")
 
-        # -1000 ~ 1000사이의 점수 반환, GPT 스코어 반환함수로, 비용문제로 주석처리 해둠
-        score = API_main()
-        # score = 50
+        try:
+            stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
+        
+            if stock_info_list is not None and account_info is not None:
+                formatter = AccountFormatter()
+                formatter.format(stock_info_list, account_info)
+                dynamodbmanager = DynamoDBManager()
+                dynamodbmanager.save_to_dynamodb('admin', stock_info_list, account_info)
+            else:
+                log_manager.logger.error("Failed to retrieve account information")
+        except Exception as e:
+            log_manager.logger.error(f"get_account_balance 예외 발생: {e}")
 
-        # chat gpt의 매매 점수가 900이상(과매수)
-        if score < 900:
-            # 매수, 매도 시점의 로그
-            for log in filtered_buy_sell_log:
-                date, action, num_stocks, price = log
-                price = str(int(price))  # np.float64 값을 일반 정수로 변환
-                log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
-                if action == 'buy':
-                    buy_data = buy_stock(access_token, app_key, app_secret, price)
-                    if buy_data:
-                        log_manager.logger.info(f"주식 매수: {buy_data}")
-                    else:
-                        log_manager.logger.error(f"매수 실패")
-                    log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
-                elif action == 'sell':
-                    sell_data = sell_stock(access_token, app_key, app_secret, price)
-                    if sell_data:
-                        log_manager.logger.info(f"주식 매도: {sell_data}")
-                    else:
-                        log_manager.logger.error(f"매도 실패")
-                    log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
-        else:
-            log_manager.logger.info(f"과매수 구간입니다. Chat GPT 추천점수는 {score}점 입니다.")
-            pass
-    except ImportError as e:
-        log_manager.logger.error(f"모델 실행 실패: {e}")
-    except Exception as e:
-        log_manager.logger.error(f"예상치 못한 에러 발생: {e}")
+        try:
+            log_manager.logger.info(f"모델 실행 시작")
+            buy_sell_log = main_run()
+            log_manager.logger.debug(f"Buy dates: {buy_sell_log}")
+            log_manager.logger.info(f"모델 실행 완료")
+
+            # 이번 달에 매수, 매도한 기록만 필터링
+            filtered_buy_sell_log = filter_logs_by_current_week(buy_sell_log)
+            log_manager.logger.info(f"filtered_buy_sell_log: {filtered_buy_sell_log}")
+
+            # -1000 ~ 1000사이의 점수 반환, GPT 스코어 반환함수로, 비용문제로 주석처리 해둠
+            score = API_main()
+            # score = 50
+
+            # chat gpt의 매매 점수가 900이상(과매수)
+            if score < 900:
+                # 매수, 매도 시점의 로그
+                for log in filtered_buy_sell_log:
+                    date, action, num_stocks, price = log
+                    price = str(int(price))  # np.float64 값을 일반 정수로 변환
+                    log_manager.logger.debug(f"Processing {action} action for {num_stocks} stocks at {price} on {date}")
+                    if action == 'buy':
+                        buy_data = buy_stock(access_token, app_key, app_secret, price)
+                        if buy_data:
+                            log_manager.logger.info(f"주식 매수: {buy_data}")
+                        else:
+                            log_manager.logger.error(f"매수 실패")
+                        log_manager.logger.info(f"Buy signal on {date} for {num_stocks} stocks at {price}")
+                    elif action == 'sell':
+                        sell_data = sell_stock(access_token, app_key, app_secret, price)
+                        if sell_data:
+                            log_manager.logger.info(f"주식 매도: {sell_data}")
+                        else:
+                            log_manager.logger.error(f"매도 실패")
+                        log_manager.logger.info(f"Sell signal on {date} for {num_stocks} stocks at {price}")
+            else:
+                log_manager.logger.info(f"과매수 구간입니다. Chat GPT 추천점수는 {score}점 입니다.")
+                pass
+        except ImportError as e:
+            log_manager.logger.error(f"모델 실행 실패: {e}")
+        except Exception as e:
+            log_manager.logger.error(f"예상치 못한 에러 발생: {e}")
+    else:
+        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
 
     
 

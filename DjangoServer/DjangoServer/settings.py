@@ -94,9 +94,9 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'stock_app.tasks2.run_task2',
         'schedule': 3600,  # 1시간마다 실행
     },
-    'run-task_saveKOSPIKOSDAQ-every-10-seconds': {
+    'run-task_saveKOSPIKOSDAQ-every-300-seconds': {
         'task': 'stock_app.tasks3.run_task_saveKOSPIKOSDAQ',
-        'schedule': 10.0,  # 10초마다 실행
+        'schedule': 300.0,  # 30초마다 실행
     },
 }
 

@@ -8,6 +8,8 @@ from modules.config.config import Config
 import os
 from decimal import Decimal
 import pandas as pd
+from datetime import datetime
+import pytz  # 한국 시간을 사용하기 위해 필요
 
 # 현재 파일의 디렉토리 경로
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -103,137 +105,149 @@ def run_task2():
     log_manager.logger.info("주식 데이터 DB에 저장 시작...")
     print("Running...")
 
-    # api 키를 가져옵니다.
-    key = KeyringManager()
-    app_key = key.app_key   
-    app_secret = key.app_secret_key
+    # 한국 시간대 설정
+    tz = pytz.timezone('Asia/Seoul')
+    current_time = datetime.now(tz).time()
 
-    # 액세스 토큰을 가져옵니다.
-    manager = AccessTokenManager()
-    access_token = get_access_token(manager)
+    # 오전 9시부터 오후 3시 20분 사이에만 실행
+    start_time = datetime.strptime("09:00", "%H:%M").time()
+    end_time = datetime.strptime("15:30", "%H:%M").time()
 
-    # 주식 데이터(현재가와 거래량)를 가져옵니다.
-    stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
+    if start_time <= current_time <= end_time:
 
-    # 오늘자 주식 데이터 dynamodb에 저장
-    if stock_data:
-        log_manager.logger.info(f"현재가, 거래량: {stock_data}")
+        # api 키를 가져옵니다.
+        key = KeyringManager()
+        app_key = key.app_key   
+        app_secret = key.app_secret_key
 
-        # Decimal로 변환
-        stock_data['Close'] = Decimal(str(stock_data['Close']))
-        stock_data['Volume'] = Decimal(str(stock_data['Volume']))
+        # 액세스 토큰을 가져옵니다.
+        manager = AccessTokenManager()
+        access_token = get_access_token(manager)
 
-        # DynamoDB에 연결합니다.
-        dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
-        table = dynamodb.Table('StockPrices')
+        # 주식 데이터(현재가와 거래량)를 가져옵니다.
+        stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
 
-        # 기존 데이터를 읽어옵니다.
-        existing_data = table.get_item(Key={'Date': stock_data['Date']})
-        try:  
-            exclude_keys = [
-                'SMA_55', 'SMA_65', 'SMA_75', 'SMA_85', 'SMA_95', 'SMA_105', 'SMA_115', 'SMA_125', 'SMA_135', 
-                'SMA_145', 'SMA_155', 'SMA_165', 'SMA_175', 'SMA_185', 'SMA_195', 'SMA_205', 'SMA_215', 'SMA_225', 
-                'SMA_235', 'SMA_245', 'SMA_255', 'SMA_265', 'SMA_275', 'SMA_285', 'SMA_295', 'SMA_305', 'SMA_315', 
-                'SMA_325', 'SMA_335', 'SMA_345', 'SMA_355', 'SMA_365', 'SMA_375', 'SMA_385', 'SMA_395', 'SMA_405', 
-                'SMA_415', 'SMA_425', 'SMA_435', 'SMA_445', 'SMA_455', 'SMA_465', 'SMA_475', 'SMA_485', 'SMA_495', 
-                'SMA_505', 'SMA_515', 'SMA_525', 'SMA_535', 'SMA_545', 'SMA_555', 'SMA_565', 'SMA_575', 'SMA_585', 
-                'SMA_595', 'SMA_605', 'SMA_615', 'SMA_625', 'SMA_635', 'SMA_645', 'SMA_655', 'SMA_665', 'SMA_675', 
-                'SMA_685', 'SMA_695', 'VMA_55', 'VMA_65', 'VMA_75', 'VMA_85', 'VMA_95', 'VMA_105', 'VMA_115', 
-                'VMA_125', 'VMA_135', 'VMA_145', 'VMA_155', 'VMA_165', 'VMA_175', 'VMA_185', 'VMA_195', 'VMA_205', 
-                'VMA_215', 'VMA_225', 'VMA_235', 'VMA_245', 'VMA_255', 'VMA_265', 'VMA_275', 'VMA_285', 'VMA_295', 
-                'VMA_305', 'VMA_315', 'VMA_325', 'VMA_335', 'VMA_345', 'VMA_355', 'VMA_365', 'VMA_375', 'VMA_385', 
-                'VMA_395', 'VMA_405', 'VMA_415', 'VMA_425', 'VMA_435', 'VMA_445', 'VMA_455', 'VMA_465', 'VMA_475', 
-                'VMA_485', 'VMA_495', 'VMA_505', 'VMA_515', 'VMA_525', 'VMA_535', 'VMA_545', 'VMA_555', 'VMA_565', 
-                'VMA_575', 'VMA_585', 'VMA_595', 'VMA_605', 'VMA_615', 'VMA_625', 'VMA_635', 'VMA_645', 'VMA_655', 
-                'VMA_665', 'VMA_675', 'VMA_685', 'VMA_695'
-            ]
-            sma_keys = [f'SMA_{i}' for i in range(5, 705, 5) if f'SMA_{i}' not in exclude_keys]
-            vma_keys = [f'VMA_{i}' for i in range(5, 705, 5) if f'VMA_{i}' not in exclude_keys]
+        # 오늘자 주식 데이터 dynamodb에 저장
+        if stock_data:
+            log_manager.logger.info(f"현재가, 거래량: {stock_data}")
 
-            # log_manager.logger.debug(f"sma_keys: {sma_keys}")
-            # log_manager.logger.debug(f"vma_keys: {vma_keys}")
+            # Decimal로 변환
+            stock_data['Close'] = Decimal(str(stock_data['Close']))
+            stock_data['Volume'] = Decimal(str(stock_data['Volume']))
 
-            if 'Item' in existing_data:
-                log_manager.logger.info(f"기존 데이터가 존재합니다. Data Update...")
-                log_manager.logger.debug(f"Updated Data: {existing_data}")
-                item = existing_data['Item']    
+            # DynamoDB에 연결합니다.
+            dynamodb = boto3.resource('dynamodb', region_name='ap-southeast-2')
+            table = dynamodb.Table('StockPrices')
 
-                new_item = {
-                    'Date': stock_data['Date'],
-                    'Close': Decimal(stock_data['Close']),
-                    'Volume': Decimal(stock_data['Volume'])
-                }
+            # 기존 데이터를 읽어옵니다.
+            existing_data = table.get_item(Key={'Date': stock_data['Date']})
+            try:  
+                exclude_keys = [
+                    'SMA_55', 'SMA_65', 'SMA_75', 'SMA_85', 'SMA_95', 'SMA_105', 'SMA_115', 'SMA_125', 'SMA_135', 
+                    'SMA_145', 'SMA_155', 'SMA_165', 'SMA_175', 'SMA_185', 'SMA_195', 'SMA_205', 'SMA_215', 'SMA_225', 
+                    'SMA_235', 'SMA_245', 'SMA_255', 'SMA_265', 'SMA_275', 'SMA_285', 'SMA_295', 'SMA_305', 'SMA_315', 
+                    'SMA_325', 'SMA_335', 'SMA_345', 'SMA_355', 'SMA_365', 'SMA_375', 'SMA_385', 'SMA_395', 'SMA_405', 
+                    'SMA_415', 'SMA_425', 'SMA_435', 'SMA_445', 'SMA_455', 'SMA_465', 'SMA_475', 'SMA_485', 'SMA_495', 
+                    'SMA_505', 'SMA_515', 'SMA_525', 'SMA_535', 'SMA_545', 'SMA_555', 'SMA_565', 'SMA_575', 'SMA_585', 
+                    'SMA_595', 'SMA_605', 'SMA_615', 'SMA_625', 'SMA_635', 'SMA_645', 'SMA_655', 'SMA_665', 'SMA_675', 
+                    'SMA_685', 'SMA_695', 'VMA_55', 'VMA_65', 'VMA_75', 'VMA_85', 'VMA_95', 'VMA_105', 'VMA_115', 
+                    'VMA_125', 'VMA_135', 'VMA_145', 'VMA_155', 'VMA_165', 'VMA_175', 'VMA_185', 'VMA_195', 'VMA_205', 
+                    'VMA_215', 'VMA_225', 'VMA_235', 'VMA_245', 'VMA_255', 'VMA_265', 'VMA_275', 'VMA_285', 'VMA_295', 
+                    'VMA_305', 'VMA_315', 'VMA_325', 'VMA_335', 'VMA_345', 'VMA_355', 'VMA_365', 'VMA_375', 'VMA_385', 
+                    'VMA_395', 'VMA_405', 'VMA_415', 'VMA_425', 'VMA_435', 'VMA_445', 'VMA_455', 'VMA_465', 'VMA_475', 
+                    'VMA_485', 'VMA_495', 'VMA_505', 'VMA_515', 'VMA_525', 'VMA_535', 'VMA_545', 'VMA_555', 'VMA_565', 
+                    'VMA_575', 'VMA_585', 'VMA_595', 'VMA_605', 'VMA_615', 'VMA_625', 'VMA_635', 'VMA_645', 'VMA_655', 
+                    'VMA_665', 'VMA_675', 'VMA_685', 'VMA_695'
+                ]
+                sma_keys = [f'SMA_{i}' for i in range(5, 705, 5) if f'SMA_{i}' not in exclude_keys]
+                vma_keys = [f'VMA_{i}' for i in range(5, 705, 5) if f'VMA_{i}' not in exclude_keys]
 
-                for sma_key, vma_key in zip(sma_keys, vma_keys):
-                    previous_sma = Decimal(item.get(sma_key, stock_data['Close']))
-                    previous_vma = Decimal(item.get(vma_key, stock_data['Volume']))
+                # log_manager.logger.debug(f"sma_keys: {sma_keys}")
+                # log_manager.logger.debug(f"vma_keys: {vma_keys}")
+
+                if 'Item' in existing_data:
+                    log_manager.logger.info(f"기존 데이터가 존재합니다. Data Update...")
+                    log_manager.logger.debug(f"Updated Data: {existing_data}")
+                    item = existing_data['Item']    
+
+                    new_item = {
+                        'Date': stock_data['Date'],
+                        'Close': Decimal(stock_data['Close']),
+                        'Volume': Decimal(stock_data['Volume'])
+                    }
+
+                    for sma_key, vma_key in zip(sma_keys, vma_keys):
+                        previous_sma = Decimal(item.get(sma_key, stock_data['Close']))
+                        previous_vma = Decimal(item.get(vma_key, stock_data['Volume']))
+                        try:
+                            new_item[sma_key] = calculate_sma(previous_sma, Decimal(stock_data['Close']))
+                            new_item[vma_key] = calculate_vma(previous_vma, Decimal(stock_data['Volume']))
+                        except KeyError:
+                            log_manager.logger.warning(f"Key not found: {sma_key} or {vma_key}")
+                            continue
+
+                    new_item.update({
+                        '365D_High': max(Decimal(item.get('365D_High', Decimal('0.0'))), stock_data['Close']),
+                        '365D_Low': min(Decimal(item.get('365D_Low', Decimal('inf'))), stock_data['Close']),
+                        '180D_High': max(Decimal(item.get('180D_High', Decimal('0.0'))), stock_data['Close']),
+                        '180D_Low': min(Decimal(item.get('180D_Low', Decimal('inf'))), stock_data['Close']),
+                        '90D_High': max(Decimal(item.get('90D_High', Decimal('0.0'))), stock_data['Close']),
+                        '90D_Low': min(Decimal(item.get('90D_Low', Decimal('inf'))), stock_data['Close']),
+                        '30D_High': max(Decimal(item.get('30D_High', Decimal('0.0'))), stock_data['Close']),
+                        '30D_Low': min(Decimal(item.get('30D_Low', Decimal('inf'))), stock_data['Close']),
+                        'AllTime_High': max(Decimal(item.get('AllTime_High', Decimal('0.0'))), stock_data['Close']),
+                        'AllTime_Low': min(Decimal(item.get('AllTime_Low', Decimal('inf'))), stock_data['Close'])
+                    })
+
+                    # log_manager.logger.debug(f"new_item: {new_item}")
+
+                    response = table.put_item(Item=new_item)
+                    # log_manager.logger.debug(f"DynamoDB response: {response}")
                     try:
-                        new_item[sma_key] = calculate_sma(previous_sma, Decimal(stock_data['Close']))
-                        new_item[vma_key] = calculate_vma(previous_vma, Decimal(stock_data['Volume']))
-                    except KeyError:
-                        log_manager.logger.warning(f"Key not found: {sma_key} or {vma_key}")
-                        continue
+                        convert_dynamodb_to_csv()
+                        log_manager.logger.info("dynamodb > csv 변환 완료")
+                    except Exception as e:
+                        log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
 
-                new_item.update({
-                    '365D_High': max(Decimal(item.get('365D_High', Decimal('0.0'))), stock_data['Close']),
-                    '365D_Low': min(Decimal(item.get('365D_Low', Decimal('inf'))), stock_data['Close']),
-                    '180D_High': max(Decimal(item.get('180D_High', Decimal('0.0'))), stock_data['Close']),
-                    '180D_Low': min(Decimal(item.get('180D_Low', Decimal('inf'))), stock_data['Close']),
-                    '90D_High': max(Decimal(item.get('90D_High', Decimal('0.0'))), stock_data['Close']),
-                    '90D_Low': min(Decimal(item.get('90D_Low', Decimal('inf'))), stock_data['Close']),
-                    '30D_High': max(Decimal(item.get('30D_High', Decimal('0.0'))), stock_data['Close']),
-                    '30D_Low': min(Decimal(item.get('30D_Low', Decimal('inf'))), stock_data['Close']),
-                    'AllTime_High': max(Decimal(item.get('AllTime_High', Decimal('0.0'))), stock_data['Close']),
-                    'AllTime_Low': min(Decimal(item.get('AllTime_Low', Decimal('inf'))), stock_data['Close'])
-                })
+                else:
+                    log_manager.logger.info("기존 데이터가 없습니다. 새 데이터를 추가합니다.")
+                    
+                    new_item = {
+                        'Date': stock_data['Date'],
+                        'Close': Decimal(stock_data['Close']),
+                        'Volume': Decimal(stock_data['Volume']),
+                        'SMA_5': Decimal(stock_data['Close']),  # 초기값 설정
+                        'VMA_5': Decimal(stock_data['Volume']),
+                    }
+                    
+                    for sma_key, vma_key in zip(sma_keys[1:], vma_keys[1:]):
+                        new_item[sma_key] = Decimal(stock_data['Close'])
+                        new_item[vma_key] = Decimal(stock_data['Volume'])
 
-                # log_manager.logger.debug(f"new_item: {new_item}")
+                    new_item.update({
+                        '365D_High': Decimal(stock_data['Close']),
+                        '365D_Low': Decimal(stock_data['Close']),
+                        '180D_High': Decimal(stock_data['Close']),
+                        '180D_Low': Decimal(stock_data['Close']),
+                        '90D_High': Decimal(stock_data['Close']),
+                        '90D_Low': Decimal(stock_data['Close']),
+                        '30D_High': Decimal(stock_data['Close']),
+                        '30D_Low': Decimal(stock_data['Close']),
+                        'AllTime_High': Decimal(stock_data['Close']),
+                        'AllTime_Low': Decimal(stock_data['Close'])
+                    })
 
-                response = table.put_item(Item=new_item)
-                # log_manager.logger.debug(f"DynamoDB response: {response}")
-                try:
-                    convert_dynamodb_to_csv()
-                    log_manager.logger.info("dynamodb > csv 변환 완료")
-                except Exception as e:
-                    log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
+                    response = table.put_item(Item=new_item)
+                    # log_manager.logger.debug(f"DynamoDB response: {response}")
+                    try:
+                        convert_dynamodb_to_csv()
+                        log_manager.logger.info("dynamodb > csv 변환 완료")
+                    except Exception as e:
+                        log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
 
-            else:
-                log_manager.logger.info("기존 데이터가 없습니다. 새 데이터를 추가합니다.")
-                
-                new_item = {
-                    'Date': stock_data['Date'],
-                    'Close': Decimal(stock_data['Close']),
-                    'Volume': Decimal(stock_data['Volume']),
-                    'SMA_5': Decimal(stock_data['Close']),  # 초기값 설정
-                    'VMA_5': Decimal(stock_data['Volume']),
-                }
-                
-                for sma_key, vma_key in zip(sma_keys[1:], vma_keys[1:]):
-                    new_item[sma_key] = Decimal(stock_data['Close'])
-                    new_item[vma_key] = Decimal(stock_data['Volume'])
-
-                new_item.update({
-                    '365D_High': Decimal(stock_data['Close']),
-                    '365D_Low': Decimal(stock_data['Close']),
-                    '180D_High': Decimal(stock_data['Close']),
-                    '180D_Low': Decimal(stock_data['Close']),
-                    '90D_High': Decimal(stock_data['Close']),
-                    '90D_Low': Decimal(stock_data['Close']),
-                    '30D_High': Decimal(stock_data['Close']),
-                    '30D_Low': Decimal(stock_data['Close']),
-                    'AllTime_High': Decimal(stock_data['Close']),
-                    'AllTime_Low': Decimal(stock_data['Close'])
-                })
-
-                response = table.put_item(Item=new_item)
-                # log_manager.logger.debug(f"DynamoDB response: {response}")
-                try:
-                    convert_dynamodb_to_csv()
-                    log_manager.logger.info("dynamodb > csv 변환 완료")
-                except Exception as e:
-                    log_manager.logger.error(f"Error converting DynamoDB to CSV: {e}")
-
-        except Exception as e:
-            log_manager.logger.error(f"Error inserting data into DynamoDB: {e}")
+            except Exception as e:
+                log_manager.logger.error(f"Error inserting data into DynamoDB: {e}")
+        else:
+            log_manager.logger.error("현재가 불러오기 실패")
     else:
-        log_manager.logger.error("현재가 불러오기 실패")
+        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
