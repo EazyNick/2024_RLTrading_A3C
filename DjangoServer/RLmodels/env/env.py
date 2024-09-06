@@ -36,7 +36,7 @@ def set_seeds(random_seed=None, numpy_seed=None):
         np.random.seed(numpy_seed)
 
 class StockTradingEnv(gym.Env):
-    def __init__(self, df, max_stock=85, trading_charge=0.00015, trading_tax=0.002):
+    def __init__(self, df, max_stock=200, trading_charge=0.00015, trading_tax=0.002):
         """
         주식 데이터프레임 df를 입력으로 받아 환경을 초기화
 
