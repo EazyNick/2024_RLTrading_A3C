@@ -38,8 +38,8 @@ def run_task3():
     current_time = datetime.now(tz).time()
 
     # 오전 9시부터 오후 3시 20분 사이에만 실행
-    start_time = datetime.strptime("09:00", "%H:%M").time()
-    end_time = datetime.strptime("15:30", "%H:%M").time()
+    start_time = datetime.strptime("00:00", "%H:%M").time()
+    end_time = datetime.strptime("16:30", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
         log_manager.logger.info("지수 데이터 DB에 저장 시작...")
