@@ -31,39 +31,59 @@ except ImportError as e:
 
 @shared_task
 def run_task3():
-    # 한국 시간대 설정
-    # tz = pytz.timezone('Asia/Seoul')
-    # current_time = datetime.now(tz).time()
+    log_manager.logger.info("Task3 지수 데이터 저장 시작")  # 로그 추가
+    print("Task3 Running...")
 
-    # # 오전 9시부터 오후 3시 20분 사이에만 실행
-    # start_time = datetime.strptime("09:00", "%H:%M").time()
-    # end_time = datetime.strptime("15:30", "%H:%M").time()
-
-    # if start_time <= current_time <= end_time:
-    # log_manager.logger.info("지수 데이터 DB에 저장 시작...")
-    # print("Running...")
-
-        # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
+    # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
     try:
-        # 데이터 가져오기
-        log_manager.logger.info("지수 데이터 DB에 저장 시작...")
-        print("Running...")
         kospi_data_today = get_intraday_data('^KS11', interval='5m', period='1d')
         kosdaq_data_today = get_intraday_data('^KQ11', interval='5m', period='1d')
 
-        # 데이터 합치기
         merged_data_today = pd.concat([kospi_data_today, kosdaq_data_today])
 
-        # DynamoDB에 저장
         save_to_dynamodb(merged_data_today)
 
+        log_manager.logger.info("Task3 완료")  # 작업이 완료되었음을 로그에 기록
     except Exception as e:
-        log_manager.logger.error(f"Error inserting KOSPI, KOSDAK data into DynamoDB: {e}")
-        # time.sleep(100)
-        # run_task3.apply_async()
-    # else:
-    #     log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
+        log_manager.logger.error(f"Error inserting KOSPI, KOSDAQ data into DynamoDB: {e}")
+        print(f"Error: {e}")
 
-    # # 작업 후 100초 뒤에 다시 실행
-    # time.sleep(100)
-    # run_task3.apply_async()  # 작업이 다시 100초 후 실행되도록 Celery에 재등록
+
+# @shared_task
+# def run_task3():
+#     # 한국 시간대 설정
+#     # tz = pytz.timezone('Asia/Seoul')
+#     # current_time = datetime.now(tz).time()
+
+#     # # 오전 9시부터 오후 3시 20분 사이에만 실행
+#     # start_time = datetime.strptime("09:00", "%H:%M").time()
+#     # end_time = datetime.strptime("15:30", "%H:%M").time()
+
+#     # if start_time <= current_time <= end_time:
+#     # log_manager.logger.info("지수 데이터 DB에 저장 시작...")
+#     # print("Running...")
+
+#         # 코스피, 코스닥 5분봉 데이터 DynamoDB에 저장
+#     try:
+#         # 데이터 가져오기
+#         log_manager.logger.info("지수 데이터 DB에 저장 시작...")
+#         print("Running...")
+#         kospi_data_today = get_intraday_data('^KS11', interval='5m', period='1d')
+#         kosdaq_data_today = get_intraday_data('^KQ11', interval='5m', period='1d')
+
+#         # 데이터 합치기
+#         merged_data_today = pd.concat([kospi_data_today, kosdaq_data_today])
+
+#         # DynamoDB에 저장
+#         save_to_dynamodb(merged_data_today)
+
+#     except Exception as e:
+#         log_manager.logger.error(f"Error inserting KOSPI, KOSDAK data into DynamoDB: {e}")
+#         # time.sleep(100)
+#         # run_task3.apply_async()
+#     # else:
+#     #     log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
+
+#     # # 작업 후 100초 뒤에 다시 실행
+#     # time.sleep(100)
+#     # run_task3.apply_async()  # 작업이 다시 100초 후 실행되도록 Celery에 재등록
