@@ -11,22 +11,20 @@ import pandas as pd
 from datetime import datetime
 import pytz  # 한국 시간을 사용하기 위해 필요
 
-# 현재 파일의 디렉토리 경로
-current_dir = os.path.dirname(os.path.abspath(__file__))
-
-# dynamodb_to_csv.py 파일이 있는 디렉토리 경로
-dynamodb_to_csv_dir = os.path.join(current_dir, '../RLmodels/data/DynamoDB')
-
-# 모듈 경로에 추가
-sys.path.append(dynamodb_to_csv_dir)
-
-# 추가 경로 설정
-sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
-sys.path.append(str(Path(__file__).resolve().parents[2] / 'RLmodels'))
-
 try:
+    # 현재 파일의 디렉토리 경로
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    # dynamodb_to_csv.py 파일이 있는 디렉토리 경로
+    dynamodb_to_csv_dir = os.path.join(current_dir, '../RLmodels/data/DynamoDB')
+    # 모듈 경로에 추가
+    sys.path.append(dynamodb_to_csv_dir)
+    # 추가 경로 설정
+    sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
+    sys.path.append(str(Path(__file__).resolve().parents[2] / 'RLmodels'))
+
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
+    from dynamodb_to_csv import convert_dynamodb_to_csv
 except ImportError as e:
     print(f"Import error: {e}")
     raise

@@ -5,7 +5,6 @@ from celery import shared_task
 import boto3
 from modules.utils import *
 from modules.config.config import Config
-import sys
 import os
 from decimal import Decimal
 import pandas as pd
