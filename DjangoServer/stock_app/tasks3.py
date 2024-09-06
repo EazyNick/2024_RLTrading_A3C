@@ -59,11 +59,11 @@ def run_task3():
 
         except Exception as e:
             log_manager.logger.error(f"Error inserting KOSPI, KOSDAK data into DynamoDB: {e}")
-            time.sleep(100)
-            run_task3.apply_async()
+            # time.sleep(100)
+            # run_task3.apply_async()
     else:
         log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
 
-    # 작업 후 100초 뒤에 다시 실행
-    time.sleep(100)
-    run_task3.apply_async()  # 작업이 다시 100초 후 실행되도록 Celery에 재등록
+    # # 작업 후 100초 뒤에 다시 실행
+    # time.sleep(100)
+    # run_task3.apply_async()  # 작업이 다시 100초 후 실행되도록 Celery에 재등록

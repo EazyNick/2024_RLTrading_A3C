@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
-from celery.schedules import crontab
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -89,16 +88,15 @@ CORS_ALLOW_HEADERS = [
 CELERY_BEAT_SCHEDULE = {
     'run-task-every-104-seconds': {
         'task': 'stock_app.tasks.run_task',
-        'schedule': 104.0,  # 104초마다 실행
+        'schedule': 3600 * 4,
     },
     'run-task2-every-100-seconds': {
         'task': 'stock_app.tasks2.run_task2',
-        'schedule': 100,  # 100초마다 실행
+        'schedule': 3600, 
     },
-    'run-task3-every-100-seconds-from-9am': {
+    'run-task3-every-100-seconds': {
         'task': 'stock_app.tasks3.run_task3',
-        'schedule': crontab(minute='0', hour='9'),  # 매일 오전 9시에 시작
-        'options': {'expires': 60 * 60 * 6 + 1200},  # 6시간 20분(13시 20분)에 만료
+        'schedule': 300,  
     },
 }
 
