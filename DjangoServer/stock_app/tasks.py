@@ -167,7 +167,7 @@ def run_task():
         except Exception as e:
             log_manager.logger.error(f"예상치 못한 에러 발생: {e}")
     else:
-        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
+        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 주식 자동매매는 9시부터 15시 30분 사이에만 실행됩니다.")
 
     
 

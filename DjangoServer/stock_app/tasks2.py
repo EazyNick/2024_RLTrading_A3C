@@ -250,4 +250,4 @@ def run_task2():
         else:
             log_manager.logger.error("현재가 불러오기 실패")
     else:
-        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
+        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 주식 데이터 수집은 9시부터 15시 30분 사이에만 실행됩니다.")

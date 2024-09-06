@@ -23,8 +23,6 @@ try:
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
     from dynamodb_to_csv import convert_dynamodb_to_csv
-    log_manager.logger.info("모듈들이 정상적으로 로드되었습니다.")
-
 except Exception as e:
     log_manager.logger.error(f"모듈 로드 중 알 수 없는 오류 발생: {e}")
     print(f"Unexpected error: {e}")
@@ -38,7 +36,7 @@ def run_task_saveKOSPIKOSDAQ():
 
     # 오전 9시부터 오후 3시 20분 사이에만 실행
     start_time = datetime.strptime("09:00", "%H:%M").time()
-    end_time = datetime.strptime("15:30", "%H:%M").time()
+    end_time = datetime.strptime("16:00", "%H:%M").time()
 
     if start_time <= current_time <= end_time:
         log_manager.logger.info("지수 데이터 DB에 저장 시작...")
@@ -63,7 +61,7 @@ def run_task_saveKOSPIKOSDAQ():
             # time.sleep(100)
             # run_task3.apply_async()
     else:
-        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 9시부터 15시 20분 사이에만 실행됩니다.")
+        log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 코스피, 코스닥 지수 데이터 수집은 9시부터 16시 사이에만 실행됩니다.")
 
     # # 작업 후 100초 뒤에 다시 실행
     # time.sleep(100)
