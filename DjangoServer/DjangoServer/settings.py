@@ -88,15 +88,15 @@ CORS_ALLOW_HEADERS = [
 CELERY_BEAT_SCHEDULE = {
     'run-task-every-104-seconds': {
         'task': 'stock_app.tasks.run_task',
-        'schedule': 3600 * 4,
+        'schedule': 20,
     },
     'run-task2-every-100-seconds': {
         'task': 'stock_app.tasks2.run_task2',
-        'schedule': 3600, 
+        'schedule': 10, 
     },
     'run-task3-every-100-seconds': {
         'task': 'stock_app.tasks3.run_task3',
-        'schedule': 10,  
+        'schedule': 10.0,  
     },
 }
 
