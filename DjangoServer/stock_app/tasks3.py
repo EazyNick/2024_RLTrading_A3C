@@ -25,11 +25,12 @@ try:
     from modules.services import *  # services 모듈의 파일들을 임포트
     from dynamodb_to_csv import convert_dynamodb_to_csv
     log_manager.logger.info("모듈들이 정상적으로 로드되었습니다.")
-    
-except ImportError as e:
-    log_manager.logger.error(f"모듈 로드 중 ImportError 발생: {e}")
-    print(f"Import error: {e}")
+
+except Exception as e:
+    log_manager.logger.error(f"모듈 로드 중 알 수 없는 오류 발생: {e}")
+    print(f"Unexpected error: {e}")
     raise
+
 
 
 @shared_task
