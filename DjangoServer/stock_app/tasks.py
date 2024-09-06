@@ -74,7 +74,7 @@ def filter_logs_by_current_week(buy_sell_log):
     ]
     return filtered_log
 
-# @shared_task
+@shared_task
 def run_task():
     log_manager.logger.info("자동매매 시작")
     log_manager.logger.info("Running...")

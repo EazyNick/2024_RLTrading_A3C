@@ -31,10 +31,8 @@ except Exception as e:
     print(f"Unexpected error: {e}")
     raise
 
-
-
 @shared_task
-def run_task3():
+def run_task_saveKOSPIKOSDAQ():
     log_manager.logger.info("Task3 지수 데이터 저장 시작")  # 로그 추가
     print("Task3 Running...")
 
@@ -53,7 +51,6 @@ def run_task3():
         print(f"Error: {e}")
 
 
-# @shared_task
 # def run_task3():
 #     # 한국 시간대 설정
 #     # tz = pytz.timezone('Asia/Seoul')
