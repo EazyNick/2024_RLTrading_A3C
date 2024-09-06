@@ -18,6 +18,34 @@ try:
 except Exception as e:
     print(f"import error {e}")
 
+# 시드값 설정 함수
+def set_seeds(random_seed=None, numpy_seed=None, torch_seed=None):
+    """
+    모든 난수 생성기의 시드값을 각각 설정하여 일관된 결과를 생성합니다.
+
+    Args:
+        random_seed (int, optional): Python random 모듈의 시드값
+        numpy_seed (int, optional): NumPy 모듈의 시드값
+        torch_seed (int, optional): PyTorch 모듈의 시드값
+    """
+    if random_seed is not None:
+        random.seed(random_seed)
+
+    if numpy_seed is not None:
+        np.random.seed(numpy_seed)
+
+    if torch_seed is not None:
+        torch.manual_seed(torch_seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(torch_seed)
+
+# 시드값 설정 (각각의 시드값을 다르게 설정)
+random_seed_value = 42
+numpy_seed_value = 2023
+torch_seed_value = 1234
+
+set_seeds(random_seed=random_seed_value, numpy_seed=numpy_seed_value, torch_seed=torch_seed_value)
+
 # 저장된 모델을 로드하고 새 데이터를 기반으로 매수, 매도를 수행하는 함수
 def run_trading(agent, env, new_data):
 
@@ -123,7 +151,7 @@ def main_run():
     log_manager.logger.info("Starting trading process")
 
     # 모델 로드
-    model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model_5.pth'
+    model_path = Path(__file__).resolve().parent / 'output/a3c_stock_trading_model_Kia_4096.pth'
     log_manager.logger.debug(f"모델 불러오는 경로: {model_path}")
     file_path = Path(__file__).resolve().parent / 'data/data_csv/kia_stock_data.csv'
     log_manager.logger.debug(f"학습 데이터 파일 경로: {file_path}")

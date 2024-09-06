@@ -2,6 +2,20 @@ import torch
 import torch.nn as nn
 from utils import log_manager
 
+# 시드값 설정 함수
+def set_seeds(torch_seed=None):
+    """
+    모든 난수 생성기의 시드값을 각각 설정하여 일관된 결과를 생성합니다.
+
+    Args:
+        torch_seed (int, optional): PyTorch 모듈의 시드값
+    """
+
+    if torch_seed is not None:
+        torch.manual_seed(torch_seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(torch_seed)
+
 class ActorCritic(nn.Module):
     def __init__(self, input_dim, action_space):
         """
@@ -18,6 +32,12 @@ class ActorCritic(nn.Module):
                                               ->  (value: 1)
         """
         super(ActorCritic, self).__init__()
+
+        # 시드값 설정 (각각의 시드값을 다르게 설정)
+        torch_seed_value = 168293
+
+        set_seeds(torch_seed=torch_seed_value)
+
         log_manager.logger.info("Initializing ActorCritic model")
         
         self.fc = nn.Linear(input_dim, 256) # 입력층 -> 은닉층

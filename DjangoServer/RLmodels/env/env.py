@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import os
 import sys
+import random
 
 try:
     # 현재 파일의 디렉토리를 기준으로 상위 디렉토리로 이동하여 'modules' 폴더 경로를 만듭니다.
@@ -19,6 +20,21 @@ try:
 except ImportError as e:
     print(f"ImportError: {e}")
 
+# 시드값 설정 함수
+def set_seeds(random_seed=None, numpy_seed=None):
+    """
+    모든 난수 생성기의 시드값을 각각 설정하여 일관된 결과를 생성합니다.
+
+    Args:
+        random_seed (int, optional): Python random 모듈의 시드값
+        numpy_seed (int, optional): NumPy 모듈의 시드값
+    """
+    if random_seed is not None:
+        random.seed(random_seed)
+
+    if numpy_seed is not None:
+        np.random.seed(numpy_seed)
+
 class StockTradingEnv(gym.Env):
     def __init__(self, df, max_stock=85, trading_charge=0.00015, trading_tax=0.002):
         """
@@ -28,6 +44,12 @@ class StockTradingEnv(gym.Env):
             df (pd.DataFrame): 주식 데이터프레임
         """
         super(StockTradingEnv, self).__init__()
+
+        # 시드값 설정 (각각의 시드값을 다르게 설정)
+        random_seed_value = 168293 
+        numpy_seed_value = 168293 
+        set_seeds(random_seed=random_seed_value, numpy_seed=numpy_seed_value)
+        
         log_manager.logger.info(f"StockTradingEnv initialized")
 
         # account_info = DataParser.get_account_info()
