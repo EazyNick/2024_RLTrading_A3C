@@ -12,8 +12,8 @@ app = Celery('DjangoServer')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # # Django 프로젝트의 모든 task 모듈을 로드합니다.
-# app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
-app.autodiscover_tasks() 
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
+# app.autodiscover_tasks() 
 
 # Django 프로젝트의 모든 task 모듈을 수동으로 로드합니다.
 # app.autodiscover_tasks(['stock_app'])
