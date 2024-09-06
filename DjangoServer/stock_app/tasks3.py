@@ -31,7 +31,7 @@ except Exception as e:
     raise
 
 @shared_task
-def run_task3():
+def run_task_saveKOSPIKOSDAQ():
     # 한국 시간대 설정
     tz = pytz.timezone('Asia/Seoul')
     current_time = datetime.now(tz).time()
