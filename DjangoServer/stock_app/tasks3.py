@@ -20,7 +20,6 @@ try:
     sys.path.append(dynamodb_to_csv_dir)
     # 추가 경로 설정
     sys.path.append(str(Path(__file__).resolve().parents[2] / 'modules'))
-    sys.path.append(str(Path(__file__).resolve().parents[2] / 'RLmodels'))
 
     from modules.Auth import *  # Auth 모듈의 파일들을 임포트
     from modules.services import *  # services 모듈의 파일들을 임포트
