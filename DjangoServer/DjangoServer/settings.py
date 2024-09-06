@@ -86,17 +86,17 @@ CORS_ALLOW_HEADERS = [
 
 # Celery 설정
 CELERY_BEAT_SCHEDULE = {
-    'run-task-every-104-seconds': {
+    'run-task-every-4-hours': {
         'task': 'stock_app.tasks.run_task',
-        'schedule': 20,
+        'schedule': 3600 * 4,  # 4시간마다 실행
     },
-    'run-task2-every-100-seconds': {
+    'run-task2-every-1-hour': {
         'task': 'stock_app.tasks2.run_task2',
-        'schedule': 10, 
+        'schedule': 3600,  # 1시간마다 실행
     },
     'run-task3-every-100-seconds': {
         'task': 'stock_app.tasks3.run_task3',
-        'schedule': 10.0,  
+        'schedule': 15.0,  # 100초마다 실행
     },
 }
 
