@@ -94,10 +94,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'stock_app.tasks2.run_task2',
         'schedule': 3600,  # 1시간마다 실행
     },
-    'run-task3-every-100-seconds': {
+    'run-task3-every-10-seconds': {
         'task': 'stock_app.tasks3.run_task3',
-        'schedule': 10.0,  # 100초마다 실행
-    }
+        'schedule': 10.0,  # 10초마다 실행
+    },
 }
 
 CELERY_TASK_TIME_LIMIT = 300  # 5 minutes
