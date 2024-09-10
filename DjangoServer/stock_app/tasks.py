@@ -102,15 +102,6 @@ def run_task():
         manager = AccessTokenManager()
         access_token = get_access_token(manager)
 
-        # stock_data = get_price(access_token, app_key, app_secret, div_code='J', itm_no='000270')
-
-        # if stock_data:
-        #     log_manager.logger.info(f"주식 데이터 불러오기 성공")
-        # else:
-        #     log_manager.logger.error(f"주식 데이터 불러오기 실패")
-
-        # log_manager.logger.debug("Before get_account_balance")
-
         try:
             stock_info_list, account_info = get_account_balance(access_token, app_key, app_secret)
         
@@ -168,48 +159,3 @@ def run_task():
             log_manager.logger.error(f"예상치 못한 에러 발생: {e}")
     else:
         log_manager.logger.info(f"현재 시간({current_time})은 작업 시간대가 아닙니다. 주식 자동매매는 9시부터 15시 30분 사이에만 실행됩니다.")
-
-    
-
-    # DB 삽입 코드
-    # if stck_prpr:
-    #     log_manager.logger.info(f"Insert 현재가: {stck_prpr}")
-    # # DynamoDB에 데이터 저장
-    #     try:
-    #         response = table.put_item(
-    #             Item={
-    #                 'Stock': '삼성전자',  # 예시 Stock
-    #                 'Timestamp': str(int(time.time())), 
-    #                 '현재가': str(stck_prpr)  # 주식 현재가
-    #             }
-    #         )
-    #         log_manager.logger.info(f"Data saved to DynamoDB successfully: {response}")
-    #     except Exception as e:
-    #         log_manager.logger.error(f"Failed to save data to DynamoDB: {e}")
-    #         raise
-    # else:
-    #     log_manager.logger.warning("stck_prpr is None or False-like value")
-
-    # # 디버깅 로그 추가
-    # log_manager.logger.debug("Before buy_stock")
-
-    # try:
-    #     buy_data = buy_stock(access_token, app_key, app_secret, "70000")
-    #     if buy_data:
-    #         log_manager.logger.info(f"주식 매수: {buy_data}")
-    #     else:
-    #         log_manager.logger.error(f"매수 실패")
-    # except Exception as e:
-    #     log_manager.logger.error(f"buy_stock 예외 발생: {e}")
-
-    # log_manager.logger.debug("Before sell_stock")
-    # try:
-    #     sell_data = sell_stock(access_token, app_key, app_secret, "90000")
-    #     if sell_data:
-    #         log_manager.logger.info(f"주식 매도: {sell_data}")
-    #     else:
-    #         log_manager.logger.error(f"매도 실패")
-    # except Exception as e:
-    #     log_manager.logger.error(f"sell_stock 예외 발생: {e}")
-    
-    # return stck_prpr
