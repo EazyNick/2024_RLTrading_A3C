@@ -43,6 +43,9 @@ def get_previous_trading_day(symbol, interval='5m'):
         # 이틀 전부터 오늘까지의 데이터를 가져옵니다.
         data = get_intraday_data(symbol, interval=interval, period='2d')
 
+        # 플래그 변수를 추가하여 경고 로그가 한 번만 출력되도록 함
+        warning_logged = False
+
         if not data.empty:
             prev_day_data = data.iloc[:-len(get_intraday_data(symbol, interval=interval, period='1d'))]
             if not prev_day_data.empty:
@@ -71,7 +74,7 @@ def save_to_dynamodb(data):
             'Volume': str(row['Volume'])
         }
 
-        log_manager.logger.debug(f"Saving item: {item}")
+        # log_manager.logger.debug(f"Saving item: {item}")
 
         try:
             response = table.put_item(
@@ -85,7 +88,9 @@ def save_to_dynamodb(data):
             log_manager.logger.debug(f"Successfully saved item with Timestamp: {item['Timestamp']} and Symbol: {item['Symbol']}")
         except boto3.exceptions.botocore.exceptions.ClientError as e:
             if e.response['Error']['Code'] == 'ConditionalCheckFailedException':
-                log_manager.logger.warning(f"Item already exists, skipping insertion: {e}")
+                if not warning_logged:
+                    log_manager.logger.warning(f"Item already exists, skipping insertion: {e}")
+                    warning_logged = True
             else:
                 log_manager.logger.error(f"Error inserting item: {e}")
 
