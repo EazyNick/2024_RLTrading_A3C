@@ -3,6 +3,9 @@
 ## 개요
 `2024_RLTrading_Source`는 강화학습 모델을 활용한 주식 자동매매 시스템입니다. 이 시스템은 Django, Nginx, AWS EC2 (Amazon Linux 2) 환경에서 동작하며, 한국투자증권 REST API를 이용하여 현재가 조회, 계좌 조회, 매수, 매도를 자동으로 수행합니다.
 
+## 시연영상
+https://www.youtube.com/watch?v=ztcIzkfpueM
+
 ## 기능
 - **강화학습 모델(A3C)**: 주식 자동매매를 위한 강화학습 모델 구현
 - **Django 서버**: 웹 인터페이스 및 백엔드 로직 처리
