@@ -26,6 +26,12 @@ A3C(Asynchronous Advantage Actor-Critic) 강화학습 알고리즘을 활용한 
 
 - **Flutter 모바일 앱**: [**stock_auto_trader**](https://github.com/EazyNick/stock_auto_trader) - 크로스 플랫폼 모바일 애플리케이션
 
+### 🤖 AI 모델 학습 레포지토리
+
+- **모델 학습 저장소**: [ICTRLT](https://github.com/EazyNick/ICTRLT)
+- **기술 스택**: A3C 강화학습, PyTorch, Python
+- **설명**: A3C(Asynchronous Advantage Actor-Critic) 강화학습 알고리즘을 활용한 주식 자동매매 모델 학습
+
 ### 🏆 주요 성과
 
 - **2024 한이음 ICT 프로젝트** 참여
